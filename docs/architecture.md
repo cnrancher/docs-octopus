@@ -3,6 +3,9 @@ id: architecture
 title: Architecture
 sidebar_label: Architecture
 ---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 ## About Octopus
 
 Octopus is an edge device management system based on Kubernetes, it is very lightweight and does not need to replace any of the basic components of the Kubernetes clusters. With Octopus deployed, the cluster can have the ability to manage any edge device as a resource.
@@ -13,7 +16,7 @@ Like the real octopus, Octopus consists of `brain` and `limb`s. The `brain` only
 
 
 ## Setup with k3s Cluster
-![architecture](/img/architecture.png)
+<img alt="architecture" src={useBaseUrl('img/architecture.png')} />;
 
 
 ## Workflow

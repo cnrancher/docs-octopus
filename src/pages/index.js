@@ -61,11 +61,11 @@ function Home() {
     <Layout
       title={`${siteConfig.title}`}
       description="Lightweight edge device management system based on Kubernetes, powered by Rancher">
-      <header className={classnames('hero hero--primary', styles.heroBanner)}>
+      <header className={classnames('hero hero--primary hero-custom', styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
-            <div className={styles.buttons}>
+            <div className={classnames('start-button', styles.buttons)}>
             <Link
               className={classnames(
                 'button button--outline button--secondary button--lg',

@@ -3,7 +3,10 @@ id: edge-ui
 title: Edge UI
 ---
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 :::note
 Coming soon
 :::
-![architecture](/img/edge-ui.png)
+
+<img alt="edge-ui" src={useBaseUrl('img/edge-ui.png')} />;

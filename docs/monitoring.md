@@ -3,6 +3,8 @@ id: monitoring
 title: Monitoring Octopus
 ---
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 Octopus is built on [sigs.k8s.io/controller-runtime](https://github.com/kubernetes-sigs/controller-runtime), so some metrics are related to controller-runtime and [client-go](https://github.com/kubernetes/client-go). At the same time, [github.com/prometheus/client_golang](https://github.com/prometheus/client_golang) provides some metrics for [Go runtime](https://golang.org/pkg/runtime/) and process state.
 
 ## Metrics Category
@@ -126,7 +128,7 @@ By default, the metrics will be exposed on port `8080`(see [brain options](../..
 ### Grafana Dashboard
 
 For convenience, Octopus provides a [Grafana Dashboard](../../deploy/e2e/integrate_with_grafana.json) to visualize the monitoring metrics.
-![architecture](/img/monitoring.png)
+<img alt="monitoring" src={useBaseUrl('img/monitoring.png')} />;
 
 ### Integrate with Prometheus Operator
 

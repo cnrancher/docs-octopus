@@ -1,17 +1,17 @@
 module.exports = {
   title: 'Octopus',
   tagline: 'Lightweight edge device management system based on Kubernetes',
-  url: 'https://octopus.rancher.cn',
-  baseUrl: '/',
+  url: 'https://rancheredge.github.io',
+  baseUrl: '/docs-octopus/',
   favicon: 'img/favicon.ico',
-  organizationName: 'RancherLabs', // Usually your GitHub org/user name.
-  projectName: 'doc-octopus', // Usually your repo name.
+  organizationName: 'rancheredge', // Usually your GitHub org/user name.
+  projectName: 'docs-octopus', // Usually your repo name.
   themeConfig: {
     announcementBar: {
       id: 'support_us', // Any value that will identify this message
       content:
           '<div class="rancher-header">' +
-          '<a href="https://rancher.cn/" target="_blank"><img src="/img/rancher-logo-horiz-white.svg" height="20" width="136"/></a>' +
+          '<a href="https://rancher.cn/" target="_blank"><img src="/docs-octopus/img/rancher-logo-horiz-white.svg" width="136" height="20"/></a>' +
           '<div>' +
           '<a href="https://rancher.cn/" target="_blank">See what else Rancher is up to.</a> ' +
           '</div>' +
