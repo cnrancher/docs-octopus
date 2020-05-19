@@ -24,6 +24,15 @@
   padding: 0 var(--ifm-pre-padding);
 }
 
+.hero-custom {
+  background: url('/docs-octopus/img/rancher-home.svg') center center no-repeat;
+  background-color: #38B5F8 !important;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 .rancher-header {
   padding: 0.5rem 0rem 0rem 0.8rem;
   display: flex;
@@ -41,14 +50,14 @@
   font-size: 10px;
 }
 
-.announcementBarClose_node_modules-\@docusaurus-theme-classic-src-theme-AnnouncementBar- {
+div[class^="announcementBar_"] button {
   display: none;
 }
 
-.buttons_src-pages- {
-  margin: 0 0 10px 0;
+.start-button {
+  padding-bottom: 10px;
 }
 
-.container span {
+.hero .container span {
   padding: 0 2px;
 }
