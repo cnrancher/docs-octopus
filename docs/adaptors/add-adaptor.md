@@ -1,6 +1,6 @@
 ---
-id: how-to-add
-title: How to Add New Adaptor
+id: develop
+title: How to Develop Adaptor
 ---
 
 ## Scaffold
