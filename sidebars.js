@@ -20,7 +20,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Device Adaptors',
-      items: ['adaptors/adaptor', 'adaptors/ble', 'adaptors/modbus', 'adaptors/opc-ua', 'adaptors/mqtt', 'adaptors/agent-device', 'adaptors/how-to-add'],
+      items: ['adaptors/adaptor', 'adaptors/mqtt-extension', 'adaptors/ble', 'adaptors/modbus', 'adaptors/opc-ua', 'adaptors/mqtt', 'adaptors/agent-device', 'adaptors/develop'],
     },
     {
       type: 'doc',
