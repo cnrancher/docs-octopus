@@ -5,9 +5,9 @@ title: State of DeviceLink
 
 ## Main Flow
 
-In the status of `DeviceLink`, there are several conditions used for tracing the states of the link. Next, let us come to understand the transition of these conditions.
+In the status of `DeviceLink`, there are several conditions used for tracing the states of the link. Now, let's start with the transition of these conditions.
 
-There is a `DeviceLink` description as below:
+This is a example of `DeviceLink`:
 
 ```yaml
 apiVersion: edge.cattle.io/v1alpha1
@@ -19,8 +19,6 @@ spec:
   adaptor:
     node: edge-worker
     name: adaptors.edge.cattle.io/dummy
-    parameters:
-      ip: 192.168.2.47
   model:
     apiVersion: "devices.edge.cattle.io/v1alpha1"
     kind: "DummyDevice"
@@ -33,7 +31,7 @@ spec:
       "on": true
 ```
 
-Suppose we create the above `DeviceLink` into the cluster, the `brain` will detect if the Node corresponding to `spec.adaptor.node` is available:
+When we deploy the above `DeviceLink` into the cluster, the `brain` will validate if the node specified in the `spec.adaptor.node` is available:
 
 ```text
 ┌─────────────────────┐   if the node is available? 
@@ -45,7 +43,7 @@ Suppose we create the above `DeviceLink` into the cluster, the `brain` will dete
                                       '             
 ```
 
-If the Node is available, the `brain` will detect if the CRD corresponding to `spec.model` is available:
+If the Node is available, the `brain` will verify if the CRD corresponded `spec.model` is exist:
 
 ```text
 ┌─────────────────────┐   if the node is available? 
@@ -56,7 +54,7 @@ If the Node is available, the `brain` will detect if the CRD corresponding to `s
            ┌─────────────────────────( ) brain      
            │                          '             
            ▼                                        
-┌─────────────────────┐   if the model is available?  
+┌─────────────────────┐   if the model is exist?  
 │    ModelExisted     │───────────────┐             
 └─────────────────────┘               │             
                                       ▼             
@@ -65,12 +63,16 @@ If the Node is available, the `brain` will detect if the CRD corresponding to `s
                                       '             
 ```
 
-*It is worth noting that the CRD used as a device model requires an annotation: `devices.edge.cattle.io/enable:true`.* If the CRD is available, the `limb` will detect if the adaptor corresponding to `spec.adaptor.name` is available:
+:::note
+The CRD used as a device model requires an annotation: `devices.edge.cattle.io/enable:true`.
+:::
+
+If the CRD is validated, the Octopus `limb` will verify if the adaptor corresponded `spec.adaptor.name` is available:
 
 ```text
            │                                        
            ▼                                           
-┌─────────────────────┐   if the model is available?   
+┌─────────────────────┐   if the model is exist?   
 │    ModelExisted     │───────────────┐                
 └─────────────────────┘               │                
                                       ▼                
@@ -87,7 +89,7 @@ If the Node is available, the `brain` will detect if the CRD corresponding to `s
                                       '                
 ```
 
-You can view [Design of Adaptor](../adaptors/design_of_adaptor.md) to learn how `limb` detects an adaptor. If the adaptor is available, the `limb` will try to create a device instance related with `spec.model`:
+You can check the [Design of Adaptor](../en/adaptors/adaptor) to understand how the `limb` detects an adaptor. If the adaptor is available, the `limb` will try to create a device instance related to `spec.model`:
 
 ```text
            │                                          
@@ -109,7 +111,7 @@ You can view [Design of Adaptor](../adaptors/design_of_adaptor.md) to learn how 
                                       '                
 ```
 
-After the device instance is successfully created, the `limb` will use the `spec.adaptor.parameters` and `spec.template.spec` to connect that real device via adaptor:
+After the device instance is successfully created, the `limb` will use the `spec.template.spec` to connect that real device via adaptor:
 
 ```text
            │                                   
@@ -131,7 +133,7 @@ After the device instance is successfully created, the `limb` will use the `spec
                                       '                
 ```
 
-If the connection is healthy, the corresponding device instance will synchronize the status from the real one. This is the process of all state flow:
+If the connection is `healthy`, the corresponding device instance will synchronize its status from the real physical one. Below is a full process of all states:
 
 ```text
 ┌─────────────────────┐   if the node is available?               
@@ -142,7 +144,7 @@ If the connection is healthy, the corresponding device instance will synchronize
            ┌─────────────────────────( ) brain                    
            │                          '                           
            ▼                                                      
-┌─────────────────────┐   if the model is available?              
+┌─────────────────────┐   if the model is exist?              
 │    ModelExisted     │───────────────┐                           
 └─────────────────────┘               │                           
                                       ▼                           
@@ -179,7 +181,9 @@ If the connection is healthy, the corresponding device instance will synchronize
                                                        '          
 ```
 
-**The flow of states is serialized, which means that if the previous state is not ready(unsuccessful, false), it will not flow to the next state.**
+:::info
+The flow of states is ordered, which means that if the previous state is not ready(unsuccessful or false), it will not flow to the next state.
+:::
 
 
 
@@ -192,11 +196,11 @@ The main flow is not always going forward, some detection logic can adjust it to
 | `NodeExisted` | `brain` | If the Node has been deleted/drained/cordoned, the `brain` will adjust the main flow back to `NodeExisted` and mark it unavailable. <br/><br/> When the Node becomes available again, the `brain` will trigger the main flow to start again. |
 | `ModelExisted` | `brain` | If the CRD(device model) has been deleted/disabled, the `brain` will adjust the main flow back to `ModelExisted` and mark it unavailable. <br/><br/> When the CRD becomes available again, the `brain` will trigger the main flow to start from model detection. |
 | `AdaptorExisted` | `limb` | If the adaptor has been deleted, the `limb` will adjust the main flow back to `AdaptorExisted` and mark it unavailable. <br/><br/> When the adaptor becomes available again, the `limb` will trigger the main flow to start from adaptor detection. |
-| `DeviceConnected` | `limb` maybe  | Accidental deletion of device instance will not be immediately perceived by `limb`, because the `limb` doesn't list-watch these instances. <br/><br/> If the deleted device has already connected(`DeviceConnected` was healthy), and the implementation of adapter is to synchronize status from the real device in real time or interval, it could have a chance to be recreated by `limb`. The `limb` will trigger the main flow to start from device creation again. <br/><br/> **Otherwise, the link needs to be modified/rebuilt manually.** |
+| `DeviceConnected` | `limb` maybe  | Accidental deletion of device instance will not be immediately perceived by `limb`, because the `limb` doesn't list-watch these instances. <br/><br/> If the deleted device has already connected(`DeviceConnected` was healthy), and the implementation of an adaptor is to synchronize status from the real device in real-time or interval, it could have a chance to be recreated by `limb`. The `limb` will trigger the main flow to start from device creation again. <br/><br/> **Otherwise, the link needs to be modified/rebuilt manually.** |
 
 ### State of DeviceConnected 
 
-Before talking about `DeviceConnected`, it needs to know that the device connection management of Octopus divides into two parts, one is the connection between `limb` and adaptor, another one is the connection between adaptor and real device:
+Before talking about `DeviceConnected`, it needs to know that the device connection management of Octopus divides into two parts, one is the connection between `limb` and adaptor, another one is the connection between the adaptor and real device:
 
 ```text
 ┌──────────┐   c1   ┌─────────┐   c2    .               
@@ -204,10 +208,10 @@ Before talking about `DeviceConnected`, it needs to know that the device connect
 └──────────┘        └─────────┘         '                    
 ```
 
-The `c1` is based on [gRPC](https://grpc.io/), but `c2` is determined by adaptor.  When both `c1` and `c2` are healthy, the `limb` will state the `DeviceConnected` in **Healthy**.
+The `c1` is based on [gRPC](https://grpc.io/), and `c2` is determined by adaptor.  When both `c1` and `c2` are healthy, the `limb` will set `DeviceConnected` state to **Healthy**.
 
-The `limb` can sense the changes in `c1`, if the `c1` closes unexpectedly, `limb` can trigger the main flow to start from device connection again.  
+The `limb` can watch the changes in `c1`, if the `c1` closes unexpectedly, `limb` will trigger the main flow to start from device connection again.  
 
-However, if the `c2` closes unexpectedly, the `limb` cannot perceive. The adaptor is responsible for notifying this, usually an *ERROR* will be sent to `limb`.  Then, the `limb` will state the `DeviceConnected` in **Unhealthy**.
+However, the `limb` cannot perceive whether the `c2` closes unexpectedly or not, so the adaptor is responsible for notifying its status, usually the adaptor need to send an *ERROR* to the `limb`.  Then, the `limb` will set the `DeviceConnected` state to **Unhealthy**.
 
-If the interrupted `c2` is not reconnected, the link will remain **Unhealthy**. This depends on the adaptation of the `adapter`. Therefore, the implementation of adaptor should reconnect `c2` as much as possible. Otherwise, the situation should be made clear in the *ERROR* message.
+If the interrupted `c2` is not reconnected, the link will remain **Unhealthy**.

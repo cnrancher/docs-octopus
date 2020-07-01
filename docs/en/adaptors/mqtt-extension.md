@@ -138,10 +138,20 @@ The specification of MQTT options are valid in all MQTT extension adaptors, they
 | Field | Description | Schema | Required |
 |:---|:---|:---|:---:|
 | caFilePem |  The PEM format content of the CA certificate, which is used for validate the server certificate with. | string  | false |
+| caFilePemRef | Specifies the relationship of DeviceLink's references to refer to the value as the CA file PEM content . | [DeviceLinkReferenceRelationship](#devicelinkreferencerelationship)  | false |
 | certFilePem | The PEM format content of the certificate, which is used for client authenticate to the server. | string  | true |
+| certFilePemRef | Specifies the relationship of DeviceLink's references to refer to the value as the client certificate file PEM content . | [DeviceLinkReferenceRelationship](#devicelinkreferencerelationship)  | false |
 | keyFilePem | The PEM format content of the key, which is used for client authenticate to the server. | string  | true |
+| keyFilePemRef | Specifies the relationship of DeviceLink's references to refer to the value as the client key file PEM content. | [DeviceLinkReferenceRelationship](#devicelinkreferencerelationship)  | true |
 | serverName| Indicates the name of the server, ref to http://tools.ietf.org/html/rfc4366#section-3.1  | string  | false |
 | insecureSkipVerify | Doesn't validate the server certificate, default value is `false`. | bool  | false |
+
+#### DeviceLinkReferenceRelationship
+
+| Field | Description | Schema | Required |
+|:---|:---|:---|:---:|
+| name | Specifies the k8s resource name of the reference(currently only support k8s secret and configmap within the same namespace). | string | true |
+| item | Specifies the item name of the referred reference. | string | true |
 
 #### MQTTClientStore
 

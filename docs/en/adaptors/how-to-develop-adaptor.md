@@ -1,11 +1,12 @@
 ---
 id: develop
 title: How to Develop Adaptor
+sidebar_label: How to Develop Adaptor
 ---
 
 ## Scaffold
 
-Octopus provides a simple way to develop a new adaptor, with running `make template-adaptor`, get a scaffold under `adaptors` directory. The overlay of the scaffold is as follows:
+Octopus provides a simple way to develop a new adaptor, with running `make template-adaptor`, get a scaffold under `adaptors` directory. The overlay of the scaffold is as below:
 
 ```text
 tree -d adaptors/<adaptor-name>
@@ -29,14 +30,16 @@ tree -d adaptors/<adaptor-name>
 
 ## Build management
 
-Adaptor follows the build management of Octopus, please view [Develop Octopus](../octopus/develop.md) for more details. Same as Octopus, Adaptor's management process consists of several stages, a stage consists of several actions. For convenience, the name of the action also represents the current stage. The overall flow relationship of action looks as below:
+Adaptor follows the build management of Octopus, please view [Develop Octopus](./develop) for more details. Same as Octopus, Adaptor's management process consists of several stages with several actions. For convenience, the name of the action represents the current stage. The overall relationship of action flow are described as below:
                                         
 ```text
         generate -> mod -> lint -> build -> package -> deploy
                                        \ -> test -> verify -> e2e
 ```
 
-Executing a stage for an Adaptor can run `make adaptor <adatpor-name> <stage name>`, for example, when executing the `test` stage for [dummy](../../adaptors/dummy) adaptor, please run `make adaptor dummy test`. To execute a stage will execute all actions in the previous sequence, if running `make adaptor dummy test`, it actually includes executing `generate`, `mod`, `lint`, `build` and `test` actions.
+Executing a stage for an Adaptor can run `make adaptor <adatpor-name> <stage name>`, for example, when executing the `test` stage for [dummy](./dummy) adaptor, please run `make adaptor dummy test`. 
+
+To execute a stage will execute all actions in the previous sequence, if running `make adaptor dummy test`, it actually includes executing `generate`, `mod`, `lint`, `build` and `test` actions.
 
 To run an action by adding `only` command, for example, if only run `build` action, please use `make adaptor <adatpor-name> build only`.
 
@@ -44,4 +47,4 @@ Integrate with [`dapper`](https://github.com/rancher/dapper) via `BY` environmen
 
 ## Contributor workflow
 
-Contributing is welcome, please view [CONTRIBUTING](../../CONTRIBUTING.md) for more details.
+Contributing is welcome, please view [CONTRIBUTING](https://github.com/cnrancher/octopus/blob/master/CONTRIBUTING.md) for more details.

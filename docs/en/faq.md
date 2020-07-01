@@ -23,6 +23,6 @@ At this time Octopus does not natively support Windows, however we are open to t
 
 Please reference the Octopus <a href="https://github.com/cnrancher/octopus/blob/master/docs/octopus/develop.md" target="_blank">develop.md</a> with instructions.
 
-##### How can I build custom device adaptors?
+##### How can I build custom device adaptor?
 
-Please reference the Octopus <a href="https://github.com/cnrancher/octopus/blob/master/docs/adaptors/develop.md" target="_blank">adaptors/develop.md</a> with instructions.
+Please reference the [develop adaptor](./adaptors/develop) with instructions.
