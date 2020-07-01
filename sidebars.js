@@ -2,41 +2,41 @@ module.exports = {
   docs: [
     {
       type: 'doc',
-      id: 'architecture',
+      id: 'en/about',
     },
     {
       type: 'doc',
-      id: 'quick-start',
+      id: 'en/quick-start',
     },
     {
       type: 'doc',
-      id: 'install',
+      id: 'en/install',
     },
     {
       type: 'category',
       label: 'DeviceLink',
-      items: ['devicelink/create-dl', 'devicelink/state-of-dl'],
+      items: ['en/devicelink/about-dl', 'en/devicelink/state-of-dl'],
     },
     {
       type: 'category',
       label: 'Device Adaptors',
-      items: ['adaptors/adaptor', 'adaptors/mqtt-extension', 'adaptors/ble', 'adaptors/modbus', 'adaptors/opc-ua', 'adaptors/mqtt', 'adaptors/agent-device', 'adaptors/develop'],
+      items: ['en/adaptors/adaptor', 'en/adaptors/modbus', 'en/adaptors/opc-ua', 'en/adaptors/mqtt', 'en/adaptors/ble', 'en/adaptors/dummy', 'en/adaptors/mqtt-extension', 'en/adaptors/develop'],
     },
     {
       type: 'doc',
-      id: 'monitoring',
+      id: 'en/develop',
     },
     {
       type: 'doc',
-      id: 'edge-ui',
+      id: 'en/monitoring',
     },
     {
       type: 'doc',
-      id: 'faq',
+      id: 'en/edge-ui',
     },
     {
       type: 'doc',
-      id: 'example',
+      id: 'en/faq',
     },
   ],
 };

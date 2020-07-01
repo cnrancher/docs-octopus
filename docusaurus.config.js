@@ -27,12 +27,17 @@ module.exports = {
       },
       links: [
         {
-          to: 'docs/architecture',
-          activeBasePath: 'docs',
+          to: 'docs/en/about',
+          activeBasePath: 'docs/en',
           label: 'Docs',
           position: 'left',
         },
-        // {to: 'blog', label: 'Blog', position: 'left'},
+        {
+          to: 'docs/cn/about',
+          activeBasePath: 'docs/cn',
+          label: '中文文档',
+          position: 'left'
+        },
         {
           href: 'https://github.com/cnrancher/octopus',
           label: 'GitHub',
@@ -47,12 +52,12 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Architecture',
-              to: 'docs/architecture',
+              label: 'About Octopus',
+              to: 'docs/en/about',
             },
             {
               label: 'Quick-Start Guide',
-              to: 'docs/quick-start',
+              to: 'docs/en/quick-start',
             },
           ],
         },
