@@ -1,0 +1,20 @@
+---
+kind: pipeline
+name: default
+
+steps:
+- name: publish
+  image: plugins/gh-pages
+  settings:
+    username:
+      from_secret: github_username
+    password:
+      from_secret: github_password
+    pages_directory: build/
+  when:
+    ref:
+      include:
+      - "refs/heads/master"
+
+node:
+  instance: agent-amd64
