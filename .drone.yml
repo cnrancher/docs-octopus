@@ -1,0 +1,41 @@
+---
+kind: pipeline
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: node:10-alpine
+  commands:
+  - node -v
+  - npm -v
+  - yarn --version
+  - yarn config set cache-folder .yarn-cache
+  - yarn install --pure-lockfile
+  - yarn run build
+  when:
+    ref:
+      include:
+      - "refs/heads/master"
+
+- name: publish
+  image: node:14.5.0
+  environment:
+    GH_NAME:
+      from_secret: github_username
+    GH_TOKEN:
+      from_secret: github_password
+  commands:
+  - git config --global user.name "$GH_NAME"
+  - echo "machine github.com login $GH_NAME password $GH_TOKEN" > ~/.netrc
+  - yarn && GIT_USER="$GH_NAME" yarn deploy
+  when:
+    ref:
+      include:
+      - "refs/heads/master"
+
+node:
+  instance: agent-amd64
