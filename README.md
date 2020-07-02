@@ -1,4 +1,5 @@
 # Website
+[![Build Status](http://drone-pandaria.cnrancher.com/api/badges/cnrancher/docs-octopus/status.svg)](http://drone-pandaria.cnrancher.com/cnrancher/docs-octopus)
 
 This website is built using [Docusaurus 2](https://v2.docusaurus.io/), a modern static website generator.
 
