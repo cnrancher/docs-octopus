@@ -1,15 +1,15 @@
 ---
 id: monitoring
-title: Monitoring Octopus
+title: 关于监控
 ---
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-Octopus is built on [sigs.k8s.io/controller-runtime](https://github.com/kubernetes-sigs/controller-runtime), so some metrics are related to controller-runtime and [client-go](https://github.com/kubernetes/client-go). At the same time, [github.com/prometheus/client_golang](https://github.com/prometheus/client_golang) provides some metrics for [Go runtime](https://golang.org/pkg/runtime/) and process state.
+Octopus基于[sigs.k8s.io/controller-runtime](https://github.com/kubernetes-sigs/controller-runtime)上搭建，因此某些指标与控制器运行时和[client-go](https://github.com/kubernetes/client-go)相关。 同时[github.com/prometheus/client_golang](https://github.com/prometheus/client_golang)为[Go runtime](https://golang.org/pkg/runtime/)提供了一些指标和过程状态。
 
-## Metrics Category
+## 指标类别
 
-> In the "Type" column, use the first letter to represent the corresponding word: G - Gauge, C - Counter, H - Histogram, S - Summary.
+> 在"Type"列中，使用第一个字母代表相应的单词： G - Gauge, C - Counter, H - Histogram, S - Summary.
 
 ### Exposing from Controller Runtime
 
@@ -121,22 +121,22 @@ Octopus is built on [sigs.k8s.io/controller-runtime](https://github.com/kubernet
 | C | [`limb_send_errors_total`](../../pkg/metrics/limb/metrics.go#L30-L37) | Total number of errors of sending device desired to adaptor. | |
 | H | [`limb_send_latency_seconds`](../../pkg/metrics/limb/metrics.go#L39-L46) | Histogram of the latency of sending device desired to adaptor. | |
 
-## Monitor
+## 监控
 
-By default, the metrics will be exposed on port `8080`(see [brain options](https://github.com/cnrancher/octopus/tree/master/cmd/brain/options) and [limb options](https://github.com/cnrancher/octopus/tree/master/cmd/limb/options)), they can be collected by [Prometheus](https://prometheus.io/) and visually analyzed through [Grafana](https://grafana.com/). Octopus provides a [ServiceMonitor definition YAML](https://github.com/cnrancher/octopus/blob/master/deploy/e2e/integrate_with_prometheus_operator.yaml) to integrate with [Prometheus Operator](https://github.com/coreos/prometheus-operator), which is an easy tool to configure and manage Prometheus instances.
+默认情况下，指标将在端口 `8080`上公开 (请参阅[brain options](https://github.com/cnrancher/octopus/tree/master/cmd/brain/options)和[limb options](https://github.com/cnrancher/octopus/tree/master/cmd/limb/options)，则可以通过[Prometheus](https://prometheus.io/)进行收集，并通过[Grafana](https://grafana.com/)进行可视化分析。 Octopus提供了一个[ServiceMonitor定义YAML](https://github.com/cnrancher/octopus/blob/master/deploy/e2e/integrate_with_prometheus_operator.yaml)与[Prometheus Operator](https://github.com/coreos/prometheus-operator)集成用于配置和管理Prometheus实例的工具。
 
-### Grafana Dashboard
+### Grafana 仪表板
 
-For convenience, Octopus provides a [Grafana Dashboard](https://github.com/cnrancher/octopus/blob/master/deploy/e2e/integrate_with_grafana.json) to visualize the monitoring metrics.
-<img alt="monitoring" src={useBaseUrl('img/monitoring.png')} />;
+为方便起见，Octopus提供了[Grafana仪表板](https://github.com/cnrancher/octopus/blob/master/deploy/e2e/integrate_with_grafana.json)来可视化展示监视指标。
+<img alt="monitoring" src={useBaseUrl('img/monitoring.png')} />
 
-### Integrate with Prometheus Operator
+### 与Prometheus Operator集成
 
-Using [prometheus-operator HELM chart](https://github.com/helm/charts/blob/master/stable/prometheus-operator), you can easily set up a Prometheus Operator to monitor the Octopus. The following steps demonstrate how to run a Prometheus Operator on a local Kubernetes cluster:
+使用[prometheus-operator HELM图表](https://github.com/helm/charts/blob/master/stable/prometheus-operator)，您可以轻松地设置Prometheus Operator来监视Octopus。 以下步骤演示了如何在本地Kubernetes集群上运行Prometheus Operator：
 
-1. Use [`cluster-k3d-spinup.sh`](https://github.com/cnrancher/octopus/blob/master/hack/cluster-k3d-spinup.sh) to set up a local Kubernetes cluster via [k3d](https://github.com/rancher/k3d).
-1. Follow the [installation guide of HELM](https://helm.sh/docs/intro/install/) to install helm tool, and then use `helm fetch --untar --untardir /tmp stable/prometheus-operator` the prometheus-operator chart to local `/tmp` directory.
-1. Generate a deployment YAML from prometheus-operator chart as below.
+1. 使用[`cluster-k3d-spinup.sh`](https://github.com/cnrancher/octopus/blob/master/hack/cluster-k3d-spinup.sh)通过[k3d](https://github.com/rancher/k3s)创建本地Kubernetes集群。
+1. 按照[HELM的安装指南](https://helm.sh/docs/intro/install/)安装helm工具，然后使用`helm fetch --untar --untardir /tmp stable/prometheus-operator` 将prometheus-operator图表移至本地`/ tmp`目录。
+1. 从prometheus-operator图表生成部署YAML，如下所示。
     ```shell
     helm template --namespace octopus-monitoring \
       --name octopus \
@@ -179,9 +179,9 @@ Using [prometheus-operator HELM chart](https://github.com/helm/charts/blob/maste
       --set grafana.'grafana\.ini'.server.root_url=http://localhost/grafana \
       /tmp/prometheus-operator > /tmp/prometheus-operator_all_in_one.yaml
     ```
-1. Create `octopus-monitoring` Namespace via `kubectl create ns octopus-monitoring`.
-1. Apply the prometheus-operator all-in-one deployment into the local cluster via `kubectl apply -f /tmp/prometheus-operator_all_in_one.yaml`.
-1. Apply the Octopus all-in-one deployment via `kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one.yaml`.
-1. Apply the monitoring integration into the local cluster via `kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/integrate_with_prometheus_operator.yaml`
-1. Visit `http://localhost/prometheus` to view the Prometheus web console through the browser, or visit `http://localhost/grafana` to view the Grafana console(the administrator account is `admin/admin`).
-1. (Optional) Import the [Octopus Overview dashboard](https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/integrate_with_grafana.json) from Grafana console.
+1. 通过`kubectl create ns octopus-monitoring`创建`octopus-monitoring`命名空间。
+1. 通过`kubectl apply -f /tmp/prometheus-operator_all_in_one.yaml`将prometheus-operator `all-in-ine`部署于本地集群。
+1. (可选)通过`kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one.yaml`来部署Octopus
+1. 通过`kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/integrate_with_prometheus_operator.yaml` 将监视集成部署于本地集群。
+1. 访问`http://localhost/prometheus`以通过浏览器查看Prometheus Web控制台，或访问`http://localhost/grafana`以查看Grafana控制台(管理员帐户为`admin/admin`)。
+1. (可选)从Grafana控制台导入[Octopus概述仪表板](https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/integrate_with_grafana.json)。

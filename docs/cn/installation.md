@@ -1,31 +1,31 @@
 ---
 id: install
-title: Installation
+title: 安装部署
 ---
 
-There are two ways to deploy Octopus, one is [Helm chart](https://helm.sh/), another one bases on [Kustomize](https://github.com/kubernetes-sigs/kustomize).
+Octopus支持两种不同的部署方式，一种是[Helm chart](https://helm.sh/)，另一种是基于[Kustomize](https://github.com/kubernetes-sigs/kustomize)的。
 
-## 1. Octopus Helm Chart
+## 1. Octopus Helm 应用
 
 :::note
-The charts in this repository requires Helm version 3.x or later.**, read and follow the [Helm installation guide](https://helm.sh/docs/intro/install/).
+此仓库中的图表需要Helm 3.x或更高版本。请阅读并遵循[Helm安装指南](https://helm.sh/docs/intro/install/)。
 :::
 
-The [Octopus-Chart](https://github.com/cnrancher/octopus-chart) repository hosts official Helm charts for [Octopus](https://github.com/cnrancher/octopus). These charts are used to deploy Octopus to the Kubernetes/k3s Cluster.
+[Octopus-Chart](https://github.com/cnrancher/octopus-chart)项目包含了[Octopus](https://github.com/cnrancher/octopus)的官方Helm图表。 这些图表用于将Octopus部署到Kubernetes/k3s集群。
 
 
-### Add the Octopus Helm Chart repo
+### 添加Octopus Helm仓库
 
-In order to be able to use the charts in this repository, add the name and URL to your Helm client:
+为了能够使用此存储库中的图表，请将下列名称和URL添加到您的Helm客户端：
 
 ```console
 $ helm repo add cnrancher http://charts.cnrancher.cn/octopus
 $ helm repo update
 ```
 
-### Installing the Chart
+### 安装应用
 
-To install the Octopus Chart into your Kubernetes/k3s cluster use:
+要将Octopus Chart安装到Kubernetes/k3s集群中，请使用：
 ```
 $ helm create ns octopus-system
 ```
@@ -33,35 +33,33 @@ $ helm create ns octopus-system
 $ helm install --namespace octopus-system octopus cnrancher/octopus
 ```
 
-After installation succeeds, you can get a status of Chart
+安装成功后，您可以获取应用状态:
 ```
 $ helm status octopus
 ```
 
-If you want to delete your Chart, use this command:
+如果要删除应用，请使用以下命令：
 ```
 $ helm delete octopus
 ```
+该命令几乎删除了与应用关联的所有Kubernetes组件，并删除了其发行版。
 
-The command removes nearly all the Kubernetes components associated with the
-chart and deletes the release.
+### Helm Chart和Octopus支持
 
-### Helm Chart and Octopus Support
+请访问[Octopus github issues](https://github.com/cnrancher/octopus/issues/)以获得支持。
 
-Visit the [Octopus github issues](https://github.com/cnrancher/octopus/issues/) for support.
+## 2. 基于Kustomize
 
-## 2. Bases on Kustomize
+Kustomize是解决Kubernetes应用程序管理的另一种工具，它使用的概念与Helm不同，后者称为[声明式应用程序管理](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/architecture /declarative-application-management.md)。
 
-Kustomize is an interesting tool in solving Kubernetes application management, it uses a different idea then Helm, which calls [Declarative Application Management](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/architecture/declarative-application-management.md). 
+Octopus使用 `Kustomize`生成其安装程序的清单文件，安装程序YAML文件位于以下目录中的[`deploy/e2e](https://github.com/cnrancher/octopus/tree/master/deploy/e2e)目录下 Github，用户可以使用它来安装Octopus及其适配器。
 
-Octopus uses `Kustomize` to generate its installer manifest files, the installer YAML file is under the [`deploy/e2e`](https://github.com/cnrancher/octopus/tree/master/deploy/e2e) directory on Github, user can use it to install the octopus and its adaptors.
-
-1. Install Octopus
+1. 安装Octopus
     ```shell script
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
     ```
 
-1. Install Octopus Official Adaptors
+1. 安装Octopus官方的协议适配器(包含Modbus,OPC-UA, BLE, MQTT和Dummy)
     ```shell script
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
@@ -70,7 +68,7 @@ Octopus uses `Kustomize` to generate its installer manifest files, the installer
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
     ```
 
-### Animated quick demo
+### 动画快速演示
 
 [![asciicast](https://asciinema.org/a/338649.svg)](https://asciinema.org/a/338649)
 

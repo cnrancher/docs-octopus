@@ -1,22 +1,24 @@
 ---
 id: dummy
-title: Dummy Adaptor
+title: Dummy 适配器
 ---
 
-### Registration Information
+Dummy适配器是Octopus一种用于测试和Demo的模拟适配器。
+
+### 注册信息
 
 |  Versions | Register Name | Endpoint Socket | Available |
 |:---:|:---:|:---:|:---:|
 |  `v1alpha1` | `adaptors.edge.cattle.io/dummy` | `dummy.sock` | * |
 
-### Support Model
+### 支持模型
 
 | Kind | Group | Version | Available | 
 |:---:|:---:|:---:|:---:|
 | [`DummySpecialDevice`](#dummyspecialdevice) | `devices.edge.cattle.io` | `v1alpha1` | * |
 | [`DummyProtocolDevice`](#dummyprotocoldevice) | `devices.edge.cattle.io` | `v1alpha1` | * |
 
-### Support Platform
+### 支持平台
 
 | OS | Arch |
 |:---:|:---|
@@ -24,15 +26,15 @@ title: Dummy Adaptor
 | `linux` | `arm` |
 | `linux` | `arm64` |
 
-### Usage
+### 使用方式
 
 ```shell script
 $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
 ```
 
-### Authority
+### 权限
 
-Grant permissions to Octopus as below:
+对Octopus授予权限，如下所示：
 
 ```text
   Resources                                           Non-Resource URLs  Resource Names  Verbs
@@ -43,14 +45,9 @@ Grant permissions to Octopus as below:
   dummyspecialdevices.devices.edge.cattle.io/status   []                 []              [get patch update]
 ```
 
-Permissions obtained from cluster as below: 
-
-```text
-none
-```
 ### DummySpecialDevice
 
-The `DummySpecialDevice` can be considered as a fake fan.
+`DummySpecialDevice`可被视为模拟风扇。
 
 | Field | Description | Schema | Required |
 |:---|:---|:---|:---:|
@@ -163,27 +160,27 @@ DummyProtocolDevicePropertyType describes the type of property.
 | array | | string | false |
 | object | | string | false |
 
-#### DeviceExtensionSpec
+##### DeviceExtensionSpec
 
 | Field | Description | Schema | Required |
 |:---|:---|:---|:---:|
 | mqtt | Specifies the MQTT settings. | *[v1alpha1.MQTTOptionsSpec](./mqtt-extension#specification) | true |
 
-#### DeviceExtensionStatus
+##### DeviceExtensionStatus
 
 | Field | Description | Schema | Required |
 |:---|:---|:---|:---:|
 | mqtt | Reports the MQTT settings. | *[v1alpha1.MQTTOptionsStatus](./mqtt-extension#status) | true |
 
-### Demo
+### Demo演示
 
-1. Create a [DeviceLink](https://github.com/cnrancher/octopus/blob/master/adaptors/dummy/deploy/e2e/dl_specialdevice.yaml) to connect the DummySpecialDevice, which simulates a fan of living room. 
+1. 创建一个[DeviceLink](https://github.com/cnrancher/octopus/blob/master/adaptors/dummy/deploy/e2e/dl_specialdevice.yaml)以连接DummySpecialDevice，该设备模拟客厅的风扇。
 
     ```shell script
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_specialdevice.yaml
     ```
-    
-    Synchronize the above-created fan's status to the remote MQTT broker server.
+   
+    将上面创建的风扇状态同步到远程MQTT代理服务器。
     
     ```shell script
     # create a Generic Secret to store the CA for connecting test.mosquitto.org.
@@ -196,7 +193,7 @@ DummyProtocolDevicePropertyType describes the type of property.
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_specialdevice_with_mqtt.yaml
     ```
     
-    Use [`mosquitto_sub`](https://mosquitto.org/man/mosquitto_sub-1.html) tool to watch the synchronized status.
+    使用[`mosquitto_sub`](https://mosquitto.org/man/mosquitto_sub-1.html)工具观看同步状态。
     
     ```shell script
     # get mqtt broker server
@@ -210,20 +207,20 @@ DummyProtocolDevicePropertyType describes the type of property.
     # mosquitto_sub -h test.mosquitto.org -p 1883 -t cattle.io/octopus/default/living-room-fan 
     ```
    
-1. Create a [DeviceLink](./deploy/e2e/dl_protocoldevice.yaml) to connect the DummyProtocolDevice, which simulates an intelligent property-filled robot, it can fill the desired properties randomly in 2 seconds.
+1. 创建一个[DeviceLink](https://github.com/cnrancher/octopus/blob/master/adaptors/dummy/deploy/e2e/dl_protocoldevice.yaml)以连接DummyProtocolDevice，该设备模拟一个充满智能属性的机器人，它可以在2秒内随机填充所需的属性。
 
     ```shell script
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_protocoldevice.yaml
     ```
    
-    Synchronize the above-created robot's answers to the remote MQTT broker server.
+    将以上创建的机械的答案同步到远程MQTT代理服务器。
         
     ```shell script
     # publish status to test.mosquitto.org
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_protocoldevice_with_mqtt.yaml
     ```
     
-    Use [`mosquitto_sub`](https://mosquitto.org/man/mosquitto_sub-1.html) tool to watch the synchronized answers.
+    使用[`mosquitto_sub`](https://mosquitto.org/man/mosquitto_sub-1.html)工具观看同步的答案。
     
     ```shell script
     # get mqtt broker server

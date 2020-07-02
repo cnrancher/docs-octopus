@@ -1,27 +1,27 @@
 ---
 id: opc-ua
-title: OPC-UA Adaptor
+title: OPC-UA 适配器
 ---
 
-### Introduction
+### 介绍
 
-[OPC Unified Architecture](https://opcfoundation.org/about/opc-technologies/opc-ua/) (OPC-UA) is a machine to machine communication protocol for industrial automation developed by the OPC Foundation.
+[OPC Unified Architecture](https://opcfoundation.org/about/opc-technologies/opc-ua/)（OPC-UA）是由OPC Foundation开发的用于工业自动化的机器对机器通信协议。
 
-OPC-UA adaptor implements the [gopcua](https://github.com/gopcua/opcua) and focus on communicating with the industrial OPC-UA equipment and systems for data collection and data manipulation on the edge side.
+OPC-UA适配器集成了[gopcua](https://github.com/gopcua/opcua)，并专注于与工业OPC-UA设备和系统进行通信，以便在边缘侧进行数据收集和数据处理。
 
-### Registration Information
+### 注册信息
 
 |  Versions | Register Name | Endpoint Socket | Available |
 |:---:|:---:|:---:|:---:|
 |  `v1alpha1` | `adaptors.edge.cattle.io/opcua` | `opcua.sock` | * |
 
-### Support Model
+### 支持模型
 
 | Kind | Group | Version | Available | 
 |:---:|:---:|:---:|:---:|
 | `OPCUADevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
 
-### Support Platform
+### 支持平台
 
 | OS | Arch |
 |:---:|:---|
@@ -29,15 +29,15 @@ OPC-UA adaptor implements the [gopcua](https://github.com/gopcua/opcua) and focu
 | `linux` | `arm` |
 | `linux` | `arm64` |
 
-### Usage
+### 使用方式
 
 ```shell script
 $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
 ```
 
-### Authority
+### 权限
 
-Grant permissions to Octopus as below:
+对Octopus授予权限，如下所示：
 
 ```text
   Resources                                   Non-Resource URLs  Resource Names  Verbs
@@ -47,7 +47,9 @@ Grant permissions to Octopus as below:
 ```
 
 ### OPC-UA DeviceLink YAML
-below is an example of OPC-UA deviceLink YAML
+
+OPC-UA `DeviceLink` YAML的示例:
+
 ```yaml
 apiVersion: edge.cattle.io/v1alpha1
 kind: DeviceLink
@@ -101,7 +103,7 @@ spec:
           value: "newString"
 ```
 
-#### OPC-UA Device Spec
+### OPC-UA Device Spec
 
 Parameter | Description | Scheme | Required
 --- | --- | --- | ---
@@ -168,5 +170,5 @@ datetime |  Property data type is datetime. | string
 
 #### DeviceExtension
 
-- reference the [example YAML](#opc-ua-devicelink-yaml) of opcua device for MQTT integration.
-- check [Integrate with MQTT Documentation](./mqtt-extension) for more details.
+- 关于OPC-UA设备的MQTT集成请参考[example YAML](#opc-ua-devicelink-yaml)。
+- 参考[与MQTT文档集成](./mqtt-extension)了解更多详细信息。
