@@ -39,4 +39,44 @@ module.exports = {
       id: 'en/faq',
     },
   ],
+  "cn-docs": [
+    {
+      type: 'doc',
+      id: 'cn/about',
+    },
+    {
+      type: 'doc',
+      id: 'cn/quick-start',
+    },
+    {
+      type: 'doc',
+      id: 'cn/install',
+    },
+    {
+      type: 'category',
+      label: 'DeviceLink',
+      items: ['cn/devicelink/about-dl', 'cn/devicelink/state-of-dl'],
+    },
+    {
+      type: 'category',
+      label: '适配器 (Adaptors)',
+      items: ['cn/adaptors/adaptor', 'cn/adaptors/modbus', 'cn/adaptors/opc-ua', 'cn/adaptors/mqtt', 'cn/adaptors/ble', 'cn/adaptors/dummy', 'cn/adaptors/mqtt-extension', 'cn/adaptors/develop'],
+    },
+    {
+      type: 'doc',
+      id: 'cn/develop',
+    },
+    {
+      type: 'doc',
+      id: 'cn/monitoring',
+    },
+    {
+      type: 'doc',
+      id: 'cn/edge-ui',
+    },
+    {
+      type: 'doc',
+      id: 'cn/faq',
+    },
+  ],
 };

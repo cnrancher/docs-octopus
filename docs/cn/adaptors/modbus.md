@@ -1,40 +1,40 @@
 ---
 id: modbus
-title: Modbus Adaptor
+title: Modbus 适配器
 ---
 
-### Introduction
+### 介绍
 
-[Modbus](https://www.modbustools.com/modbus.html) is a master/slave protocol, the device requesting the information is called the Modbus master and the devices supplying information are Modbus slaves. 
-In a standard Modbus network, there is one master and up to 247 slaves, each with a unique slave address from 1 to 247. 
-The master can also write information to the slaves.
+[Modbus](https://www.modbustools.com/modbus.html)是主/从协议，请求信息的设备称为Modbus主设备，提供信息的设备为Modbus从设备。
+在标准的Modbus网络中，有一个主设备和多达247个从设备，每个从设备具有从1到247的唯一从设备地址。
+主机也可以将信息写入从机。
 
-Modbus adaptor support both TCP and RTU protocol, it acting as the master node and connects to or manipulating the Modbus slave devices on the edge side.
+Modbus适配器同时支持TCP和RTU协议，它充当主节点，并可在边缘侧连接或操纵Modbus从设备。
 
-### Registers Operation
+### 注册操作
 
-- **Coil Registers**: readable and writable, 1 bit (off/on)
+- **线圈寄存器**：可读可写，1位（关闭/打开）
 
-- **Discrete Input Registers**: readable, 1 bit (off/on)
+- **离散输入寄存器**：可读，1位（关闭/打开）
 
-- **Input Registers**: readable, 16 bits (0 to 65,535), essentially measurements and statuses
+- **输入寄存器**：可读，16位（0至65,535），本质上是测量值和状态
 
-- **Holding Registers**: readable and writable, 16 bits (0 to 65,535), essentially configuration values
+- **保持寄存器**：可读可写，16位（0到65,535），本质上是配置值
 
 
-### Registration Information
+### 注册信息
 
 |  Versions | Register Name | Endpoint Socket | Available |
 |:---:|:---:|:---:|:---:|
 |  `v1alpha1` | `adaptors.edge.cattle.io/modbus` | `modbus.sock` | * |
 
-### Support Model
+### 支持模型
 
 | Kind | Group | Version | Available | 
 |:---:|:---:|:---:|:---:|
 | `ModbusDevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
 
-### Support Platform
+### 支持平台
 
 | OS | Arch |
 |:---:|:---|
@@ -42,15 +42,15 @@ Modbus adaptor support both TCP and RTU protocol, it acting as the master node a
 | `linux` | `arm` |
 | `linux` | `arm64` |
 
-### Usage
+### 使用方式
 
 ```shell script
 $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml
 ```
 
-### Authority
+### 权限
 
-Grant permissions to Octopus as below:
+对Octopus授予权限，如下所示：
 
 ```text
   Resources                                   Non-Resource URLs  Resource Names  Verbs
@@ -61,7 +61,7 @@ Grant permissions to Octopus as below:
 
 ### Modbus DeviceLink YAML
 
-example of modbus deviceLink YAML
+modbus `DeviceLink` YAML的示例:
 ```yaml
 apiVersion: edge.cattle.io/v1alpha1
 kind: DeviceLink
@@ -177,5 +177,5 @@ operationValue | Arithmetic operation value | string | false
 
 #### DeviceExtension
 
-- reference the [example YAML](#modbus-devicelink-yaml) of modbus device for MQTT integration.
-- check [Integrate with MQTT Documentation](./mqtt-extension) for more details.
+- 关于Modbus设备的MQTT集成请参考[example YAML](#modbus-devicelink-yaml)。
+- 参考[与MQTT文档集成](./mqtt-extension)了解更多详细信息。

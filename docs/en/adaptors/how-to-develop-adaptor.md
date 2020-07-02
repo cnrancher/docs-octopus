@@ -30,7 +30,7 @@ tree -d adaptors/<adaptor-name>
 
 ## Build management
 
-Adaptor follows the build management of Octopus, please view [Develop Octopus](./develop) for more details. Same as Octopus, Adaptor's management process consists of several stages with several actions. For convenience, the name of the action represents the current stage. The overall relationship of action flow are described as below:
+Adaptor follows the build-management of Octopus, please view [Develop Octopus](./develop) for more details. Same as Octopus, Adaptor's management process consists of several stages with several actions. For convenience, the name of the action represents the current stage. The overall relationship of action flow is described as below:
                                         
 ```text
         generate -> mod -> lint -> build -> package -> deploy

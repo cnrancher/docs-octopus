@@ -1,10 +1,10 @@
 module.exports = {
   title: 'Octopus',
   tagline: 'Lightweight edge device management system based on Kubernetes',
-  url: 'https://rancheredge.github.io',
+  url: 'https://cnrancher.github.io',
   baseUrl: '/docs-octopus/',
   favicon: 'img/favicon.ico',
-  organizationName: 'rancheredge', // Usually your GitHub org/user name.
+  organizationName: 'cnrancher', // Usually your GitHub org/user name.
   projectName: 'docs-octopus', // Usually your repo name.
   themeConfig: {
     announcementBar: {
@@ -27,16 +27,21 @@ module.exports = {
       },
       links: [
         {
+          to: 'docs/cn/about',
+          activeBasePath: 'docs/cn',
+          label: '中文文档',
+          position: 'left'
+        },
+        {
           to: 'docs/en/about',
           activeBasePath: 'docs/en',
           label: 'Docs',
           position: 'left',
         },
         {
-          to: 'docs/cn/about',
-          activeBasePath: 'docs/cn',
-          label: '中文文档',
-          position: 'left'
+          href: './eng',
+          label: 'English',
+          position: 'right',
         },
         {
           href: 'https://github.com/cnrancher/octopus',
@@ -52,38 +57,42 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'About Octopus',
-              to: 'docs/en/about',
+              label: '关于 Octopus',
+              to: 'docs/cn/about',
             },
             {
-              label: 'Quick-Start Guide',
-              to: 'docs/en/quick-start',
+              label: '快速入门指南',
+              to: 'docs/cn/quick-start',
+            },
+            {
+              label: '开发适配器',
+              to: 'docs/cn/adaptors/develop',
             },
           ],
         },
         {
-          title: 'Community',
+          title: '社区相关',
           items: [
             {
-              label: 'Rancher Website',
+              label: 'Rancher 官网',
               href: 'https://www.rancher.cn',
             },
             {
               label: 'Slack',
               href: 'https://slack.rancher.io',
             },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
           ],
         },
         {
-          title: 'More',
+          title: '更多',
           items: [
             {
               label: 'GitHub',
               href: 'https://github.com/cnrancher/octopus',
+            },
+            {
+              label: 'Helm Chart',
+              href: 'https://github.com/cnrancher/octopus-chart',
             },
           ],
         },
@@ -99,7 +108,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/rancheredge/docs-octopus/edit/master/website/',
+            'https://github.com/cnrancher/docs-octopus/edit/master/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

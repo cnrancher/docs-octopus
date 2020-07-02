@@ -9,31 +9,31 @@ import GitHubButton from 'react-github-btn';
 
 const features = [
   {
-    title: <>为边缘而生</>,
+    title: <>Build for Edge</>,
     imageUrl: 'img/undraw_docusaurus_tree.svg',
     description: (
       <>
-         轻量且不需要替换Kubernetes集群的任何组件。 部署Octopus后，
-         群集可以将任何边缘设备作为k8s资源进行管理。
+        Lightweight and does not need to replace any components of the Kubernetes clusters. With Octopus deployed,
+        the cluster can have the ability to manage any edge device as a resource.
       </>
     ),
   },
   {
-    title: <>简单而灵活</>,
+    title: <>Simple yet Flexible</>,
     imageUrl: 'img/undraw_docusaurus_mountain.svg',
     description: (
       <>
-        Octopus具有内置的设备协议适配器，如BLE，Modbus，OPC-UA和MQTT，并且支持自定义设备适配器插件。
-        点击<a href="https://github.com/cnrancher/octopus/blob/master/docs/adaptors/develop.md" target="_blank">开始构建</a>自定义适配器。
+        Octopus has build-in device adaptor like BLE, modbus, OPC-UA, and MQTT, and it supports custom device adaptor plugins. Go
+        ahead and <a href="https://github.com/cnrancher/octopus/blob/master/docs/adaptors/develop.md" target="_blank">build your own adaptor</a>.
       </>
     ),
   },
   {
-    title: <>支持原生Kubernetes和k3s</>,
+    title: <>Powered by Kubernetes & k3s</>,
     imageUrl: 'img/undraw_docusaurus_react.svg',
     description: (
       <>
-        Octopus镜像同时支持ARM64和ARMv7。 适用于原生 Kubernetes和<a href="https://k3s.io/" target="_blank"> k3s </a>。
+        Both ARM64 and ARMv7 are supported with multiarch images. Works great with both valina Kubernetes and <a href="https://k3s.io/" target="_blank">k3s</a>.
       </>
     ),
   },
@@ -64,15 +64,15 @@ function Home() {
       <header className={classnames('hero hero--primary hero-custom', styles.heroBanner)}>
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
-          <p className="hero__subtitle">基于Kubernetes/k3s的轻量级边缘设备管理系统</p>
+          <p className="hero__subtitle">{siteConfig.tagline}</p>
             <div className={classnames('start-button', styles.buttons)}>
             <Link
               className={classnames(
                 'button button--outline button--secondary button--lg',
                 styles.getStarted,
               )}
-              to={useBaseUrl('/docs/cn/about')}>
-              开始使用
+              to={useBaseUrl('docs/about')}>
+              Get Started
             </Link>
           </div>
           <GitHubButton href="https://github.com/cnrancher/octopus" data-icon="octicon-star" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</GitHubButton>

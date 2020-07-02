@@ -1,27 +1,27 @@
 ---
 id: ble
-title: BLE Adaptor
+title: BLE 适配器
 ---
 
-### Introduction
+### 介绍
 
-BLE stands for Bluetooth Low Energy (marketed as Bluetooth Smart). BLE is a form of wireless communication designed for short-range communications. 
+BLE代表低功耗蓝牙（通常称为BlueTooth Smart）。 BLE是一种设计用于短距离通信的无线通信形式。
 
-BLE adaptor implements the Bluetooth protocol and helps to define the attributes of the connected BLE device.
+BLE适配器实现了蓝牙协议的支持，并用于定义所连接的BLE设备的属性与配置。
 
-### Registration Information
+### 注册信息
 
 |  Versions | Register Name | Endpoint Socket | Available |
 |:---:|:---:|:---:|:---:|
 |  `v1alpha1` | `adaptors.edge.cattle.io/ble` | `ble.sock` | * |
 
-### Support Model
+### 支持模型
 
 | Kind | Group | Version | Available | 
 |:---:|:---:|:---:|:---:|
 | `BluetoothDevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
 
-### Support Platform
+### 支持平台
 
 | OS | Arch |
 |:---:|:---|
@@ -29,15 +29,15 @@ BLE adaptor implements the Bluetooth protocol and helps to define the attributes
 | `linux` | `arm` |
 | `linux` | `arm64` |
 
-### Usage
+### 使用方式
 
 ```shell script
 $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
 ```
 
-### Authority
+### 权限
 
-Grant permissions to Octopus as below:
+对Octopus授予权限，如下所示：
 
 ```text
   Resources                                   Non-Resource URLs  Resource Names  Verbs
@@ -47,6 +47,9 @@ Grant permissions to Octopus as below:
 ```
 
 ### Example of BLE deviceLink YAML
+
+BEL `DeviceLink` YAML的示例:
+
 ```YAML
 apiVersion: edge.cattle.io/v1alpha1
 kind: DeviceLink
@@ -85,7 +88,8 @@ spec:
         visitor:
           characteristicUUID: 226c000064764566756266734470666d
 ```
-For more BLE deviceLink examples, please refer to the [deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/ble/deploy/e2e) directory.
+
+有关更多BLE `DeviceLink`示例，请参考[deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/ble/deploy/e2e)目录。
 
 ### BLE Device Spec
 
@@ -165,5 +169,5 @@ Divide | Arithmetic operation of divide | string | false
 
 #### DeviceExtension
 
-- reference the [example YAML](#example-of-ble-devicelink-yaml) of BLE device for MQTT integration.
-- check [Integrate with MQTT Documentation](./mqtt-extension) for more details.
+- 关于BLE设备的MQTT集成请参考[example YAML](#example-of-ble-devicelink-yaml)。
+- 参考[与MQTT文档集成](./mqtt-extension)了解更多详细信息。

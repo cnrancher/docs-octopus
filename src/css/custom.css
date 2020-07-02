@@ -31,6 +31,7 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  min-height: 800px;
 }
 
 .rancher-header {
@@ -60,4 +61,8 @@ div[class^="announcementBar_"] button {
 
 .hero .container span {
   padding: 0 2px;
+}
+
+.features_src-pages-{
+  margin: 5rem 0;
 }

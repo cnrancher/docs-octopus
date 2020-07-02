@@ -1,22 +1,22 @@
 ---
 id: quick-start
-title: Quick-Start Guide
+title: 快速入门指南
 ---
 
-## Prerequisite
-You should either have an existing k3s or Kubernetes cluster to deploy the Octopus app. For users who don't have an existing Kubernetes cluster can follow the [Spin-up k3s Cluster Using k3d](#spin-up-k3s-cluster-using-k3doptional) to run a quick test.
+## 前置条件
+您需要有一个k3集群或Kubernetes集群来部署Octopus的应用。 对于不具有现有Kubernetes群集的用户，可参照[下列指南](#使用k3d的搭建k3s群集可选)来快速搭建一个本地k3s集群进行测试。
 
-### Spin-up k3s Cluster Using k3d(optional)
+### 使用k3d的搭建k3s群集(可选)
 
-[k3d](https://github.com/rancher/k3d) is a tool to create containerized k3s clusters. This means, that you can spin-up a multi-node k3s cluster on a single machine using Docker.
+[k3d](https://github.com/rancher/k3d)是快速搭建容器化k3s集群的工具。 这意味着，您可以使用Docker在单台计算机上启动多节点k3s集群。
 
-1. Spin-up a local k3d cluster with 3 worker nodes on default.
+1. 默认情况下启动具有3个Worker节点的本地k3s集群。
     ```shell script 
     $ curl -sfL https://get.k3s.io | sh -
     ```
    
    :::note
-   You are expected to see the following logs if the installation succeeds, use either `CTRL+C` or hit `Enter` to stop the local cluster.
+   如果安装成功，则应该看到以下日志，请使用`CTRL+C`或按`Enter`键以停止本地集群。
    :::
    ```logs
    [INFO] [0604 17:09:41] creating edge cluster with v1.17.2
@@ -44,12 +44,12 @@ You should either have an existing k3s or Kubernetes cluster to deploy the Octop
    [WARN] [0604 17:10:37] please input CTRL+C to stop the local cluster
    ```
 
-1. Open a new terminal and set the `KUBECONFIG` to access the local k3s cluster.
+1. 打开一个新终端，并配置`KUBECONFIG`以访问本地k3s集群。
     ```shell script 
     $ export KUBECONFIG=~/.kube/rancher-k3s.yaml
     ```
    
-1. Validate the local k3s cluster by checking its node.
+1. 通过检查本地k3s集群的节点来对其进行验证。
     ```shell script 
     $ kubectl get node
    NAME                 STATUS   ROLES    AGE     VERSION
@@ -60,24 +60,24 @@ You should either have an existing k3s or Kubernetes cluster to deploy the Octop
     ```
 
 
-## Walk-through
+## 使用步骤
 
-In this walk-through, we will use Octopus to manage a `dummy` device and perform the following tasks:
+在本演练中，我们将部署Octopus并通过其管理`一类虚拟设备`并执行以下任务：
 
-1. [Deploy the Octopus](#1-deploy-octopus)
-1. [Deploy Device Model & Device Adaptor](#2-deploy-device-model--device-adaptor)
-1. [Create Device-Link](#3-create-device-link)
-1. [Manage Device](#4-manage-device)
+1. [部署 Octopus](#1-部署-octopus)
+1. [部署设备模型和设备控制器](#2-部署设备模型和设备控制器)
+1. [创建 DeviceLink](#3-创建-devicelink)
+1. [管理设备](#4-管理设备)
 
-### 1. Deploy Octopus
+### 1. 部署 Octopus
 
-There are [two ways](./install) to deploy the Octopus, for convenience, we will use the manifest YAML file to bring up the Octopus. The installer YAML file is under the [`deploy/e2e`](https://github.com/cnrancher/octopus/tree/master/deploy/e2e) directory on Github:
+有[两种](./install)部署Octopus的方法，为方便起见，我们将通过一份 `all-in-one`的YAML文件来部署。 安装程序YAML文件位于Github上的[`deploy/e2e`](https://github.com/cnrancher/octopus/tree/master/deploy/e2e)目录下：
 
 ```shell script
 $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one_without_webhook.yaml
 ```
 
-expected result:
+预期结果：
 ```log
 namespace/octopus-system created
 customresourcedefinition.apiextensions.k8s.io/devicelinks.edge.cattle.io created
@@ -91,8 +91,7 @@ deployment.apps/octopus-brain created
 daemonset.apps/octopus-limb created
 ```
 
-After installed, we can verify the status of Octopus as below:
-
+安装后，我们可以验证Octopus的状态，如下所示：
 ```shell script
 $ kubectl get all -n octopus-system
 NAME                                 READY   STATUS    RESTARTS   AGE
@@ -117,11 +116,15 @@ replicaset.apps/octopus-brain-65fdb4ff99   1         1         1       14s
 
 ```
 
-### 2. Deploy Device Model & Device Adaptor
+### 2. 部署设备模型和设备控制器
 
-Octopus uses a dummy device for testing, which does not need to be connected to a real physical device. So we can assume that the dummy device is a real-world device here.
+接下来我们会使用备模拟器进行测试(不需要将其连接到真实的物理设备)。 在这里我们可以假设虚拟设备是一个真实的设备。
 
-First, we need to describe the device as a resource in Kubernetes. This description process is modeling the device. In Kubernetes, the best way to describe resources is to use [CustomResourceDefinitions](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/#customresourcedefinitions), so **defining a device model in Octopus is actually defining the CustomResourceDefinition.** Take a quick look at this `DummySpecialDevice` model(assume this is a smart fan): 
+首先，我们需要将设备描述为Kubernetes中的一种资源。 此描述过程即为对设备进行建模。 在Kubernetes中，描述资源的最佳方法是使用[CustomResourceDefinitions](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/#customresourcedefinitions)，因此**定义Octopus的设备模型实际上是在定义CustomResourceDefinition**, 可快速浏览一下下列的`DummySpecialDevice`模型（假设这是一个智能风扇）：
+
+:::note
+下列YAML可通过[code-generator](https://github.com/kubernetes/code-generator)动态生成，无需手动编辑。
+:::
 
 ```yaml
 apiVersion: apiextensions.k8s.io/v1
@@ -199,13 +202,13 @@ status:
   ...
 ```
 
-The dummy adaptor installer YAML file is under the [`adaptors/dummy/deploy/e2e`](https://github.com/cnrancher/octopus/blob/master/adaptors/dummy/deploy/e2e) directory, the `all_in_one.yaml` contains the device model and the device adaptor, we can apply it into the cluster directly:
+虚拟设备适配器(Dummy Adaptor)的安装YAML文件位于[`adaptors/dummy/deploy/e2e`](https://github.com/cnrancher/octopus/blob/master/adaptors/dummy/deploy/e2e)目录下，即 `all_in_one.yaml`, 它包含了设备模型和设备适配器，我们可以通过以下指令将其直接部署到k3s集群中：
 
 ```shell script
 $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
 ```
 
-expected result:
+预期结果：
 ```
 customresourcedefinition.apiextensions.k8s.io/dummyspecialdevices.devices.edge.cattle.io created
 customresourcedefinition.apiextensions.k8s.io/dummyprotocoldevices.devices.edge.cattle.io created
@@ -241,7 +244,7 @@ replicaset.apps/octopus-brain-65fdb4ff99   1         1         1       2m27s
 
 ```
 
-Notes that we have also granted Octopus permission to managing `DummySpecialDevice`/`DummyProtocolDevice`:
+请注意，我们还授予了Octopus管理 `DummySpecialDevice`/`DummyProtocolDevice`的权限：
 
 ```shell script
 $ kubectl get clusterrolebinding | grep octopus
@@ -250,15 +253,18 @@ octopus-adaptor-dummy-manager-rolebinding              43s
 
 ```
 
-### 3. Create Device Link
+### 3. 创建 DeviceLink
 
-Next, we are going to connect the dummy device via `DeviceLink` YAML. A `DeviceLink` consists of 3 parts: `Adaptor`, `Model`, and `Device spec`:
+前面我们提到过DeviceLink是Octopus自定义的一个k8s资源对象(缩写为: dl)，用户可通过编辑DeviceLink 的YAML文件来进行配置与和管理设备连接。
 
-- The `Adaptor` defines which adaptor to use and the node that the real-world device should be connected to.
-- `Model` describes the model of a device, it is the [TypeMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go) of the device model CRD.
-- `Device spec` describes how to connect to the device and its desired properties or status of the device, those parameters are defined by the device model CRD. 
+接下来，我们将通过 `DeviceLink` YAML来连接一个虚拟设备。 DeviceLink由3部分组成：Adaptor，Model和Device spec。
 
-Let's assume that there is a device named `living-room-fan` that can be connected through the `edge-worker` node, we can use the following YAML to test how it works.
+- `Adaptor` - 适配器定义了要使用的适配器(即协议)以及实际设备应连接的节点。
+- `Model` - 模型描述了设备的模型，它是设备模型的[TypeMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go) CRD。
+- `Device Spec` - 设备参数描述了如何连接到设备及其所需的设备属性或状态，这些参数由设备模型的CRD来定义。
+
+假设有一个名为 `living-room-fan` 的设备可以通过 `edge-worker` 节点连接，我们可以使用以下YAML来测试其工作方式。
+
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: edge.cattle.io/v1alpha1
@@ -285,7 +291,7 @@ spec:
 
 ```
 
-There are [several states](./devicelink/state-of-dl) of a DeviceLink, if we found the `PHASE` is **DeviceConnected** and its `STATUS` is on **Healthy**, we can now query its status use the same `DeviceLink` name of device model CRD(i.e dummyspecialdevice in here):
+DeviceLink包含了[几种状态](./devicelink/state-of-dl)，如果我们发现其`PHASE`为**DeviceConnected**和`STATUS`为**Healthy**的状态下，我们就可以使用设备模型的CRD对象来查询其状态（即此处的dummyspecialdevice）：
 
 ```shell script
 $ kubectl get devicelink living-room-fan -n default
@@ -294,7 +300,7 @@ living-room-fan   DummySpecialDevice   edge-worker   adaptors.edge.cattle.io/dum
 
 ```
 
-Check device reported status:
+查看虚拟设备上报的状态或信息：
 ```shell script
 $ kubectl get dummyspecialdevice living-room-fan -n default -w
 NAME              GEAR   SPEED   AGE
@@ -304,15 +310,15 @@ living-room-fan   slow   12      36s
 
 ```
 
-### 4. Manage Device
+### 4. 管理设备
 
-Users can use device spec properties to manage its device, e.g, if we want to turn off the fan, we can set its spec `"on": false`:
+用户可以使用修改设备属性来管理其设备，例如，假设我们要关闭风扇，可以将其`on`(开关属性)配置设置为 `"on"：false`：
 
 ```shell script
 $ kubectl patch devicelink living-room-fan -n default --type merge --patch '{"spec":{"template":{"spec":{"on":false}}}}'
 ```
 
-the log shows `devicelink.edge.cattle.io/living-room-fan is patched`, query its status, both `GEAR` and `SPEED` shows an empty value.
+日志显示 `devicelink.edge.cattle.io/living-room-fan is patched`，查询其状态，`GEAR`和`SPEED`值均显示为空值(表示已关闭)。
 
 ```
 $ kubectl get devicelink living-room-fan -n default

@@ -1,48 +1,50 @@
 ---
 id: mqtt-extension
-title: Integrate with MQTT
+title: 适配器与MQTT集成
 ---
 
-Octopus provides two out-of-box ways to integrate with [MQTT](http://mqtt.org/):
+Octopus提供了两种现成的方法来与[MQTT](http://mqtt.org/)集成：
 
-1. Most Octopus adaptors, like [BLE adaptor](./ble) support to synchronize the device status via an MQTT broker. Get more MQTT extension adaptors [below](#supported-adaptors).
-1. If the device naturally supports MQTT, the [MQTT adaptor](./mqtt) can be used as the first choice.
+1. 大多数Octopus适配器，例如[BLE适配器](./ble)，都支持通过MQTT代理同步设备状态。 在[#supported-adaptors]下获得更多MQTT扩展适配器。
+1. 如果设备自然支持MQTT，则可以将[MQTT适配器](./mqtt)用作首选。
 
-> This post mainly outlines the detail of the first way, if you want to know more about the MQTT adaptor, please view [here](./mqtt). If the above out-of-box ways cannot satisfy you, you can follow the [CONTRIBUTING](../../CONTRIBUTING.md) to contribute your idea or [develop a new adaptor](./develop.md).
+> 这篇文章主要概述了第一种方法的细节，如果您想了解更多关于MQTT适配器的信息，请查看[MQTT适配器](./mqtt)。 如果以上开箱即用的方式无法满足您的要求，则可以按照[CONTRIBUTING](../../CONTRIBUTING.md)提出您的想法，或[开发新的适配器](./develop.md)。
 
-Although the latest version of MQTT is v5.0, for the time being, Octopus does not support the revision, the main reason is the [corresponding development library](https://www.eclipse.org/paho/clients/golang/) does not support yet([paho.mqtt.golang/issues#347](https://github.com/eclipse/paho.mqtt.golang/issues/347)):
+尽管MQTT的最新版本为v5.0，但目前Octopus暂时不支持该修订版，主要原因是[相应的开发库](https://www.eclipse.org/paho/clients/golang/)尚不支持[paho.mqtt.golang/issues＃347](https://github.com/eclipse/paho.mqtt.golang/issues/347)：
 
 - [x] [MQTT 3.1](http://public.dhe.ibm.com/software/dw/webservices/ws-mqtt/mqtt-v3r1.html)
 - [x] [MQTT 3.1.1](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
 - [ ] [MQTT 5.0](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
 
-Integrating with MQTT to expose the status of a device, in addition to giving the device an ability to use MQTT, can also expand the usage scenarios of the device, such as equipment interaction and equipment monitoring.
+与MQTT集成以显示设备状态，除了赋予设备使用MQTT的能力外，还可以扩展设备的使用场景，例如设备交互和设备监视。
 
 ## MQTT
 
-> MQTT is a machine-to-machine (M2M)/"Internet of Things" connectivity protocol. It was designed as an extremely lightweight publish/subscribe messaging transport. It is useful for connections with remote locations where a small code footprint is required and/or network bandwidth is at a premium.
+> MQTT是机器对机器(M2M)/`物联网`连接协议。 它被设计为一种非常轻量级的发布/订阅消息传递。 对于与需要较小代码占用和/或网络带宽非常宝贵的远程位置的连接很有用。
 
-Although MQTT's name contains "MQ", it is not a protocol for defining a message queue, actually, [the "MQ" refers to the MQseries product from IBM and has nothing to do with "Message Queue"](https://www.hivemq.com/blog/mqtt-essentials-part2-publish-subscribe/#distinction-from-message-queues). MQTT is a lightweight and binary protocol, and due to its minimal packet overhead, MQTT excels when transferring data over the wire in comparison to protocols like HTTP. MQTT provides a means of communication that can be pub/sub like a message queue, at the same time, many features are provided to enrich communication scenarios, such as QoS, Last will and testament, retained message and so on. To learn more about MQTT, there are a series of articles that are highly recommended: [MQTT Essentials](https://www.hivemq.com/mqtt-essentials/).
+尽管MQTT的名称包含`MQ`，但它不是用于定义消息队列的协议，实际上，[`MQ`是指IBM的MQseries产品，与`消息队列`无关。](https://www.hivemq.com/blog/mqtt-essentials-part2-publish-subscribe/#distinction-from-message-queues)。 
+MQTT是一种轻量级的二进制协议，并且由于其最小的数据包开销，与HTTP之类的协议相比，MQTT在通过网络传输数据时表现出色。 MQTT提供了一种可以像消息队列一样发布/订阅的通信方式，同时，提供了许多功能来丰富通信场景，例如QoS，最后遗嘱和遗嘱，保留的消息等。 
+要了解有关MQTT的更多信息，强烈推荐一系列文章：[MQTT Essentials](https://www.hivemq.com/mqtt-essentials/)。
 
 ![mqtt-tcp-ip-stack](https://www.hivemq.com/img/blog/mqtt-tcp-ip-stack.png)
 
-### Convention
+### 惯例
 
-> **MQTT uses subject-based filtering of messages**. **Every message contains a topic (subject)** that the broker can use to determine whether a subscribing client gets the message or not. 
+> **MQTT使用基于主题的消息过滤**。 **每封邮件都包含一个主题(主题)**，代理可以使用该主题来确定订阅客户端是否收到该邮件。
 
-In MQTT, the **topic** is a hierarchically-structured string that can be used to [filter and route messages](https://www.hivemq.com/blog/mqtt-essentials-part-5-mqtt-topics-best-practices/) and the **payload** data is agnostic which means the publisher can send binary data, text data, or even full-fledged XML or JSON, so designing the topic tree and payload schema is an important work of any MQTT deployment.
+在MQTT中，**topic**是可用于[过滤和路由消息](https://www.hivemq.com/blog/mqtt-essentials-part-5-mqtt-topics-best-practices/)的层次结构字符串， 而**payload**数据不可知，这意味着发布者可以发送二进制数据，文本数据甚至是 完整的XML或JSON，因此设计主题树和有效负载架构是任何MQTT部署的重要工作。
 
-Octopus follows the [best practices of MQTT topic from MQTT Essentials](https://www.hivemq.com/blog/mqtt-essentials-part-5-mqtt-topics-best-practices/#best-practices) to construct the **topic** name, and marshals the **payload** data as JSON.
+Octopus遵循[MQTT Essentials中MQTT主题的最佳实践](https://www.hivemq.com/blog/mqtt-essentials-part-5-mqtt-topics-best-practices/#best-practices)来构造 **topic**名称，并将 **payload** 数据编组为JSON。
 
-## Configuration
+## 配置选项
 
-Octopus reorganizes the client parameters of [github.com/eclipse/paho.mqtt.golang](https://github.com/eclipse/paho.mqtt.golang/blob/4c98a2381d16c21ed2f9f131cec2429b0348ab0f/options.go#L53-L87), and then constructs the following configuration options. The available version of the configuration options is `v1alpha1`.
+Octopus重新组织了[github.com/eclipse/paho.mqtt.golang](https://github.com/eclipse/paho.mqtt.golang/blob/4c98a2381d16c21ed2f9f131cec2429b0348ab0f/options.go#L53-L87)的客户端参数 然后构造以下配置选项。 配置选项的可用版本为`v1alpha1`。
 
 |  Versions | Available | Current |
 |:---:|:---:|:---:|
 |  [`v1alpha1`](./integrate_with_mqtt.md) | * | * |
 
-The current official Adaptors such as BLE, Modbus and OPC-UA support the MQTT protocol extension using the same configuration (refer to the following `spec.template.spec.extension`).
+当前的官方适配器（如BLE，Modbus和OPC-UA）使用相同的配置（请参阅以下`spec.template.spec.extension`）支持MQTT协议扩展。
 
 ```YAML
 apiVersion: edge.cattle.io/v1alpha1
@@ -76,9 +78,9 @@ spec:
      "on": true
 ```
 
-### Specification
+### 规范
 
-The specification of MQTT options are valid in all MQTT extension adaptors, they are using for connecting the MQTT broker, guiding the connection, indicating which topic to publish/subscribe and encoding of payload data.
+MQTT选项的规范在所有MQTT扩展适配器中均有效，它们用于连接MQTT代理，指导连接，指示要发布/订阅的主题以及有效载payload的编码。
 
 #### DeviceExtensionSpec
 
@@ -181,9 +183,9 @@ The specification of MQTT options are valid in all MQTT extension adaptors, they
 
 ### Specification YAML
 
-The specification of MQTT options are valid in all MQTT extension adaptors, they are using for connecting the MQTT broker server, guiding the connection, indicating which topic to publish/subscribe and encoding of payload data and so on.
+MQTT选项的规范在所有MQTT扩展适配器中均有效，它们用于连接MQTT代理服务器，引导连接，指示要发布/订阅的主题以及有效Payload的编码等。
 
-> REQUIRED is the required field to be filled.
+> REQUIRED是必填字段。
 
 ```yaml
 
@@ -480,10 +482,10 @@ message:
 
 ```
 
-## Supported Adaptors
+## 支持的适配器
 
-- [dummy](./dummy)
-- [ble](./ble)
 - [modbus](./modbus)
 - [opcua](./opc-ua)
+- [ble](./ble)
+- [dummy](./dummy)
 
