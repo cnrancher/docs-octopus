@@ -39,29 +39,21 @@ Octopus借鉴了[Maven](https://maven.apache.org/)，并基于[make](https://www
 
 假设在Mac上尝试以下示例：
 
-1.在本地主机上运行，当前环境将安装其他依赖项。 如果任何安装失败，您将收到相应的警告。
-    - `make octopus build`：执行`build`阶段，然后获取`darwin/amd64` 的可执行二进制文件。
-    - `make octopus test only`：在`darwin/amd64`平台上执行`test` 动作。
-    - `REPO=somebody OS=linux ARCH=amd64 make octopus package`：执行`package` 动作，完成后可获取`linux/amd64` 的可执行二进制文件和一个Repo名为`somebody`的Octopus `linux/amd64` 的镜像。
-    - `CLUSTER_TYPE=make octopus verify only`：使用[`kind`](https://github.com/kubernetes-sigs/kind)集群执行`verify`操作。
+1. 在本地主机上运行，当前环境将安装其他依赖项。 如果任何安装失败，您将收到相应的警告。
+   - `make octopus build`：执行`build`阶段，然后获取`darwin/amd64` 的可执行二进制文件。
+   - `make octopus test only`：在`darwin/amd64`平台上执行`test` 动作。
+   - `REPO=somebody OS=linux ARCH=amd64 make octopus package`：执行`package` 动作，完成后可获取`linux/amd64` 的可执行二进制文件和一个Repo名为`somebody`的Octopus `linux/amd64` 的镜像。
+   - `CLUSTER_TYPE=make octopus verify only`：使用[`kind`](https://github.com/kubernetes-sigs/kind)集群执行`verify`操作。
 
-1. Support multi-arch in the localhost.
-    - `CROSS=true make octopus build only`: execute `build` action, then get all execution binaries of supported platform.
-    - `CROSS=true make octopus test only`: _crossed testing isn't supported currently_.
-    - `CROSS=true REPO=somebody make octopus package only`: execute `package` action, then get all supported platform images of `somebody` repo.
-        + `make octopus package only`: _packaging `darwin` platform image isn't supported currently_.
-    - `CROSS=true REPO=somebody make octopus deploy only`: execute `deploy` action, then push all supported platform images to `somebody` repo, also create [manifest images](https://docs.docker.com/engine/reference/commandline/manifest/) for the current version.
-        + `make octopus deploy only`: _deploying `darwin` platform image isn't supported currently_.
-        
 1. 在本地主机中支持多架构镜像。
-    - `CROSS=true make octopus build only`: 执行`build` 操作，然后获取受支持平台的所有执行二进制文件。
-    - `CROSS=true make octopus test only`: _目前不支持交叉平台测试_。
-    - `CROSS=true REPO=somebody make octopus package only`: 执行`package` 操作，指定镜像的组织名为`somebody` 并构建所有支持的平台的镜像。 
-        + `make octopus package only`: _当前不支持`darwin` 平台的镜像_.
-    - `CROSS=true REPO=somebody make octopus deploy only`: 执行`deploy` 操作，然后将所有支持的平台的镜像推送至`somebody` 仓库，并且创建当前版本的[Manifest 文件](https://docs.docker.com/engine/reference/commandline/manifest/).
-        + `make octopus deploy only`: _当前不支持`darwin` 平台镜像_.
+   - `CROSS=true make octopus build only`: 执行`build` 操作，然后获取受支持平台的所有执行二进制文件。
+   - `CROSS=true make octopus test only`: _目前不支持交叉平台测试_。
+   - `CROSS=true REPO=somebody make octopus package only`: 执行`package` 操作，指定镜像的组织名为`somebody` 并构建所有支持的平台的镜像。 
+      + `make octopus package only`: _当前不支持`darwin` 平台的镜像_.
+   - `CROSS=true REPO=somebody make octopus deploy only`: 执行`deploy` 操作，然后将所有支持的平台的镜像推送至`somebody` 仓库，并且创建当前版本的[Manifest 文件](https://docs.docker.com/engine/reference/commandline/manifest/).
+      + `make octopus deploy only`: _当前不支持`darwin` 平台镜像_.
 
-1.在[`dapper`](https://github.com/rancher/dapper)模式下构建，当前环境中不需要其他依赖项，这类选项适合于构造CI/CD，并具有良好的环境可移植性。
+1. 在[`dapper`](https://github.com/rancher/dapper)模式下构建，当前环境中不需要其他依赖项，这类选项适合于构造CI/CD，并具有良好的环境可移植性。
    - `BY=dapper make octopus build`：执行`build` 阶段，然后获取`linux/amd64` 可执行二进制文件。
    - `BY=dapper make octopus test`：在`linux/amd64`平台上执行`test` 操作。
    - `BY=dapper REPO=somebody make octopus package only`：执行`package` 操作并获得`linux/amd64`架构和组织名为`sombody`的镜像。
