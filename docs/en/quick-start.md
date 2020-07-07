@@ -12,7 +12,7 @@ You should either have an existing k3s or Kubernetes cluster to deploy the Octop
 
 1. Spin-up a local k3d cluster with 3 worker nodes on default.
     ```shell script 
-    $ curl -sfL https://get.k3s.io | sh -
+    $ curl -fL https://octopus-assets.oss-cn-beijing.aliyuncs.com/k3d/cluster-k3s-spinup.sh | bash -
     ```
    
    :::note

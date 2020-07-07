@@ -12,7 +12,7 @@ title: 快速入门指南
 
 1. 默认情况下启动具有3个Worker节点的本地k3s集群。
     ```shell script 
-    $ curl -sfL https://get.k3s.io | sh -
+    $ curl -fL https://octopus-assets.oss-cn-beijing.aliyuncs.com/k3d/cluster-k3s-spinup.sh | bash -
     ```
    
    :::note
