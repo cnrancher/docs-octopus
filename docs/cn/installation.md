@@ -3,15 +3,15 @@ id: install
 title: 安装部署
 ---
 
-Octopus支持两种不同的部署方式，一种是[Helm chart](https://helm.sh/)，另一种是基于[Kustomize](https://github.com/kubernetes-sigs/kustomize)的。
+Octopus支持两种不同的部署方式，一种是基于[Helm chart](https://helm.sh/)部署，另一种是基于[Kustomize](https://github.com/kubernetes-sigs/kustomize)部署。
 
-## 1. Octopus Helm 应用
+## 基于Helm chart部署
 
 :::note
 此仓库中的图表需要Helm 3.x或更高版本。请阅读并遵循[Helm安装指南](https://helm.sh/docs/intro/install/)。
 :::
 
-[Octopus-Chart](https://github.com/cnrancher/octopus-chart)项目包含了[Octopus](https://github.com/cnrancher/octopus)的官方Helm图表。 这些图表用于将Octopus部署到Kubernetes/k3s集群。
+[Octopus-Chart](https://github.com/cnrancher/octopus-chart)项目包含了[Octopus](https://github.com/cnrancher/octopus)的官方Helm图表。 这些图表用于将Octopus部署到Kubernetes或k3s集群。
 
 
 ### 添加Octopus Helm仓库
@@ -25,7 +25,7 @@ $ helm repo update
 
 ### 安装应用
 
-要将Octopus Chart安装到Kubernetes/k3s集群中，请使用：
+请运行以下命令，将Octopus Chart安装到Kubernetes或k3s集群中：
 ```
 $ helm create ns octopus-system
 ```
@@ -33,7 +33,7 @@ $ helm create ns octopus-system
 $ helm install --namespace octopus-system octopus cnrancher/octopus
 ```
 
-安装成功后，您可以获取应用状态:
+安装成功后，您可以获取应用状态：
 ```
 $ helm status octopus
 ```
@@ -42,13 +42,13 @@ $ helm status octopus
 ```
 $ helm delete octopus
 ```
-该命令几乎删除了与应用关联的所有Kubernetes组件，并删除了其发行版。
+该命令几乎删除了与应用关联的所有Kubernetes组件，并删除了Kubernetes发行版。
 
 ### Helm Chart和Octopus支持
 
 请访问[Octopus github issues](https://github.com/cnrancher/octopus/issues/)以获得支持。
 
-## 2. 基于Kustomize
+## 基于Kustomize部署
 
 Kustomize是解决Kubernetes应用程序管理的另一种工具，它使用的概念与Helm不同，后者称为[声明式应用程序管理](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/architecture /declarative-application-management.md)。
 
@@ -59,7 +59,7 @@ Octopus使用 `Kustomize`生成其安装程序的清单文件，安装程序YAML
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
     ```
 
-1. 安装Octopus官方的协议适配器(包含Modbus,OPC-UA, BLE, MQTT和Dummy)
+1. 安装Octopus官方的协议适配器(包含Modbus、OPC-UA、BLE、MQTT和Dummy)
     ```shell script
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
