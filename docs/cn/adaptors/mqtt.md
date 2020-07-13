@@ -3,35 +3,35 @@ id: mqtt
 title: MQTT 适配器
 ---
 
-## Registration Information
+## 注册信息
 
-|  Versions | Register Name | Endpoint Socket | Available |
-|:---:|:---:|:---:|:---:|
-|  `v1alpha1` | `adaptors.edge.cattle.io/mqtt` | `mqtt.sock` | * |
+| 版本 | 注册名称 | 端点 Socket | 是否可用 |
+|:---|:---|:---|:---|
+|  `v1alpha1` | `adaptors.edge.cattle.io/mqtt` | `mqtt.sock` | 是 |
 
-## Support Model
+## 支持模板
 
-| Kind | Group | Version | Available | 
-|:---:|:---:|:---:|:---:|
-| `mqttDevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
+| 类型 | 设备组 | 版本 | 是否可用 | 
+|:---|:---|:---|:---|
+| `mqttDevice` | `devices.edge.cattle.io` | `v1alpha1` | 是 |
 
-## Support Platform
+## 支持的平台
 
-| OS | Arch |
-|:---:|:---|
+| 操作系统 | 架构 |
+|:---|:---|
 | `linux` | `amd64` |
 | `linux` | `arm` |
 | `linux` | `arm64` |
 
-## Usage
+## 使用方式
 
 ```shell script
 kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
 ```
 
-## Authority
+## 权限
 
-Grant permissions to Octopus as below <!-- kubectl describe clusterrole ... -->:
+对Octopus授予权限，如下所示：
 
 ```text
   Resources                                   Non-Resource URLs  Resource Names  Verbs
@@ -40,61 +40,60 @@ Grant permissions to Octopus as below <!-- kubectl describe clusterrole ... -->:
   mqttdevices.devices.edge.cattle.io/status  []                 []              [get patch update]
 ```
 
-### DeviceMqttConfig
-
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-broker | MQTT broker url string | string  | true
-username | MQTT username | string | true
-password | MQTT user password | string | true
-
-### SubInfo
-
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-topic | topic name  | string | true
-payloadType |  MQTT payload type (json)  | string | true
-qos | qos of MQTT | int | true
-
-### PubInfo
-
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-topic | topic name  | string | true
-qos | qos of MQTT | int | true
-
-### ValueProps
-
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-valueType | Reports the type of property | string | false
-intValue | Reports the value of int type | int | false
-stringValue | Reports the value of string type | string | false
-floatValue | Reports the value of float type | float | false
-booleanValue | Reports the value of boolean type | bool | false
-arrayValue | Reports the value of array type | RawExtension | false
-objectValue | Reports the value of object type | RawExtension | false
-
 ### DeviceSpecProperty
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-name | Property name  | string | true
-description |  Property description  | string | false
-jsonPath | jsonpath of value ,for more complete information please check out [GJSON Syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md).| string | true
-subInfo | subecribe info adaptor | [SubInfo](#subinfo) | true
-value | valueProps of property | [ValueProps](#valueprops) | false
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+name | 属性名称  | string | 是
+description |  属性描述  | string | 否
+jsonPath | 属性值的json路径，详情请参考[GJSON Syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)| string | 是
+subInfo | 订阅信息adapter| [SubInfo](#subinfo) | 是
+value | 属性的valueProps | [ValueProps](#valueprops) | 否
 
 ### DevicePropertyStatus
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-name | property name | string | true
-description | property describe | string | false
-value | valueProps of property | [ValueProps](#valueprops) | true
-updateAt | property status update time | string | true
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+name | property name | string | 是
+description | property describe | string | 否
+value | valueProps of property | [ValueProps](#valueprops) | 否
+updateAt | property status update time | string | 是
 
-## Example of MQTT deviceLink YAML
+### MQTT参数
+
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+broker | MQTT broker url地址 | string  | 是
+username | MQTT 用户名 | string | 是
+password | MQTT 用户密码 | string | 是
+
+### PubInfo
+
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+topic | topic名称  | string | 是
+qos | MQTT服务质量等级 | int | 是
+### SubInfo
+
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+topic | topic名称  | string | 是
+payloadType |  MQTT payload 类型（json） | string | 是
+qos | MQTT服务质量等级 | int | 是
+
+### ValueProps
+
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+valueType | 属性类型，可选值包括：int、string、float、boolean、array和object | string | 否
+intValue | int类型属性的值 | int | 否
+stringValue | string类型属性的值 | string | 否
+floatValue | float类型属性的值 | float | 否
+booleanValue | boolean类型属性的值| boolean | 否
+arrayValue | array类型属性的值 | RawExtension | 否
+objectValue | object类型属性的值 | RawExtension | 否
+
+## MQTT deviceLink YAML示例
 ```YAML
 apiVersion: edge.cattle.io/v1alpha1
 kind: DeviceLink
@@ -117,7 +116,7 @@ spec:
     spec:
       config:
         broker: "tcp://192.168.8.246:1883"
-        password: parchk123
+        password: p*****3
         username: parchk
       properties:
         - name: "switch"
@@ -145,37 +144,38 @@ spec:
 
 ```
 
-### JSON Path Syntax
+### JSON Path语法
 
-for more detailed information of JSON path syntax please refer to [GJSON Syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md).
+属性值的json路径，详情请参考[GJSON Syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)
 
-### Quick Start
 
-1. Update the MQTT broker configuration of the above [YAML](#example-of-mqtt-devicelink-yaml) file
+### 快速入门
+
+1. 更新上述[YAML](#example-of-mqtt-devicelink-yaml)文件示例中的MQTT broker参数配置
     ```yaml
         spec:
           config:
             broker: "tcp://192.168.8.246:1883"
-            password: parchk123
+            password: p*****3
             username: parchk
     ```
-1. start the testdevice roomlight in the `test/testdata/testdevice/roomlight` directory
+1. 启动`test/testdata/testdevice/roomlight`路径下的roomlight设备
     ```shell script
     cd ./testdata/testdevice/roomlight
     go build
     ./roomlight -b "tcp://192.168.8.246:1883"
     ```
    
-1. deploy the DeviceLink use [roomlightcase1.yaml](../../deploy/e2e)
+1. 使用[roomlightcase1.yaml](../../deploy/e2e)部署DeviceLink
     ```shell script
     $ kubeclt apply -f roomlightcase1.yaml
     ```
-1. check the status of device in the clusters
+1. 检查集群中设备的状态
     ```shell script
     $ kubeclt get mqttdevice mqtt-test -oyaml
     ```
 
-1. You are expected to see the following YAML if installation is succeed.
+1. 如果安装成功，应该返回如下信息：
     ```yaml
     apiVersion: "devices.edge.cattle.io/v1alpha1"
     kind: "MqttDevice"
@@ -211,7 +211,7 @@ for more detailed information of JSON path syntax please refer to [GJSON Syntax]
             powerDissipation: "10KWH"
           valueType: "object"
     ```
-1. You can also modify the device property as below:
+1. 您可以修改设备属性，如下所示：
 
     ```shell script
     $ kubectl edit dl mqtt-test
@@ -221,7 +221,7 @@ for more detailed information of JSON path syntax please refer to [GJSON Syntax]
         spec:
           config:
             broker: tcp://192.168.8.246:1883
-            password: parchk123
+            password: p*****3
             username: parchk
           properties:
           - description: the room light switch

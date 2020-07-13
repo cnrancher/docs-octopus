@@ -91,7 +91,7 @@ For more BLE deviceLink examples, please refer to the [deploy/e2e](https://githu
 
 Parameter | Description | Scheme | Required
 --- | --- | --- | ---
-parameters | Parameter of the opcua device| *[DeviceParamters](#deviceparamters) | false
+parameters | Parameter of the BLE device| *[DeviceParamters](#deviceparamters) | false
 protocol | Device protocol config  | [DeviceProtocol](#deviceprotocol) | true
 properties | Device properties     | []*[DeviceProperty](#deviceproperty) | false
 extension | Integrate with deivce MQTT extension  | *[DeviceExtension](#deviceextension) | false

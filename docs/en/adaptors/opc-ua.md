@@ -123,7 +123,7 @@ Parameter | Description | Scheme | Required
 --- | --- | --- | ---
 url | The URL for opc-ua server endpoint | string | true
 username | Username for accessing opc-ua server | string | false
-password | Password for opc-ua server endpoint | string | false
+password | Password for opc-ua server password | string | false
 securityPolicy | Defaults to `None`. Valid values are `None, Basic128Rsa15, Basic256, Basic256Sha256, Aes128Sha256RsaOaep, Aes256Sha256RsaPss`. | string | false
 securityMode | Defaults to `None`. Valid values are `None, Sign, and SignAndEncrypt`. | string | false
 certificateFile | Certificate file for accessing opc-ua server | string | true
