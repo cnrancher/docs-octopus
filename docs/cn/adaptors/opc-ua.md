@@ -11,20 +11,20 @@ OPC-UA适配器集成了[gopcua](https://github.com/gopcua/opcua)，并专注于
 
 ### 注册信息
 
-|  Versions | Register Name | Endpoint Socket | Available |
-|:---:|:---:|:---:|:---:|
+| 版本 | 注册名称 | 端点 Socket | 是否可用 |
+|:---|:---|:---|:---|
 |  `v1alpha1` | `adaptors.edge.cattle.io/opcua` | `opcua.sock` | * |
 
 ### 支持模型
 
-| Kind | Group | Version | Available | 
-|:---:|:---:|:---:|:---:|
+| 类型 | 设备组 | 版本 | 是否可用 | 
+|:---|:---|:---|:---|
 | `OPCUADevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
 
 ### 支持平台
 
-| OS | Arch |
-|:---:|:---|
+| 操作系统 | 架构 |
+|:---|:---|
 | `linux` | `amd64` |
 | `linux` | `arm` |
 | `linux` | `arm64` |
@@ -48,7 +48,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/ad
 
 ### OPC-UA DeviceLink YAML
 
-OPC-UA `DeviceLink` YAML的示例:
+OPC-UA `DeviceLink` YAML的示例：
 
 ```yaml
 apiVersion: edge.cattle.io/v1alpha1
@@ -105,67 +105,67 @@ spec:
 
 ### OPC-UA Device Spec
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-parameters | Parameter of the opcua device| *[DeviceParamters](#deviceparamters) | false
-protocol | Protocol for accessing the opcua device  | *[ProtocolConfig](#protocolconfig) | true
-properties | Device properties  | []*[DeviceProperty](#deviceproperty) | false
-extension | Integrate with deivce MQTT extension  | *[DeviceExtension](#deviceextension) | false
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+parameters | opcua 设备的参数| *[DeviceParamters](#deviceparamters) | 否
+protocol | 访问opcua 设备时使用的网络传输协议  | *[ProtocolConfig](#protocolconfig) | 是
+properties | 设备属性  | []*[DeviceProperty](#deviceproperty) | 否
+extension | OPC-UA设备的MQTT集成  | *[DeviceExtension](#deviceextension) | 否
 
 #### DeviceParamters
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-syncInterval | Device properties sync interval, default to `5s`  | string | false
-timeout |  Device connection timeout, default to `10s` | string | false
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+syncInterval | 同步设备属性的间隔时间，默认值为5秒  | string | 否
+timeout |  设备连接超时时间，默认值为10秒          | string | 否
 
 #### ProtocolConfig
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-url | The URL for opc-ua server endpoint | string | true
-username | Username for accessing opc-ua server | string | false
-password | Password for opc-ua server endpoint | string | false
-securityPolicy | Defaults to `None`. Valid values are `None, Basic128Rsa15, Basic256, Basic256Sha256, Aes128Sha256RsaOaep, Aes256Sha256RsaPss`. | string | false
-securityMode | Defaults to `None`. Valid values are `None, Sign, and SignAndEncrypt`. | string | false
-certificateFile | Certificate file for accessing opc-ua server | string | true
-privateKeyFile | PrivateKey file for accessing opc-ua server | string | true
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+url | opc-ua server 的端点 | string | 是
+username | opc-ua server用户名 | string | 否
+password | opc-ua server 用户密码| string | 否
+securityPolicy | 安全策略，可选值为：`None, Basic128Rsa15, Basic256, Basic256Sha256, Aes128Sha256RsaOaep, Aes256Sha256RsaPss`，默认值为 `None`| string | 否
+securityMode | 安全模式，可选值为：`None, Sign, and SignAndEncrypt`，默认值为 `None` | string | 否
+certificateFile | 访问opc-ua server时使用的证书文件 | string | 是
+privateKeyFile | 访问opc-ua server时使用的私钥文件 | string | 是
 
 #### DeviceProperty
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-name | Property name | string | true
-description | Property description  | string | false
-readOnly | Check if the device property is readonly, otherwise readwrite, default to false | boolean | false
-dataType | The datatype of this property | *[PropertyDataType](#propertydatatype) | true
-visitor | The visitor configuration of this property | *[PropertyVisitor](#propertyvisitor) | true
-value | Set desired value of the property | string | false
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+name | 属性名称 | string | 是
+description | 属性描述  | string | 否
+readOnly | 是否只读，默认值为`false` | boolean | 否
+dataType | 属性的数据类型 | *[PropertyDataType](#propertydatatype) | 是
+visitor | 属性visitor配置| *[PropertyVisitor](#propertyvisitor) | 是
+value | 配置属性的值 | string | 否
 
 #### PropertyVisitor
 
-Parameter | Description | Scheme |  Required
---- | --- | --- | ---
-nodeID | The ID of opc-ua node, e.g. "ns=1,i=1005" | string | true
-browseName | The name of opc-ua node | string | false
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+nodeID | opc-ua节点ID，例如 ns=1,i=1005 | string | 是
+browseName | opc-ua node节点名称 | string | 否
 
 
 #### PropertyDataType
 
-Parameter | Description | Scheme
---- | --- | --- 
+参数 | 描述| 类型 |
+:--- | :--- | :--- 
 boolean | Property data type is boolean. | string
-int64 | Property data type is int64. | string
-int32 |  Property data type is int32. | string
-int16 |  Property data type is int16. | string
-uint64 | Property data type is uint64. | string
-uint32 |  Property data type is uint32. | string
-uint16 |  Property data type is uint16. | string
-float |  Property data type is float. | string
-double |  Property data type is double. | string
-string |  Property data type is string. | string
-byteString |  Property data type is bytestring. Will be converted to string for display. | string
-datetime |  Property data type is datetime. | string
+int64 | 64位整数(64bit interger)，占8个字节，相当于long | string
+int32 | 32位整数(32bit interger)，占4个字节，相当于int| string
+int16 |  16位整数(16bit integer)，占2个字节，相当于short| string
+uint64 | 数据类型是uint64 | string
+uint32 |  数据类型是uint32 | string
+uint16 |  数据类型是uint16 | string
+float |  数据类型是float| string
+double |  数据类型是double | string
+string |  数据类型是string | string
+byteString |  数据类型是bytestring，会被转换为string显示 | string
+datetime |  数据类型是datetime | string
 
 
 #### DeviceExtension

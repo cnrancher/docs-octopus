@@ -5,39 +5,39 @@ title: Modbus 适配器
 
 ### 介绍
 
-[Modbus](https://www.modbustools.com/modbus.html)是主/从协议，请求信息的设备称为Modbus主设备，提供信息的设备为Modbus从设备。
-在标准的Modbus网络中，有一个主设备和多达247个从设备，每个从设备具有从1到247的唯一从设备地址。
-主机也可以将信息写入从机。
+[Modbus](https://www.modbustools.com/modbus.html)是主/从协议，请求信息的设备称为**Modbus主设备**，提供信息的设备称为**Modbus从设备**。
+在标准的Modbus网络中，有1个主设备和最多247个从设备，每个从设备具有从1到247的唯一从设备地址。
+除了请求从设备的信息外，主设备也可以将信息写入从设备。
 
-Modbus适配器同时支持TCP和RTU协议，它充当主节点，并可在边缘侧连接或操纵Modbus从设备。
+Modbus适配器同时支持TCP和RTU协议充当主节点，并可在边缘侧连接或操纵Modbus从设备。
 
 ### 注册操作
 
-- **线圈寄存器**：可读可写，1位（关闭/打开）
+- **线圈寄存器**：即CoilRegister，可读可写，1位（关闭/打开）
 
-- **离散输入寄存器**：可读，1位（关闭/打开）
+- **离散输入寄存器**：即DiscreteInputRegister，可读，1位（关闭/打开）
 
-- **输入寄存器**：可读，16位（0至65,535），本质上是测量值和状态
+- **输入寄存器**：即HoldingRegister，可读，16位（0至65，535），本质上是测量值和状态
 
-- **保持寄存器**：可读可写，16位（0到65,535），本质上是配置值
+- **保持寄存器**：即InputRegister，可读可写，16位（0到65，535），本质上是配置值
 
 
 ### 注册信息
 
-|  Versions | Register Name | Endpoint Socket | Available |
-|:---:|:---:|:---:|:---:|
-|  `v1alpha1` | `adaptors.edge.cattle.io/modbus` | `modbus.sock` | * |
+|  版本 | 注册名称 | 端点 Socket | 是否可用 |
+|:---|:---|:---|:---|
+|  `v1alpha1` | `adaptors.edge.cattle.io/modbus` | `modbus.sock` | 是 |
 
 ### 支持模型
 
-| Kind | Group | Version | Available | 
-|:---:|:---:|:---:|:---:|
-| `ModbusDevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
+| 类型 | 设备组 | 版本 | 是否可用 | 
+|:---|:---|:---|:---|
+| `ModbusDevice` | `devices.edge.cattle.io` | `v1alpha1` | 是 |
 
 ### 支持平台
 
-| OS | Arch |
-|:---:|:---|
+| 操作系统 | 架构 |
+|:---|:---|
 | `linux` | `amd64` |
 | `linux` | `arm` |
 | `linux` | `arm64` |
@@ -59,9 +59,9 @@ $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/ad
   modbusdevices.devices.edge.cattle.io/status  []                 []              [get patch update]
 ```
 
-### Modbus DeviceLink YAML
+### Modbus DeviceLink YAML示例
 
-modbus `DeviceLink` YAML的示例:
+modbus `DeviceLink` YAML的示例：
 ```yaml
 apiVersion: edge.cattle.io/v1alpha1
 kind: DeviceLink
@@ -106,76 +106,76 @@ spec:
 
 ```
 
-### Modbus Device Spec
+### Modbus Device 参数说明 
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-parameters | Parameter of the modbus device| *[ModbusDeviceParamters](#modbusdeviceparamters) | false
-protocol | Protocol for accessing the modbus device  | *[ModbusProtocolConfig](#modbusprotocolconfig) | true
-properties | Device properties  | []*[DeviceProperty](#deviceproperty) | false
-extension | Integrate with deivce MQTT extension  | *[DeviceExtension](#deviceextension) | false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+parameters | Modbus设备的参数| *[ModbusDeviceParamters](#modbusdeviceparamters) | 否
+protocol | 访问Modbus设备的网络传输协议  | *[ModbusProtocolConfig](#modbusprotocolconfig) | 是
+properties | Modbus设备属性  | *[DeviceProperty](#deviceproperty) | 否
+extension | Modbus设备的MQTT集成  | *[DeviceExtension](#deviceextension) | 否
 
 #### ModbusDeviceParamters
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-syncInterval | Device properties sync interval, default to `5s`  | string | false
-timeout |  Device connection timeout, default to `10s` | string | false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+syncInterval | 同步设备属性的间隔时间，默认值为5秒  | string | 否
+timeout |  设备连接超时时间，默认值为10秒          | string | 否
 
 #### ModbusProtocolConfig
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-rtu | Modbus RTU protocol config  | *[ModbusConfigRTU](#modbusconfigrtu)| false
-tcp | Modbus TCP protocol config  | *[ModbusConfigTCP](#modbusconfigtcp)| false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+rtu | Modbus RTU传输协议相关参数  | *[ModbusConfigRTU](#modbusconfigrtu)| 否
+tcp | Modbus TCP传输协议相关参数  | *[ModbusConfigTCP](#modbusconfigtcp)| 否
 
 #### ModbusConfigRTU
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-serialPort | Device path (e.g. /dev/ttyS0) | string | true
-slaveId | Slave id of the device | int | true
-baudRate | Baud rate, a measurement of transmission speed, default to `19200` | int | false
-dataBits | Data bits (5, 6, 7 or 8), default to `0` | int | false
-parity | N - None, E - Even, O - Odd (default E) (The use of no parity requires 2 stop bits.) | string | false
-stopBits | Stop bits: 1 or 2 (default 1) | int | false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+serialPort | 设备路径（例如：/dev/ttyS0） | string | 是
+slaveId | 从设备ID | int | 是
+baudRate | 波特率，传输速度的测量单位, 默认值是`19200` | int | 否
+dataBits | 数据位 （5、6、7或8） 默认值是`0` | int | 否
+parity | 奇偶校验，N - 无校验；E -偶数校验；O - 奇数校验；默认值为E  | string | 否
+stopBits | 停止位数， 可选值：1或2，默认值为1 | int | 否
 
 #### ModbusConfigTCP
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-ip | IP address of the device | string | true
-port | TCP port of the device | int | true
-slaveId | Slave id of the device | int | true
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+ip | 设备的IP地址 | string | 是
+port | 设备使用的IP端口 | int | 是
+slaveId | 设备使用的从设备ID | int | 是
 
 #### DeviceProperty
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-name | Property name | string | true
-description | Property description  | string | false
-readOnly | Check if the device property is readonly, default to false | boolean | false
-dataType | Property data type, options are `int, string, float, boolean` | string | true
-visitor | Property visitor config | *[PropertyVisitor](#propertyvisitor) | true
-value | Set desired value of the property | string | false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+name | 属性名称 | string | 是
+description | 属性描述  | string | 否
+readOnly | 是否只读，默认值为`false` | boolean | 否
+dataType | 属性的数据类型，可选值为：`int、string、float、boolean` | string | 是
+visitor | 属性visitor配置| *[PropertyVisitor](#propertyvisitor) | 是
+value | 配置属性的值 | string | 否
 
 #### PropertyVisitor
 
-Parameter | Description | Scheme |  Required
---- | --- | --- | ---
-register | CoilRegister, DiscreteInputRegister, HoldingRegister, or InputRegister | string | true
-offset | Offset indicates the starting register number to read/write data | int | true
-quantity | Limit number of registers to read/write | int | true
-orderOfOperations | The quantity of registers | []*[ModbusOperations](#modbusoperations) | false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+register | 可选值：CoilRegister、DiscreteInputRegister、HoldingRegister或InputRegister| string | 是
+offset | 偏移量，读取或写入register的位置 | int | 是
+quantity | 数量，可以读取或写入的register数量 | int | 是
+orderOfOperations | register的数量 | [ModbusOperations](#modbusoperations) | 否
 
 #### ModbusOperations
 
-Parameter | Description | Scheme |  Required
---- | --- | --- | ---
-operationType | Arithmetic operation type(`Add, Subtract, Multiply, Divide`) | string | false
-operationValue | Arithmetic operation value | string | false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+operationType | 运算类型：加减乘除(`Add, Subtract, Multiply, Divide`) | string | 否
+operationValue | 运算值 | string | 否
 
 #### DeviceExtension
 
-- 关于Modbus设备的MQTT集成请参考[example YAML](#modbus-devicelink-yaml)。
+- 关于Modbus设备的MQTT集成请参考[example YAML](#Modbus-DeviceLink-YAML示例)。
 - 参考[与MQTT文档集成](./mqtt-extension)了解更多详细信息。

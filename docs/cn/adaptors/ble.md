@@ -11,20 +11,20 @@ BLE适配器实现了蓝牙协议的支持，并用于定义所连接的BLE设�
 
 ### 注册信息
 
-|  Versions | Register Name | Endpoint Socket | Available |
-|:---:|:---:|:---:|:---:|
+|  版本 | 注册名称 | 端点 Socket | 是否可用 |
+|:---|:---|:---|:---|
 |  `v1alpha1` | `adaptors.edge.cattle.io/ble` | `ble.sock` | * |
 
 ### 支持模型
 
-| Kind | Group | Version | Available | 
-|:---:|:---:|:---:|:---:|
+| 类型 | 设备组 | 版本 | 是否可用 | 
+|:---|:---|:---|:---|
 | `BluetoothDevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
 
 ### 支持平台
 
-| OS | Arch |
-|:---:|:---|
+| 操作系统 | 架构 |
+|:---|:---|
 | `linux` | `amd64` |
 | `linux` | `arm` |
 | `linux` | `arm64` |
@@ -46,9 +46,9 @@ $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/ad
   bluetoothdevices.devices.edge.cattle.io/status  []                 []              [get patch update]
 ```
 
-### Example of BLE deviceLink YAML
+### BLE deviceLink YAML示例
 
-BEL `DeviceLink` YAML的示例:
+BEL `DeviceLink` YAML的示例
 
 ```YAML
 apiVersion: edge.cattle.io/v1alpha1
@@ -91,83 +91,83 @@ spec:
 
 有关更多BLE `DeviceLink`示例，请参考[deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/ble/deploy/e2e)目录。
 
-### BLE Device Spec
+### BLE Device 参数说明 
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-parameters | Parameter of the opcua device| *[DeviceParamters](#deviceparamters) | false
-protocol | Device protocol config  | [DeviceProtocol](#deviceprotocol) | true
-properties | Device properties     | []*[DeviceProperty](#deviceproperty) | false
-extension | Integrate with deivce MQTT extension  | *[DeviceExtension](#deviceextension) | false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+parameters | BLE设备的参数| *[DeviceParamters](#deviceparamters) | 否
+protocol | 访问BLE设备时使用的传输协议  | [DeviceProtocol](#deviceprotocol) | 是
+properties | 设备属性    | []*[DeviceProperty](#deviceproperty) | false
+extension | OPC-UA设备的MQTT集成  | *[DeviceExtension](#deviceextension) | 否
 
 
 #### DeviceParamters
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-syncInterval | Device properties sync interval, default to `15s`  | string | false
-timeout |  Device connection timeout, default to `10s` | string | false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+syncInterval | 同步设备属性的间隔时间，默认值为15秒  | string | 否
+timeout |  设备连接超时时间，默认值为10秒          | string | 否
 
 #### DeviceProtocol
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-name | Device name  | string | NOT required when the device macAddress is provided
-macAddress |  Device access mac address  | string | NOT required when the device name is provided
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+name | 设备名称  | string | 否，提供了macAddress时，非必填
+macAddress |  设备访问的MacAddress  | string | 否，提供了设备名称时，非必填
 
 #### DeviceProperty
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-name | Property name  | string | true
-description |  Property description  | string | false
-accessMode | Property accessMode  | *[PropertyAccessMode](#propertyaccessmode) | true
-visitor | Property visitor | *[PropertyVisitor](#propertyvisitor) | true
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+name | 属性名称  | string | 是
+description |  属性描述  | string | 否
+accessMode | 属性的访问权限  | *[PropertyAccessMode](#propertyaccessmode) | 是
+visitor | Property visitor | *[PropertyVisitor](#propertyvisitor) | 是
 
 #### PropertyAccessMode
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-ReadOnly   | Property access mode is read only  | string | false
-ReadWrite  | Property access mode is read and write  | string | false
-NotifyOnly | Property access mode is notify only  | string | false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+ReadOnly   | 只读  | string | 否
+ReadWrite  | 读写  | string | 否
+NotifyOnly | 只发送通知 | string | 否
 
 #### PropertyVisitor
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-characteristicUUID | Property UUID  | string | true
-defaultValue | Config data write to the bluetooth device(set when access mode is `ReadWrite`), for example `ON` configed in the dataWrite  | string | false
-dataWrite | Responsible for converting the data from the string into []byte that is understood by the bluetooth device, for example: `"ON":[1], "OFF":[0]` | string | false
-dataConverter | Responsible for converting the data being read from the bluetooth device into string | *[BluetoothDataConverter](#bluetoothdataconverter) | false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+characteristicUUID | 属性的UUID  | string | 是
+defaultValue | 当AccessMode为`ReadWrite`时，为蓝牙设备开放写入数据的权限  | string | 否
+dataWrite | 将字符串数据转换为蓝牙设备可以读取的模式，例如：`"ON":[1], "OFF":[0]` | string | 否
+dataConverter | 将蓝牙设备发送的数据转换为字符串 | *[BluetoothDataConverter](#bluetoothdataconverter) | 否
 
 #### BluetoothDataConverter
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-startIndex | Specifies the start index of the incoming byte stream to be converted  | int | true
-endIndex | Specifies the end index of incoming byte stream to be converted | int | true
-shiftLeft | Specifies the number of bits to shift left | int | false
-shiftRight | Specifies the number of bits to shift right | int | false
-orderOfOperations | Specifies in what order the operations | []*[BluetoothOperations](#BluetoothOperations) | false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+startIndex | 指定开始转换字节流的位置  | int | 是
+endIndex | 指定停止转换字节流的位置 | int | 是
+shiftLeft | 指定向左位移的的字节数量 | int | 否
+shiftRight | 指定向右位移的的字节数量 | int | 否
+orderOfOperations | 指定操作的执行顺序 | []*[BluetoothOperations](#BluetoothOperations) | 否
 
 #### BluetoothOperations
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-operationType | Specifies the operation to be performed | *[BluetoothArithmeticOperationType](#bluetootharithmeticoperationtype) | true
-operationValue | Specifies with what value the operation is to be performed | string | true
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+operationType | 指定操作的类型 | *[BluetoothArithmeticOperationType](#bluetootharithmeticoperationtype) | 是
+operationValue | 指定执行该操作的值| string | 是
 
 #### BluetoothArithmeticOperationType
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-Add | Arithmetic operation of add | string | false
-Subtract | Arithmetic operation of subtract | string | false
-Multiply | Arithmetic operation of multiply | string | false
-Divide | Arithmetic operation of divide | string | false
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+Add | 加法 | string | 否
+Subtract | 减法 | string | 否
+Multiply | 乘法 | string | 否
+Divide | 除法 | string | 否
 
 #### DeviceExtension
 
-- 关于BLE设备的MQTT集成请参考[example YAML](#example-of-ble-devicelink-yaml)。
+- 关于BLE设备的MQTT集成请参考[example YAML](#BLE-deviceLink-YAML示例)。
 - 参考[与MQTT文档集成](./mqtt-extension)了解更多详细信息。
