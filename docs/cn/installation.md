@@ -7,7 +7,7 @@ Octopus支持两种不同的部署方式，一种是基于[Helm chart](https://h
 
 ## 基于Helm chart部署
 
-:::note
+:::note说明
 此仓库中的图表需要Helm 3.x或更高版本。请阅读并遵循[Helm安装指南](https://helm.sh/docs/intro/install/)。
 :::
 

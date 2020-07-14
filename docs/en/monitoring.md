@@ -36,20 +36,6 @@ Octopus is built on [sigs.k8s.io/controller-runtime](https://github.com/kubernet
 | C | [`rest_client_requests_total`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L44-L49) | Number of HTTP requests, partitioned by status code, method, and host. | |
 | H | [`rest_client_request_latency_seconds`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L35-L42) | Request latency in seconds. Broken down by verb and URL. | |
 
-#### Reflector metrics
-
-> Deprecated by [kubernetes/pull#74636](https://github.com/kubernetes/kubernetes/pull/74636) to fix the memory leak in kubelet.
-
-| Type | Name | Description | Usage |
-|:---:|:---|:---|:---|
-| G | [`reflector_last_resource_version`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L101-L105) | Last resource version seen for the reflectors. |  |
-| C | [`reflector_lists_total`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L59-L63) | Total number of API lists done by the reflectors. | |
-| S | [`reflector_list_duration_seconds`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L65-L69) | How long an API list takes to return and decode for the reflectors. | |
-| S | [`reflector_items_per_list`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L71-L75) | How many items an API list returns to the reflectors. |  |
-| C | [`reflector_short_watches_total`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L83-L87) | Total number of short API watches done by the reflectors. |  |
-| C | [`reflector_watches_total`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L77-L81) | Total number of API watches done by the reflectors. |  |
-| S | [`reflector_watch_duration_seconds`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L89-L93) | How long an API watch takes to return and decode for the reflectors. |  |
-| S | [`reflector_items_per_watch`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L95-L99) | How many items an API watch returns to the reflectors. |  |
 
 #### Workqueue metrics
 

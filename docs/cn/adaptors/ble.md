@@ -97,7 +97,7 @@ spec:
 :--- | :--- | :--- | :---
 parameters | BLE设备的参数| *[DeviceParamters](#deviceparamters) | 否
 protocol | 访问BLE设备时使用的传输协议  | [DeviceProtocol](#deviceprotocol) | 是
-properties | 设备属性    | []*[DeviceProperty](#deviceproperty) | false
+properties | 设备属性    | *[DeviceProperty](#deviceproperty) | false
 extension | OPC-UA设备的MQTT集成  | *[DeviceExtension](#deviceextension) | 否
 
 

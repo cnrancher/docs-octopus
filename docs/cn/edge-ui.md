@@ -5,7 +5,7 @@ title: Edge UI
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-:::note
+:::note说明
 Edge-UI当前仅适用于k3s集群。
 :::
 ## 从Helm图表中安装Edge-UI
@@ -18,7 +18,7 @@ $ helm upgrade -n octopus-system --set edge-ui.enabled=true octopus cnrancher/oc
 
 ## 从YAML文件安装Edge-UI
 
-通过`all-in-one` YAML文件来部署 `Edge-UI`:
+通过`all-in-one` YAML文件来部署 `Edge-UI`：
 
 ```shell script
 $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/edge-api-server/master/deploy/e2e/all_in_one.yaml
@@ -37,7 +37,7 @@ rancher-edge-ui   LoadBalancer   10.43.98.95   172.16.1.89,192.168.0.90   8443:3
 ```
 
 默认情况下，`Edge-UI`使用服务发现类型为`LoadBalancer`的`8443`端口，您可以通过其`EXTERNAL-IP:8443`来访问它：
-<img alt="edge-ui" src={useBaseUrl('img/edge-ui.png')} />
+<img alt="edge-ui" src={useBaseUrl('img/edge-ui.jpg')} />
 
 ## 登入验证
 
