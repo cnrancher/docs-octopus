@@ -117,7 +117,7 @@ spec:
     spec:
       config:
         broker: "tcp://192.168.8.246:1883"
-        password: parchk123
+        password: p******123
         username: parchk
       properties:
         - name: "switch"
@@ -156,7 +156,7 @@ for more detailed information of JSON path syntax please refer to [GJSON Syntax]
         spec:
           config:
             broker: "tcp://192.168.8.246:1883"
-            password: parchk123
+            password: p******123
             username: parchk
     ```
 1. start the testdevice roomlight in the `test/testdata/testdevice/roomlight` directory
@@ -221,7 +221,7 @@ for more detailed information of JSON path syntax please refer to [GJSON Syntax]
         spec:
           config:
             broker: tcp://192.168.8.246:1883
-            password: parchk123
+            password: p******123
             username: parchk
           properties:
           - description: the room light switch

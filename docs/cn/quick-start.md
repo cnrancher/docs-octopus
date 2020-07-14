@@ -26,7 +26,7 @@ title: 快速入门指南
     $ curl -fL https://octopus-assets.oss-cn-beijing.aliyuncs.com/k3d/cluster-k3s-spinup.sh | bash -
     ```
    
-   :::note
+   :::note说明
    如果安装成功，则应该看到以下日志，请使用`CTRL+C`或按`Enter`键以停止本地集群。
    :::
    ```logs
@@ -122,7 +122,7 @@ replicaset.apps/octopus-brain-65fdb4ff99   1         1         1       14s
 
 首先，我们需要将设备描述为Kubernetes中的一种资源。 此描述过程即为对设备进行建模。 在Kubernetes中，描述资源的最佳方法是使用[CustomResourceDefinitions](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/#customresourcedefinitions)，因此**定义Octopus的设备模型实际上是在定义CustomResourceDefinition**, 可快速浏览一下下列的`DummySpecialDevice`模型（假设这是一个智能风扇）：
 
-:::note
+:::note说明
 下列YAML可通过[code-generator](https://github.com/kubernetes/code-generator)动态生成，无需手动编辑。
 :::
 
