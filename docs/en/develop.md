@@ -65,7 +65,7 @@ In [`dapper`](https://github.com/rancher/dapper) mode:
 
 ## Build management of Adaptors
 
-The build management of Adaptors is the similar to Octopus, except that the execution is different. Executing a stage of any adaptor can run `make adaptor <adaptor name> <stage name>`. Please view [Develop Adaptors](../adaptors/develop.md) for more details.
+The build management of Adaptors is the similar to Octopus, except that the execution is different. Executing a stage of any adaptor can run `make adaptor <adaptor name> <stage name>`. Please view [Develop Adaptors](../adaptors/how-to-develop-adaptor.md) for more details.
 
 ## Build management for all components
 
