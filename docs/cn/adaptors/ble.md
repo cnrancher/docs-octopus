@@ -3,25 +3,25 @@ id: ble
 title: BLE 适配器
 ---
 
-### 介绍
+## 介绍
 
 BLE代表低功耗蓝牙（通常称为BlueTooth Smart）。 BLE是一种设计用于短距离通信的无线通信形式。
 
 BLE适配器实现了蓝牙协议的支持，并用于定义所连接的BLE设备的属性与配置。
 
-### 注册信息
+## 注册信息
 
 |  版本 | 注册名称 | 端点 Socket | 是否可用 |
 |:---|:---|:---|:---|
 |  `v1alpha1` | `adaptors.edge.cattle.io/ble` | `ble.sock` | * |
 
-### 支持模型
+## 支持模型
 
 | 类型 | 设备组 | 版本 | 是否可用 | 
 |:---|:---|:---|:---|
 | `BluetoothDevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
 
-### 支持平台
+## 支持的操作系统和架构
 
 | 操作系统 | 架构 |
 |:---|:---|
@@ -29,13 +29,13 @@ BLE适配器实现了蓝牙协议的支持，并用于定义所连接的BLE设�
 | `linux` | `arm` |
 | `linux` | `arm64` |
 
-### 使用方式
+## 使用方式
 
 ```shell script
 $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
 ```
 
-### 权限
+## 权限
 
 对Octopus授予权限，如下所示：
 
@@ -45,10 +45,9 @@ $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/ad
   bluetoothdevices.devices.edge.cattle.io         []                 []              [create delete get list patch update watch]
   bluetoothdevices.devices.edge.cattle.io/status  []                 []              [get patch update]
 ```
+## BLE示例
 
-### BLE deviceLink YAML示例
-
-BEL `DeviceLink` YAML的示例
+指定一个 "蓝牙设备 "设备链接来连接[小米温度计](https://www.mi.com/mj-humiture)。
 
 ```YAML
 apiVersion: edge.cattle.io/v1alpha1
@@ -69,105 +68,148 @@ spec:
     spec:
       parameters:
         syncInterval: 15s
-        timeout: 10s
-      extension:
-        mqtt:
-          client:
-            server: tcp://test.mosquitto.org:1883
-          message:
-            topic:
-              prefix: cattle.io/octopus
-              with: nn # namespace/name
+        timeout: 30s
       protocol:
-        name: "MJ_HT_V1"
-        macAddress: ""
+        endpoint: "MJ_HT_V1"
       properties:
-      - name: data
-        description: XiaoMi temp sensor with temperature and humidity data
-        accessMode: NotifyOnly
-        visitor:
-          characteristicUUID: 226c000064764566756266734470666d
+        - name: data
+          description: XiaoMi temp sensor with temperature and humidity data
+          accessMode: NotifyOnly
+          visitor:
+            characteristicUUID: 226c000064764566756266734470666d
+        - name: humidity
+          description: Humidity in percent
+          accessMode: ReadOnly
+          visitor:
+            characteristicUUID: f000aa0304514000b000000000000000
+            dataConverter:
+              startIndex: 1
+              endIndex: 0
+              shiftRight: 2
+              orderOfOperations:
+                # Options are Add/Subtract/Multiply/Divide
+                - type: Multiply
+                  value: "0.03125"
+        - name: power-enabled
+          description: Turn the device power on or off
+          accessMode: ReadWrite
+          visitor:
+            characteristicUUID: f000aa0104514000b000000000000001
+            # Sets the defaultValue by chosen one of option in the dataWrite
+            defaultValue: OFF
+            dataWrite:
+              ON: [1]
+              OFF: [0]
+            dataConverter:
+              startIndex: 1
+              endIndex: 0
+              shiftRight: 3
+              orderOfOperations:
+                - type: Multiply
+                  value: "0.03125"
 ```
 
 有关更多BLE `DeviceLink`示例，请参考[deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/ble/deploy/e2e)目录。
 
-### BLE Device 参数说明 
+## BluetoothDevice
 
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-parameters | BLE设备的参数| *[DeviceParamters](#deviceparamters) | 否
-protocol | 访问BLE设备时使用的传输协议  | [DeviceProtocol](#deviceprotocol) | 是
-properties | 设备属性    | *[DeviceProperty](#deviceproperty) | false
-extension | OPC-UA设备的MQTT集成  | *[DeviceExtension](#deviceextension) | 否
+metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | 否
+spec | 定义 "蓝牙设备 "的预期状态 | [BluetoothDeviceSpec](#bluetoothdevicespec) | 是
+status | D定义 "蓝牙设备 "的实际状态 | [BluetoothDeviceStatus](#bluettothdevicestatus) | 否
 
+## BluetoothDeviceSpec
 
-#### DeviceParamters
-
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-syncInterval | 同步设备属性的间隔时间，默认值为15秒  | string | 否
-timeout |  设备连接超时时间，默认值为10秒          | string | 否
+extension | 指定设备的插件 | *[BluetoothDeviceExtension](#bluetoothdeviceextension) | 否
+parameters | 指定设备的参数 | *[BluetoothDeviceParameters](#bluetoothdeviceparamters) | 否
+protocol | 指定访问设备时使用的协议 | [BluetoothDeviceProtocol](#bluetoothdeviceprotocol) | 是
+properties | 指定设备的属性 | [[]BluetoothDeviceProperty](#bluetoothdeviceproperty) | 否
 
-#### DeviceProtocol
-
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-name | 设备名称  | string | 否，提供了macAddress时，非必填
-macAddress |  设备访问的MacAddress  | string | 否，提供了设备名称时，非必填
+properties | 上报设备的属性 | [[]BluetoothDeviceStatusProperty](#bluetoothdevicestatusproperty) | 否
 
-#### DeviceProperty
+#### BluetoothDeviceParameters
 
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-name | 属性名称  | string | 是
-description |  属性描述  | string | 否
-accessMode | 属性的访问权限  | *[PropertyAccessMode](#propertyaccessmode) | 是
-visitor | Property visitor | *[PropertyVisitor](#propertyvisitor) | 是
+syncInterval | 指定默认的设备同步时间间隔，默认为`15s`| string | 否
+timeout |  指定默认的设备的连接超时时间，默认为`30s` | string | 否
 
-#### PropertyAccessMode
+#### BluetoothDeviceProtocol
 
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-ReadOnly   | 只读  | string | 否
-ReadWrite  | 读写  | string | 否
-NotifyOnly | 只发送通知 | string | 否
+endpoint | 指定设备的端点，可以是设备的名称或MAC地址 | string | 是
 
-#### PropertyVisitor
+#### BluetoothDeviceProperty
 
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-characteristicUUID | 属性的UUID  | string | 是
-defaultValue | 当AccessMode为`ReadWrite`时，为蓝牙设备开放写入数据的权限  | string | 否
-dataWrite | 将字符串数据转换为蓝牙设备可以读取的模式，例如：`"ON":[1], "OFF":[0]` | string | 否
-dataConverter | 将蓝牙设备发送的数据转换为字符串 | *[BluetoothDataConverter](#bluetoothdataconverter) | 否
+name | 指定属性名称 | string | 是
+description | 指定属性的描述  | string | 否
+accessMode | 指定属性的访问模式，默认为 "NotifyOnly" | [BluetoothDevicePropertyAccessMode](#bluetoothpropertyaccessmode) | 是
+visitor | 指定属性的visitor | *[BluetoothDevicePropertyVisitor](#bluetoothpropertyvisitor) | 是
+
+
+#### BluetoothDeviceStatusProperty
+
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+name | 属性名称 | string | 否
+value | 属性值 | string | 否
+accessMode | 属性的权限 | [BluetoothDevicePropertyAccessMode](#bluetoothpropertyaccessmode) | 否
+updatedAt | 修改属性的时间戳 | *[metav1.Time](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/time.go#L33) | 否
+
+#### BluetoothDevicePropertyAccessMode
+
+Parameter | Description | Scheme
+--- | --- | --- 
+ReadOnly   | 属性的权限是read only | string
+ReadWrite  | 属性的权限是read and write | string
+NotifyOnly | 属性的权限模式是notify only | string
+
+#### BluetoothDevicePropertyVisitor
+
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+characteristicUUID | 指定属性的UUID。 | string | 是
+defaultValue | 当访问模式为 "读写 "时，指定属性的默认值| string | 否
+dataWrite | 指定要写入设备的数据 | string | 否
+dataConverter | 指定将从设备读取的数据转换为字符串的转换器 | [BluetoothDataConverter](#bluetoothdataconverter) | 否
 
 #### BluetoothDataConverter
 
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-startIndex | 指定开始转换字节流的位置  | int | 是
-endIndex | 指定停止转换字节流的位置 | int | 是
-shiftLeft | 指定向左位移的的字节数量 | int | 否
-shiftRight | 指定向右位移的的字节数量 | int | 否
-orderOfOperations | 指定操作的执行顺序 |*[BluetoothOperations](#BluetoothOperations) | 否
+startIndex | 指定要转换的输入字节流的起始索引 | int | 是
+endIndex | 指定要转换的输入字节流的结束索引 | int | 是
+shiftLeft | 指定要左移的位数 | int | 否
+shiftRight | 指定要右移的位数 | int | 否
+orderOfOperations | 指定操作的顺序 | [[]BluetoothDeviceArithmeticOperation](#bluetoothdevicearithmeticoperation) | 否
 
-#### BluetoothOperations
+#### BluetoothDeviceArithmeticOperation
 
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-operationType | 指定操作的类型 | *[BluetoothArithmeticOperationType](#bluetootharithmeticoperationtype) | 是
-operationValue | 指定执行该操作的值| string | 是
+type | 指定算术运算的类型 | [BluetoothDeviceArithmeticOperationType](#bluetoothdevicearithmeticoperationtype) | 是
+value | Specifies the value for arithmetic operation, which is in form of float string. | string | 是
 
-#### BluetoothArithmeticOperationType
+#### BluetoothDeviceArithmeticOperationType
 
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 |
+:--- | :--- | :--- |
+Add | 加法的算术运算。 | string
+Subtract | 减法的算术运算。 | string
+Multiply | 乘法的算术运算。 | string
+Divide | 除法的算术运算。 | string
+
+#### BluetoothDeviceExtension
+
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-Add | 加法 | string | 否
-Subtract | 减法 | string | 否
-Multiply | 乘法 | string | 否
-Divide | 除法 | string | 否
+mqtt | 指定MQTT的设置 | *[v1alpha1.MQTTOptionsSpec](./mqtt-extension#specification) | 否
 
-#### DeviceExtension
-
-- 关于BLE设备的MQTT集成请参考[example YAML](#BLE-deviceLink-YAML示例)。
-- 参考[与MQTT文档集成](./mqtt-extension)了解更多详细信息。

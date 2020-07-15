@@ -35,17 +35,13 @@ MQTT是一种轻量级的二进制协议，并且由于其最小的数据包开�
 
 在MQTT中，**topic**是可用于[过滤和路由消息](https://www.hivemq.com/blog/mqtt-essentials-part-5-mqtt-topics-best-practices/)的层次结构字符串， 而**payload**数据不可知，这意味着发布者可以发送二进制数据，文本数据甚至是 完整的XML或JSON，因此设计主题树和有效负载架构是任何MQTT部署的重要工作。
 
-Octopus遵循[MQTT Essentials中MQTT主题的最佳实践](https://www.hivemq.com/blog/mqtt-essentials-part-5-mqtt-topics-best-practices/#best-practices)来构造 **topic**名称，并将 **payload** 数据编组为JSON。
+Octopus建议您参考[MQTT Essentials中MQTT主题的最佳实践](https://www.hivemq.com/blog/mqtt-essentials-part-5-mqtt-topics-best-practices/#best-practices)来构造 **topic**名称，并将 **payload** 数据编组为JSON。
 
 ## 配置选项
 
-Octopus重新组织了[github.com/eclipse/paho.mqtt.golang](https://github.com/eclipse/paho.mqtt.golang/blob/4c98a2381d16c21ed2f9f131cec2429b0348ab0f/options.go#L53-L87)的客户端参数 然后构造以下配置选项。 配置选项的可用版本为`v1alpha1`。
+octopus重组了[github.com/eclipse/paho.mqtt.golang](https://github.com/eclipse/paho.mqtt.golang/blob/4c98a2381d16c21ed2f9f131cec2429b0348ab0f/options.go#L53-L87)的客户端参数，然后提供了一组配置选项。
 
-|  版本 | 是否可用| 最新版 |
-|:---:|:---:|:---:|
-|  [`v1alpha1`](./integrate_with_mqtt.md) | 是 | 是 |
-
-当前的官方适配器（如BLE，Modbus和OPC-UA）使用相同的配置（请参阅以下`spec.template.spec.extension`）支持MQTT协议扩展。
+目前官方的适配器如[BLE](./ble.md)、[Modbus](./modbus.md)和[OPCua](./opcua.md)都支持MQTT协议扩展，使用相同的配置(参考以下`spec.template.spec.extension.mqtt`)。
 
 ```YAML
 apiVersion: edge.cattle.io/v1alpha1
@@ -70,8 +66,7 @@ spec:
            server: tcp://test.mosquitto.org:1883
            maxReconnectInterval: 20s
          message:
-           topic:
-             prefix: cattle.io/octopus
+           topic: cattle.io/octopus/:namespace/:name
            qos: 1
      protocol:
        location: "living_room"
@@ -83,108 +78,102 @@ spec:
 
 MQTT选项的规范在所有MQTT扩展适配器中均有效，它们用于连接MQTT代理，指导连接，指示要发布/订阅的主题以及有效载payload的编码。
 
-#### DeviceExtensionSpec
+#### MQTTOptions
 
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-| mqtt | mqtt配置说明 | [MQTTOptionsSpec](#mqttoptionsspec) | 否 |
+| client | 指定客户端的设置| [MQTTClientOptions](#mqttclientoptions) | 是 |
+| message | 指定信息的设置 | [MQTTMessageOptions](#mqttmessageoptions) | 是 |
 
-#### MQTTOptionsSpec
+##### MQTTClientOptions
 
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-| client | 客户端配置 | [MQTTClientOptions](#mqttclientoptions) | 是 |
-| message | 信息配置 | [MQTTMessageOptions](#mqttmessageoptions) | 是 |
+| server | 指定MQTT broker的服务器URI，格式为 "schema://host:port"。`schema`的可选值为："ws"、"wss"、"tcp"、"unix"、"ssl"、"tls "或 "tcps "。 | string | 是 |
+| protocolVersion | 指定集群连接到broker时使用的MQTT协议版本。可选值是`3`--MQTT 3.1和`4`--MQTT 3.1.1，默认值是`0` | *uint | 否 |
+| basicAuth | 指定客户端连接到MQTT broker的用户名和密码 | *[MQTTClientBasicAuth](#mqttclientbasicauth) | 否 |
+| tlsConfig | 指定客户端连接到MQTT broker的TLS配置 | *[MQTTClientTLS](#mqttclienttls)  | 否 |
+| cleanSession | 指定在连接消息中设置 "clean session "标志，MQTT broker不应该，默认为`true` | *bool  | 否 |
+| store | 指定在QoS级别为1或2的情况下提供消息持久性，默认存储为 "Memory" | *[MQTTClientStore](#mqttclientstore)  | 否 |
+| resumeSubs | 指定在连接但未重新连接时恢复存储的(未)订阅信息。只有当`cleanSession`为`false`时才有效。默认值是`false` | bool | 否 |
+| connectTimeout | 指定客户端在超时和出错前尝试打开与MQTT代理的连接的时间。持续时间为0，则不会超时。默认值是`30s` | *[metav1.Duration](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/duration.go#L27)  | 否 |
+| keepAlive | 指定客户端在向代理发送PING请求之前应该等待的时间。默认的keep alive是`10s` | *[metav1.Duration](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/duration.go#L27) | 否 |
+| pingTimeout | 指定客户端向broker发送PING请求后应该等待的时间长度默认值是`10s` | *[metav1.Duration](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/duration.go#L27) | 否 |
+| order | 指定消息路由以保证每个QoS级别内的顺序。默认值为 "true"| *bool | 否 |
+| writeTimeout | 指定客户端成功发布消息后出现超时错误的时间，默认为30s | *[metav1.Duration](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/duration.go#L27)  | 否 |
+| waitTimeout | 指定客户端订阅/发布消息后应超时的时间，持续时间为`0`永远不会超时。 | *[metav1.Duration](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/duration.go#L27)  | 否 |
+| disconnectQuiesce | 指定客户端断开连接时的静止时间，默认为 "5s"| *[metav1.Duration](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/duration.go#L27)  | 否 |
+| autoReconnect | 配置使用自动重连逻辑，默认为 "true" | bool | 否 |
+| maxReconnectInterval | 指定客户在重新连接到经纪商之前应该等待的时间，默认为`10m` | *[metav1.Duration](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/duration.go#L27)  | 否 |
+| messageChannelDepth | 指定客户端暂时离线时保存消息的内部队列大小，默认为`100`。 | *uint  | 否 |
+| httpHeaders | 指定客户端在 WebSocket 开启握手时发送的附加 HTTP 头信息。 | string | 否 |
 
-#### MQTTClientOptions
+##### MQTTClientBasicAuth
 
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-| server | MQTT broker的server URI，应该遵循`schema://host:port`格式，`schema`的可选值包括：ws、wss、tcp、unix、ssl、tls、和tcps。 | string | 是 |
-| protocolVersion | MQTT的版本号，可选值为：3或4；3表示使用的MQTT版本号为 3.1，4表示使用的MQTT版本号为 3.1.1。 | uint | 否 |
-| will | Specifies the last will message that the client gives it to the broker. | [MQTTClientWillMessage](#mqttclientwillmessage) | 否 |
-| basicAuth | 客户端连接broker时使用的校验信息，包括用户名和密码。 | [MQTTClientBasicAuth](#mqttclientbasicauth) | 否 |
-| tlsConfig | 客户端连接broker时使用的TLS配置信息 | [MQTTClientTLS](#mqttclienttls)  | 否 |
-| cleanSession | 是否与MQTT broker 建立持久会话，默认值为`true` | bool  | 否 |
-| store | 当QoS等级是1或2时，存储消息的位置默认值是`memory` | [MQTTClientStore](#mqttclientstore)  | 否 |
-| resumeSubs | 连接时，是否启用存储未订阅消息的功能，默认值为`false`，当`CleanSession`的值为`false`时有效| bool | 否 |
-| connectTimeout | 连接超时的时长，默认值为`30s` | string  | 否 |
-| keepAlive | 客户端向broker发送Ping请求之前的等待时间，默认值是`10s` | string | 否 |
-| pingTimeout | 客户端向broker发送Ping请求后，等待broker返回信息的时间，默认值是`10s` | string | 否 |
-| order | 是否将信息路由到每个QoS等级排序，默认值为true| bool | 否 |
-| writeTimeout | 客户端成功发布信息的等待时长，如果超过这个时间还没有发布成功，则表示超时，返回超时错误信息，默认值为`30s`| string  | 否 |
-| autoReconnect | 是否自动重新连接默认值是`true` | bool  | 否 |
-| maxReconnectInterval | 自动重新连接之前的等待时长，默认值是`10m` | string  | 否 |
-| messageChannelDepth | 客户端无法连接时，存储信息的内部队列大小，默认值是`100` | uint  | 否 |
-| httpHeaders | 指定客户端在 WebSocket 开启握手时发送的附加 HTTP 消息头 | string  | 否 |
+| username | 指定基本认证的用户名 | string  | 否 |
+| usernameRef | 指定DeviceLink的引用关系，将该值作为用户名引用 | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12) | 否 |
+| password | 指定基本认证的密码 | string  | 否 |
+| passwordRef | 指定DeviceLink的引用关系，将该值作为密码引用 | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12) | 否 |
 
+##### MQTTClientTLS
 
-#### MQTTClientWillMessage
-
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-| topic | 指定发布最后一条遗嘱信息的主题，如果没有设置，遗嘱主题将在全局设置中指定的主题名称后附加"$will "作为其主题名称。 | string  | 否 |
-| payloadEncode| 定义发布消息的编码方式，可选值： "raw "和 "base64"，默认值为raw。 | string | 否 |
-| payloadContent | 指定payload的内容 | string | 否 |
-| qos | 消息的QoS等级，可选值为0、1、2，0表示最多发送一次，1表示最少发送一次，2表示只发送一次，默认值为`0`。 | byte | 否 |
-| retained | 是否要保留的信息，默认值为 "false"。 | bool | 否 |
+| caFilePEM |  CA证书的PEM格式内容，用于验证服务器证书 | string  | 否 |
+| caFilePEMRef | 指定DeviceLink的引用关系，以引用值作为CA文件的PEM内容 | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12)  | 否 |
+| certFilePEM | 证书的PEM格式内容，用于客户端对服务器的认证| string  | 否 |
+| certFilePEMRef | 指定DeviceLink的引用关系，以引用值作为客户端证书文件的PEM内容 | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12) | 否 |
+| keyFilePEM | 密钥的PEM格式内容，用于客户端对服务器的认证。 | string  | 否 |
+| keyFilePEMRef | 指定DeviceLink的引用关系，将该值作为客户端密钥文件PEM内容引用。 | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12) | 否 |
+| serverName| 表示服务器的名称，参考http://tools.ietf.org/html/rfc4366#section-3.1  | string  | 否 |
+| insecureSkipVerify | 不验证服务器证书，默认值为`false` | bool  | 否 |
 
-#### MQTTClientBasicAuth
+##### MQTTClientStore
 
-|参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-| name | MQTT服务器用户名 | string  | 否 |
-| password | MQTT服务器用户密码 | string  | 否 |
-
-#### MQTTClientTLS
-
-参数 | 描述 | 类型 | 是否必填
-:--- | :--- | :--- | :---
-| caFilePem |  CA证书的PEM格式内容，用于验证服务器证书 | string  | 否 |
-| caFilePemRef | 指定DeviceLink的引用关系，以引用值作为CA文件的PEM内容 | [DeviceLinkReferenceRelationship](#devicelinkreferencerelationship)  | 否 |
-| certFilePem | 证书的PEM格式内容，用于客户端对服务器的认证。 | string  | 是 |
-| certFilePemRef | 指定DeviceLink的引用关系，以引用值作为客户端证书文件的PEM内容。 | [DeviceLinkReferenceRelationship](#devicelinkreferencerelationship)  | 否 |
-| keyFilePem | 密钥的PEM格式内容，用于客户端对服务器的认证。 | string  | 是 |
-| keyFilePemRef | 指定DeviceLink的引用关系，将该值作为客户端密钥文件PEM内容引用。| [DeviceLinkReferenceRelationship](#devicelinkreferencerelationship)  | 是 |
-| serverName| 服务器的名称，参见 http://tools.ietf.org/html/rfc4366#section-3.1  | string  | 否 |
-| insecureSkipVerify | 是否不验证服务器证书，默认值是 `false` | bool  | 否 |
-
-#### DeviceLinkReferenceRelationship
-
-参数 | 描述 | 类型 | 是否必填
-:--- | :--- | :--- | :---
-| name | 指定引用的k8s资源名(目前只支持k8s secret和configmap在同一命名空间内) | string | 是 |
-| item | 指定参考文献的项目名称 | string | 是 |
-
-#### MQTTClientStore
-
-参数 | 描述 | 类型 | 是否必填
-:--- | :--- | :--- | :---
-| type | 指定存储类型。选项为 "memory "和 "file"，默认值为 "memory"| string | 否 |
-| direcotryPrefix | 如果使用文件存储，则指定存储的目录前缀，默认值是`/var/run/octopus/mqtt`。默认值是`/var/run/octopus/mqtt` | string | 否 |
+| type | 指定存储的类型，可选值为"memory"和 "file"，默认值是 "memory"。 | string | 否 |
+| direcotryPrefix | 如果使用 "文件 "存储，则指定存储的目录前缀，默认值是`/var/run/octopus/mqtt`。默认值是`/var/run/octopus/mqtt` | string | 否 |
 
 #### MQTTMessageOptions
 
-参数 | 描述 | 类型 | 是否必填
+| Field | Description | Schema | Required |
+|:---|:---|:---|:---:|
+| topic | 指定主题 | 否 | true |
+| will | 指定遗嘱信息 | *[MQTTWillMessage](#mqttwillmessage) | 否 |
+| qos | 指定消息的QoS，默认值为`1` | *[MQTTMessageQoSLevel](#mqttmessageqoslevel) | 否 |
+| retained | 指定是否保留最后发布的消息，默认为 "true" | bool | 否 |
+| path | 指定渲染topic的`:path`关键字的路径。 | string | 否 |
+| operator | 指定用于渲染主题的`:operator`关键字的操作符。 | *[MQTTMessageTopicOperator](mqttmessagetopicoperator) | 否 |
+
+##### MQTTWillMessage
+
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-| topic | 指定topic的设置。 | [MQTTMessageTopic](#mqttmessagetopic) | 是 |
-| payloadEncode | 定义发布消息的编码方式，选项有 "raw "和 "base64"，默认为raw。 | string | 否 |
-| qos | 消息的QoS等级，可选值为0、1、2，0表示最多发送一次，1表示最少发送一次，2表示只发送一次，默认值为`0` | byte | 否 |
-| retained | 指定要保留的信息，默认值为 "false"。 | bool | 否 |
-| waitTimeout | 指定客户端操作后应等待的时间，默认值为`0s`，即永不超时。 | string | 否 |
+| topic | 指定遗嘱消息的主题，如果没有设置，主题将在父字段指定的主题名称后附加`$will`作为主题名称。如果没有设置，主题将在父字段中指定的主题名称后附加"$will "作为主题名称。 | string | 否 |
+| content | 指定will消息的内容。内容的序列化形式是Base64编码的字符串，在这里表示任意（可能是非字符串）的内容值 | string | 否 |
 
-#### MQTTMessageTopic
+##### MQTTMessageQoSLevel
 
-参数 | 描述 | 类型 | 是否必填
+参数 | 描述| 类型 |
+:--- | :--- | :--- |
+0 | 最多发送一次 | byte 
+1 | 最少发送一次 | byte  
+2 | 只发送一次 | byte 
+
+##### MQTTMessageTopicOperator
+
+参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-| name | 指定主题的静态名称，如果同时配置了 "name "和 "prefix"，则默认使用该静态名称 | string | 否 |
-| prefix | 指定主题的动态名称的前缀。动态名称需要前缀。| string | 否 |
-| with | 指定主题的动态名称的模式。选项有`nn`(k8s name + namespace)和`uid`(k8s resource uid)，默认模式为`nn` | string | 否 |
-
+| read | 指定在订阅时渲染主题的`:operator`关键字的操作符 | string | false |
+| write | 指定在发布时渲染主题的`:operator`关键字的操作符 | string | false |
 
 ### YAML配置文件示例
 
 MQTT选项的规范在所有MQTT扩展适配器中均有效，它们用于连接MQTT代理服务器，引导连接，指示要发布/订阅的主题以及有效Payload的编码等。REQUIRED是必填字段。
+
 
 ```yaml
 
@@ -198,61 +187,94 @@ client:
   
   # Specifies the MQTT protocol version that the cluster uses to connect to broker.
   # Legitimate values are currently 3 - MQTT 3.1 or 4 - MQTT 3.1.1.
-  protocolVersion: <int, 3|4>
-  
-  # Specifies the will message that the client gives it to the broker,
-  # which can be published to any clients that are subscribed the provided topic.
-  will:
-  
-    # Specifies the topic for publishing the will message,
-    # if not set, the will topic will append "$will" to the topic name specified
-    # in global settings as its topic name.
-    topic: 
-      
-      # Specifies the static name of topic.
-      name: <string>
-  
-    # Specifies the encode way of payload content.
-    #   raw: Not encode.
-    #   base64: The output (published) data is encoded with Base64, and the input (subscribed) data is decoded with Base64. 
-    # The "base64" way allows to input bytes (`payloadContent`) that cannot be characterized.
-    # The default way is "raw".
-    payloadEncode: <string, raw|base64>
-
-    # Specifies the payload content.
-    # REQUIRED
-    payloadContent: <string>
-  
-    # Specifies the QoS of the will message.
-    #   0: Send at most once.
-    #   1: Send at least once.
-    #   2: Send exactly once.
-    # The default value is "0".
-    qos: <int, 0|1|2>
-  
-    # Specifies the will message to be retained.
-    # The default value is "false".
-    retained: <bool>
+  # The default value is 0, which means MQTT v3.1.1 identification is preferred.
+  protocolVersion: <int, 0|3|4>
   
   # Specifies the username and password that the client connects
   # to the MQTT broker. Without the use of `tlsConfig`,
   # the account information will be sent in plaintext across the wire.
   basicAuth:
-    name: <string>
+    # Specifies the username for basic authentication.
+    username: <string>
+
+    # Specifies the relationship of DeviceLink's references to
+    # refer to the value as the username.
+    usernameRef:
+
+      # Specifies the name of reference.
+      # REQUIRED
+      name: <string>
+
+      # Specifies the item name of the referred reference.
+      # REQUIRED
+      item: <string>
+
+    # Specifies the relationship of DeviceLink's references to refer to the value as the username.
     passsword: <string>
+
+    # Specifies the relationship of DeviceLink's references to
+    # refer to the value as the password.
+    passwordRef:
+
+      # Specifies the name of reference.
+      # REQUIRED
+      name: <string>
+
+      # Specifies the item name of the referred reference.
+      # REQUIRED
+      item: <string>
   
   # Specifies the TLS configuration that the client connects to the MQTT broker.
   tlsConfig:
     
     # The PEM format content of the CA certificate,
     # which is used for validate the server certificate with.
-    caFilePem: <string>
+    caFilePEM: <string>
+
+    # Specifies the relationship of DeviceLink's references to
+    # refer to the value as the CA file PEM content.
+    caFilePEMRef:
+
+      # Specifies the name of reference.
+      # REQUIRED
+      name: <string>
+
+      # Specifies the item name of the referred reference.
+      # REQUIRED
+      item: <string>
     
     # The PEM format content of the certificate and key,
     # which is used for client authenticate to the server.
-    certFilePem: <string>
-    keyFilePem: <string>
-    
+    certFilePEM: <string>
+
+    # Specifies the relationship of DeviceLink's references to
+    # refer to the value as the client certificate file PEM content.
+    certFilePEMRef:
+
+      # Specifies the name of reference.
+      # REQUIRED
+      name: <string>
+
+      # Specifies the item name of the referred reference.
+      # REQUIRED
+      item: <string>
+
+    # Specifies the PEM format content of the key(private key),
+    # which is used for client authenticate to the server.
+    keyFilePEM: <string>
+
+    # Specifies the relationship of DeviceLink's references to
+    # refer to the value as the client key file PEM content.
+    keyFilePEMRef:
+
+      # Specifies the name of reference.
+      # REQUIRED
+      name: <string>
+
+      # Specifies the item name of the referred reference.
+      # REQUIRED
+      item: <string>
+
     # Indicates the name of the server, ref to http://tools.ietf.org/html/rfc4366#section-3.1.
     serverName: <string>
   
@@ -269,8 +291,8 @@ client:
   store: 
     
     # Specifies the type of storage.
-    # The default store is "memory".
-    type: <string, memory|file>
+    # The default store is "Memory".
+    type: <string, Memory|File>
     
     # Specifies the directory prefix of the storage, if using file store.
     # The default value is "/var/run/octopus/mqtt".
@@ -314,6 +336,15 @@ client:
   # A duration of 0 never times out.
   # The default value is "30s".
   writeTimeout: <string>
+
+  # Specifies the amount of time that the client should timeout
+  # after subscribed/published a message.
+  # A duration of 0 never times out.
+  waitTimeout: <string>
+
+  # Specifies the quiesce when the client disconnects.
+  # The default value is "5s".
+  disconnectQuiesce: <string>
   
   # Configures using the automatic reconnection logic.
   # The default value is "true".
@@ -340,146 +371,171 @@ client:
 # Specifies the message settings.
 message:
     
-  # Specifies the topic settings.
+  # Specifies the topic.
   # REQUIRED
-  topic:
-      
-    # Specifies the static name of topic.
-    name: <string>
-      
-    # Specifies the prefix for the dynamic name of topic.
-    # The prefix is REQUIRED for dynamic name.
-    prefix: <string>
-      
-    # Specifies the mode for the dynamic name of topic.
-    # The default mode is "nn".
-    with: <string, nn|uid>
+  topic: <string>
 
-  # Specifies the encode way of payload data.
-  #   raw: Not encode.
-  #   base64: The output (published) data is encoded with Base64, and the input (subscribed) data is decoded with Base64.
-  # The default way is "raw".
-  payloadEncode: <string, raw|base64>
+  # Specifies the will message that the client gives it to the broker,
+  # which can be published to any clients that are subscribed the provided topic.
+  will:
+  
+    # Specifies the topic of will message.
+    # if not set, the topic will append "$will" to the topic name specified
+    # in parent field as its topic name.
+    topic: <string>
+    
+    # Specifies the content of will message. The serialized form of the content is a
+    # base64 encoded string, representing the arbitrary (possibly non-string) content value here.
+    content: <string, base64-encoded>
 
   # Specifies the QoS of the will message.
   #   0: Send at most once.
   #   1: Send at least once.
   #   2: Send exactly once.
-  # The default value is "0".
+  # The default value is "1".
   qos: <int, 0|1|2>
 
   # Specifies the will message to be retained.
-  # The default value is "false".
+  # The default value is "true".
   retained: <bool>
 
-  # Specifies the amount of time that the client should wait after operating.
-  # A duration of 0 never times out.
-  # The default value is "0s".
-  waitTimeout: <string>
+  # Specifies the path for rendering the `:path` keyword of topic.
+  path: <string>
+
+  # Specifies the operator for rendering the `:operator` keyword of topic.
+  operator:
+
+    # Specifies the operator for rendering the `:operator` keyword of topic during subscribing.
+    read: <string>
+
+    # Specifies the operator for rendering the `:operator` keyword of topic during publishing.
+    write: <string>
 
 ```
 
-### MQTT选项状态
+### Templated Topic
 
-MQTT选项的状态在所有MQTT扩展适配器中也是有效的，它们描述了MQTT配置的实际状态。
+Octopus提供了一个**templated topic**，以适应不同的MQTT发布和订阅场景。templated topic支持的关键词有五个。
 
-```yaml
+- `:namespace`，替换DeviceLink的[命名空间](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L147)。
+- `:name`，替换为DeviceLink的[名称](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L118)。
+- `:uid`，替换为DeviceLink的[UID](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L167)。
+- `:path`，替换为自定义路径。
+- `:operator`，基于操作(`read` - [subscribe](https://www.hivemq.com/blog/mqtt-essentials-part-4-mqtt-publish-subscribe-unsubscribe/#subscribe), `write` - [publish](https://www.hivemq.com/blog/mqtt-essentials-part-4-mqtt-publish-subscribe-unsubscribe/#publish))进行替换。值得注意的是，`read`操作在MQTT扩展中不支持，但在[MQTT适配器](./mqtt.md)中运行良好。
 
-# Observes the client settings.
-client:
+模板化主题有以下两个特点：
 
-  # Observes the broker server URI.
-  server: <string>
-  
-  # Observes the protocol version.
-  protocolVersion: <int>
+- 容错的额外分隔符，`path. "a///b//c"`将被视为`path."。"a///b///c"`将作为`path: "a/b/c"`。
+- 自动忽略没有内容的关键词。
 
-  # Observes the will message that the client gives it to the broker.
-  will:
+#### 使用案例
 
-    # Observes the topic for publishing the will message.
-    topicName: <string>
-    
-    # Observes the encode way of payload content.
-    payloadEncode: <string>
+1. 给定主题`cattle.io/octopus/:namespace/device/:name`，当DeviceLink命名为`default/case1`时
+    ```YAML
+    apiVersion: edge.cattle.io/v1alpha1
+    kind: DeviceLink
+    metadata:
+      namespace: default
+      name: case1
+      uid: fcd1eb1b-ea42-4cb9-afb0-0ec2d0830583
+    spec:
+      ...
+      template:
+        ...
+        spec:
+          extension:
+            mqtt:
+              ...
+              message:
+                topic: "cattle.io/octopus/:namespace/device/:name"
+    ```
 
-    # Observes the QoS of the will message.
-    qos: <int>
+    - Publish Topic: `cattle.io/octopus/default/device/case1`
+    - Subscribe Topic: `cattle.io/octopus/default/device/case1`
 
-    # Observes if retaining the will message.
-    retained: <bool>
+1. 给定主题`cattle.io/octopus/device/:uid`，当DeviceLink命名为`default/case2`时：
 
-  # Observes if configuring basic authentication.
-  configBasicAuth: <bool>
+    ```YAML
+    apiVersion: edge.cattle.io/v1alpha1
+    kind: DeviceLink
+    metadata:
+      namespace: default
+      name: case2
+      uid: 41478d1e-c3f8-46e3-a3b5-ba251f285277
+    spec:
+      ...
+      template:
+        ...
+        spec:
+          extension:
+            mqtt:
+              ...
+              message:
+                topic: "cattle.io/octopus/device/:uid"
+    ```
 
-  # Observes if configuring TLS.
-  configTLS: <bool>
-  
-  # Observes if setting the "clean session" flag.
-  cleanSession: <bool>
+    - Publish Topic: `cattle.io/octopus/device/41478d1e-c3f8-46e3-a3b5-ba251f285277`
+    - Subscribe Topic: `cattle.io/octopus/device/41478d1e-c3f8-46e3-a3b5-ba251f285277`
 
-  # Observes the store type.
-  store:
+    > UID是Kubernetes提供的代表资源的唯一标识，对外没有太多的解读意义。因此，一般情况下不建议使用这个关键字。
 
-     # Observes the type of storage.
-     type: <string>
-     
-     # Observes the directory of the file storage.
-     directory: <string>
-  
-  # Observes if enabling resuming of stored (un)subscribe messages when connecting but not reconnecting.
-  resumeSubs: <bool>
+1. 给定主题`cattle.io/octopus/:operator/device/:namespace/:name`，当DeviceLink命名为`default/case3`时：
 
-  # Observes the amount of time that the client try to open a connection
-  # to an MQTT broker before timing out and getting error.
-  connectTimeout: <string>
+    ```YAML
+    apiVersion: edge.cattle.io/v1alpha1
+    kind: DeviceLink
+    metadata:
+      namespace: default
+      name: case3
+      uid: 835aea2e-5f80-4d14-88f5-40c4bda41aa3
+    spec:
+      ...
+      template:
+        ...
+        spec:
+          extension:
+            mqtt:
+              ...
+              message:
+                topic: "cattle.io/octopus/:operator/device/:namespace/:name"
+                operator:
+                  write: "set"
+    ```
 
-  # Observes the amount of time that the client should wait
-  # before sending a PING request to the broker.
-  keepAlive: <string>
-  
-  # Observes the amount of time that the client should wait
-  # after sending a PING request to the broker.
-  pingTimeout: <string>
-  
-  # Observes the message routing to guarantee order within each QoS level.
-  order: <bool>
+    - Publish Topic: `cattle.io/octopus/set/device/default/case3`
+    - Subscribe Topic: `cattle.io/octopus/device/default/case3`
 
-  # Observes the amount of time that the client publish a message successfully before getting a timeout error.
-  writeTimeout: <string>
-  
-  # Observes if using the automatic reconnection logic.
-  autoReconnect: <bool>
-  
-  # Observes the amount of time that the client should wait before reconnecting to the broker.
-  maxReconnectInterval: <int>
+1. 给定主题`cattle.io/octopus/:operator/device/:path/:uid`，当DeviceLink命名为`default/case4`时。
 
-  # Observes the size of the internal queue that holds messages while the client is temporarily offline, 
-  # allowing the application to publish when the client is reconnected.
-  messageChannelDepth: <int>
-  
-  # Observes the additional HTTP headers that the client sends in the WebSocket opening handshake.
-  httpHeaders: <map[string][]string>
- 
-# Observes the message settings. 
-message:
-  
-  # Observes the topic for publishing/subscribing the message.
-  topicName: <string>
-  
-  # Observes the encode way of payload content.
-  payloadEncode: <string>
+    ```YAML
+    apiVersion: edge.cattle.io/v1alpha1
+    kind: DeviceLink
+    metadata:
+      namespace: default
+      name: case4
+      uid: 014997f5-1f12-498b-8631-d2f22920e20a
+    spec:
+      ...
+      template:
+        ...
+        spec:
+          extension:
+            mqtt:
+              ...
+              message:
+                topic: "cattle.io/octopus/:operator/device/:path/:uid"
+                operator:
+                  read: "status"
+                path: "region/ap"
+    ```
 
-  # Observes the QoS of the message.
-  qos: <int>
-  
-  # Observes if retaining the message.
-  retained: <bool>
-  
-  # Observes the amount of time that the client should wait after operating.
-  waitTimeout: <string>
-
-```
+    - Publish Topic: `cattle.io/octopus/device/region/ap/014997f5-1f12-498b-8631-d2f22920e20a`
+    - Subscribe Topic: `cattle.io/octopus/status/device/region/ap/014997f5-1f12-498b-8631-d2f22920e20a`
 
 
+## 可用适配器列表
 
+- [Modbus](/docs-octopus/docs/cn/adaptors/modbus)
+- [OPC-UA](/docs-octopus/docs/cn/adaptors/opc-ua)
+- [MQTT](/docs-octopus/docs/cn/adaptors/mqtt)
+- [Dummy](/docs-octopus/docs/cn/adaptors/dummy)
