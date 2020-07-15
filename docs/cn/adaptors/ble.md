@@ -5,9 +5,9 @@ title: BLE 适配器
 
 ## 介绍
 
-BLE代表低功耗蓝牙（通常称为BlueTooth Smart）。 BLE是一种设计用于短距离通信的无线通信形式。
+BLE代表[低功耗蓝牙](#https://en.wikipedia.org/wiki/Bluetooth_Low_Energy)。 BLE是一种设计用于短距离通信的无线通信形式。
 
-BLE适配器实现了蓝牙协议的支持，并用于定义所连接的BLE设备的属性与配置。
+BLE适配器在[bettercap/gatt](#github.com/bettercap/gatt)上实现，有助于与支持BLE的设备进行通信或定义连接设备的属性。
 
 ## 注册信息
 
@@ -116,8 +116,8 @@ spec:
 参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
 metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | 否
-spec | 定义 "蓝牙设备 "的预期状态 | [BluetoothDeviceSpec](#bluetoothdevicespec) | 是
-status | D定义 "蓝牙设备 "的实际状态 | [BluetoothDeviceStatus](#bluettothdevicestatus) | 否
+spec | 定义 "BluetoothDevice"的预期状态 | [BluetoothDeviceSpec](#bluetoothdevicespec) | 是
+status | D定义 "BluetoothDevice"的实际状态 | [BluetoothDeviceStatus](#bluettothdevicestatus) | 否
 
 ## BluetoothDeviceSpec
 
@@ -196,7 +196,7 @@ orderOfOperations | 指定操作的顺序 | [[]BluetoothDeviceArithmeticOperatio
 参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
 type | 指定算术运算的类型 | [BluetoothDeviceArithmeticOperationType](#bluetoothdevicearithmeticoperationtype) | 是
-value | Specifies the value for arithmetic operation, which is in form of float string. | string | 是
+value | 指定算术运算的值，其形式为浮点数字符串 | string | 是
 
 #### BluetoothDeviceArithmeticOperationType
 
