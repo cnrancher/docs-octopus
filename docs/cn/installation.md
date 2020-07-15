@@ -50,7 +50,7 @@ $ helm delete octopus
 
 ## 基于Kustomize部署
 
-Kustomize是解决Kubernetes应用程序管理的另一种工具，它使用的概念与Helm不同，后者称为[声明式应用程序管理](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/architecture /declarative-application-management.md)。
+Kustomize是解决Kubernetes应用程序管理的另一种工具，它使用的概念与Helm不同，后者称为[声明式应用程序管理](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/architecture/declarative-application-management.md)。
 
 Octopus使用 `Kustomize`生成其安装程序的清单文件，安装程序YAML文件位于以下目录中的[`deploy/e2e](https://github.com/cnrancher/octopus/tree/master/deploy/e2e)目录下 Github，用户可以使用它来安装Octopus及其适配器。
 

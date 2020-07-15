@@ -166,7 +166,7 @@ spec:
     ./roomlight -b "tcp://192.168.8.246:1883"
     ```
    
-1. 使用[roomlightcase1.yaml](../../deploy/e2e)部署DeviceLink
+1. 使用[`deploy/e2e`](https://github.com/cnrancher/octopus/tree/master/deploy/e2e)部署DeviceLink
     ```shell script
     $ kubeclt apply -f roomlightcase1.yaml
     ```

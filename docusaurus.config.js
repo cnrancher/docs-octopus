@@ -39,7 +39,7 @@ module.exports = {
           position: 'left',
         },
         {
-          href: './eng',
+          href: 'https://cnrancher.github.io/docs-octopus/eng/',
           label: 'English',
           position: 'right',
         },
@@ -108,7 +108,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/cnrancher/docs-octopus/edit/master/website/',
+            'https://github.com/cnrancher/docs-octopus/tree/master',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

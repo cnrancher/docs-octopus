@@ -156,8 +156,8 @@ Octopus诞生时就考虑到了可伸缩性的必要，这种能力体现在设�
 
 ## 可用适配器列表
 
-- [Modbus](./modbus)
-- [OPC-UA](./opc-ua)
-- [MQTT](./mqtt)
-- [BLE](./ble)
-- [Dummy](./dummy)
+- [Modbus](/docs-octopus/docs/cn/adaptors/modbus)
+- [OPC-UA](/docs-octopus/docs/cn/adaptors/opc-ua)
+- [MQTT](/docs-octopus/docs/cn/adaptors/mqtt)
+- [BLE](/docs-octopus/docs/cn/adaptors/ble)
+- [Dummy](/docs-octopus/docs/cn/adaptors/dummy)
