@@ -9,7 +9,7 @@ title: Modbus Adaptor
 In a standard Modbus network, there is one master and up to 247 slaves, each with a unique slave address from 1 to 247. 
 The master can also write information to the slaves.
 
-Modbus adaptor support both TCP and RTU protocol, it acting as the master node and connects to or manipulating the Modbus slave devices on the edge side.
+Modbus adaptor implements the [goburrow/modbus](#github.com/goburrow/modbus) to support both TCP and RTU protocols, it acting as the controller(master) node and connects to or manipulating the Modbus worker(slave) devices on the edge side.
 
 ### Modbus Registers Operation
 

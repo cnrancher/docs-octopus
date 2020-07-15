@@ -136,14 +136,14 @@ The specification of MQTT options are valid in all MQTT extension adaptors, they
 
 #### MQTTMessageOptions
 
-| Field | Description | Schema | Required |
+| Parameter | Description | Schema | Required |
 |:---|:---|:---|:---:|
 | topic | Specifies the topic. | string | true |
 | will | Specifies the will message. | *[MQTTWillMessage](#mqttwillmessage) | false |
 | qos | Specifies the QoS of the message, default value is `1`. | *[MQTTMessageQoSLevel](#mqttmessageqoslevel) | false |
 | retained | Specifies if the last published message to be retained, default is `true`. | *bool | false |
 | path | Specifies the path for rendering the `:path` keyword of topic. | string | false |
-| operator | Specifies the operator for rendering the `:operator` keyword of topic. | *[MQTTMessageTopicOperator](mqttmessagetopicoperator) | false |
+| operator | Specifies the operator for rendering the `:operator` keyword of topic. | *[MQTTMessageTopicOperator](#mqttmessagetopicoperator) | false |
 
 ##### MQTTWillMessage
 
