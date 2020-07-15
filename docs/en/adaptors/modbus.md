@@ -112,7 +112,7 @@ Parameter | Description | Scheme | Required
 --- | --- | --- | ---
 parameters | Parameter of the modbus device| *[ModbusDeviceParamters](#modbusdeviceparamters) | false
 protocol | Protocol for accessing the modbus device  | *[ModbusProtocolConfig](#modbusprotocolconfig) | true
-properties | Device properties  | []*[DeviceProperty](#deviceproperty) | false
+properties | Device properties  | *[DeviceProperty](#deviceproperty) | false
 extension | Integrate with deivce MQTT extension  | *[DeviceExtension](#deviceextension) | false
 
 #### ModbusDeviceParamters
@@ -166,7 +166,7 @@ Parameter | Description | Scheme |  Required
 register | CoilRegister, DiscreteInputRegister, HoldingRegister, or InputRegister | string | true
 offset | Offset indicates the starting register number to read/write data | int | true
 quantity | Limit number of registers to read/write | int | true
-orderOfOperations | The quantity of registers | []*[ModbusOperations](#modbusoperations) | false
+orderOfOperations | The quantity of registers | *[ModbusOperations](#modbusoperations) | false
 
 #### ModbusOperations
 

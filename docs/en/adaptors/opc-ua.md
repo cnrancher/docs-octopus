@@ -107,7 +107,7 @@ Parameter | Description | Scheme | Required
 --- | --- | --- | ---
 parameters | Parameter of the opcua device| *[DeviceParamters](#deviceparamters) | false
 protocol | Protocol for accessing the opcua device  | *[ProtocolConfig](#protocolconfig) | true
-properties | Device properties  | []*[DeviceProperty](#deviceproperty) | false
+properties | Device properties  | [DeviceProperty](#deviceproperty) | false
 extension | Integrate with deivce MQTT extension  | *[DeviceExtension](#deviceextension) | false
 
 #### DeviceParamters
