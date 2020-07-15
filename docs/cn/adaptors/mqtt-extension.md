@@ -8,7 +8,7 @@ Octopus提供了两种的方法与[MQTT](http://mqtt.org/)集成：
 1. [modbus](./modbus)、[opcua](./opc-ua)、[ble](./ble)和[dummy](./dummy)，都支持通过MQTT代理同步设备状态。 
 1. 如果设备支持MQTT，则可以将[MQTT适配器](./mqtt)用作首选。
 
-> 这篇文章主要概述了第一种方法的细节，如果您想了解更多关于MQTT适配器的信息，请查看[MQTT适配器](./mqtt)。 如果以上开箱即用的方式无法满足您的要求，则可以按照[CONTRIBUTING](../../CONTRIBUTING.md)提出您的想法，或[开发新的适配器](./develop.md)。
+> 这篇文章主要概述了第一种方法的细节，如果您想了解更多关于MQTT适配器的信息，请查看[MQTT适配器](./mqtt)。 如果以上开箱即用的方式无法满足您的要求，则可以按照[CONTRIBUTING](https://github.com/cnrancher/octopus/blob/master/CONTRIBUTING.md)提出您的想法，或[开发新的适配器](./develop.md)。
 
 尽管MQTT的最新版本为v5.0，但目前Octopus暂时不支持该修订版，主要原因是[相应的开发库](https://www.eclipse.org/paho/clients/golang/)尚不支持[paho.mqtt.golang/issues＃347](https://github.com/eclipse/paho.mqtt.golang/issues/347)：
 

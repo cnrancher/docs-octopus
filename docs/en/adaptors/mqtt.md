@@ -166,7 +166,7 @@ for more detailed information of JSON path syntax please refer to [GJSON Syntax]
     ./roomlight -b "tcp://192.168.8.246:1883"
     ```
    
-1. deploy the DeviceLink use [roomlightcase1.yaml](../../deploy/e2e)
+1. deploy the DeviceLink use `deploy/e2e`](https://github.com/cnrancher/octopus/tree/master/deploy/e2e)
     ```shell script
     $ kubeclt apply -f roomlightcase1.yaml
     ```

@@ -8,7 +8,7 @@ Octopus provides two out-of-box ways to integrate with [MQTT](http://mqtt.org/):
 1. Most Octopus adaptors, like [BLE adaptor](./ble) support to synchronize the device status via an MQTT broker. Get more MQTT extension adaptors [below](#supported-adaptors).
 1. If the device naturally supports MQTT, the [MQTT adaptor](./mqtt) can be used as the first choice.
 
-> This post mainly outlines the detail of the first way, if you want to know more about the MQTT adaptor, please view [here](./mqtt). If the above out-of-box ways cannot satisfy you, you can follow the [CONTRIBUTING](../../CONTRIBUTING.md) to contribute your idea or [develop a new adaptor](./develop.md).
+> This post mainly outlines the detail of the first way, if you want to know more about the MQTT adaptor, please view [here](./mqtt). If the above out-of-box ways cannot satisfy you, you can follow the [CONTRIBUTING](https://github.com/cnrancher/octopus/blob/master/CONTRIBUTING.md) to contribute your idea or [develop a new adaptor](./develop.md).
 
 Although the latest version of MQTT is v5.0, for the time being, Octopus does not support the revision, the main reason is the [corresponding development library](https://www.eclipse.org/paho/clients/golang/) does not support yet([paho.mqtt.golang/issues#347](https://github.com/eclipse/paho.mqtt.golang/issues/347)):
 

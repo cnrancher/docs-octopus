@@ -157,8 +157,8 @@ The **Connection** can let the `limb` to connect to an adaptor, on this phase, t
 
 ## Available Adaptor List
 
-- [Modbus](./modbus)
-- [OPC-UA](./opc-ua)
-- [MQTT](./mqtt)
-- [BLE](./ble)
-- [Dummy](./dummy)
+- [Modbus](/docs-octopus/docs/en/adaptors/modbus)
+- [OPC-UA](/docs-octopus/docs/en/adaptors/opc-ua)
+- [MQTT](/docs-octopus/docs/en/adaptors/mqtt)
+- [BLE](/docs-octopus/docs/en/adaptors/ble)
+- [Dummy](/docs-octopus/docs/en/adaptors/dummy)
