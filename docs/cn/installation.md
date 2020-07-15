@@ -19,7 +19,7 @@ Octopus支持两种不同的部署方式，一种是基于[Helm chart](https://h
 为了能够使用此存储库中的图表，请将下列名称和URL添加到您的Helm客户端：
 
 ```console
-$ helm repo add cnrancher http://charts.cnrancher.cn/octopus
+$ helm repo add octopus http://charts.cnrancher.cn/octopus
 $ helm repo update
 ```
 
@@ -27,20 +27,20 @@ $ helm repo update
 
 请运行以下命令，将Octopus Chart安装到Kubernetes或k3s集群中：
 ```
-$ helm create ns octopus-system
+$ kubectl create ns octopus-system
 ```
 ```
-$ helm install --namespace octopus-system octopus cnrancher/octopus
+$ helm install --namespace octopus-system myapp octopus/octopus
 ```
 
 安装成功后，您可以获取应用状态：
 ```
-$ helm status octopus
+$ helm status myapp
 ```
 
 如果要删除应用，请使用以下命令：
 ```
-$ helm delete octopus
+$ helm delete myapp
 ```
 该命令几乎删除了与应用关联的所有Kubernetes组件，并删除了Kubernetes发行版。
 
