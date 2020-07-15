@@ -7,7 +7,7 @@ title: BLE 适配器
 
 BLE代表[低功耗蓝牙](#https://en.wikipedia.org/wiki/Bluetooth_Low_Energy)。 BLE是一种设计用于短距离通信的无线通信形式。
 
-BLE适配器在[bettercap/gatt](#github.com/bettercap/gatt)上实现，有助于与支持BLE的设备进行通信或定义连接设备的属性。
+BLE适配器实现了蓝牙协议的支持，并用于定义所连接的BLE设备的属性与配置。
 
 ## 注册信息
 
