@@ -10,30 +10,29 @@ import GitHubButton from 'react-github-btn';
 const features = [
   {
     title: <>Build for Edge</>,
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    imageUrl: 'img/landing-img-edge.png',
     description: (
       <>
-        Lightweight and does not need to replace any components of the Kubernetes clusters. With Octopus deployed,
-        the cluster can have the ability to manage any edge device as a resource.
+        Lightweight and does not need to replace any basic components of the Kubernetes cluster. After Octopus deployed, the cluster can have the ability to manage edge devices as custom k8s resources.
       </>
     ),
   },
   {
     title: <>Simple yet Flexible</>,
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    imageUrl: 'img/landing-img-adaptors.png',
     description: (
       <>
-        Octopus has build-in device adaptor like BLE, modbus, OPC-UA, and MQTT, and it supports custom device adaptor plugins. Go
+        Octopus has build-in device adaptor like BLE, Modbus, OPC-UA, and MQTT, and it supports custom device adaptor plugins. Go
         ahead and <a href="https://github.com/cnrancher/docs-octopus/blob/master/docs/en/develop.md" target="_blank">build your own adaptor</a>.
       </>
     ),
   },
   {
     title: <>Powered by Kubernetes & k3s</>,
-    imageUrl: 'img/undraw_docusaurus_react.svg',
+    imageUrl: 'img/landing-img-arch.png',
     description: (
       <>
-        Both ARM64 and ARMv7 are supported with multiarch images. Works great with both valina Kubernetes and <a href="https://k3s.io/" target="_blank">k3s</a>.
+        Both ARM64 and ARMv7 are supported with multi-arch images. Works great with both valina Kubernetes and <a href="https://k3s.io/" target="_blank">k3s</a>.
       </>
     ),
   },
@@ -71,7 +70,7 @@ function Home() {
                 'button button--outline button--secondary button--lg',
                 styles.getStarted,
               )}
-              to={useBaseUrl('docs/about')}>
+              to={useBaseUrl('docs/en/about')}>
               Get Started
             </Link>
           </div>

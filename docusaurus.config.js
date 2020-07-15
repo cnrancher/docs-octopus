@@ -1,6 +1,6 @@
 module.exports = {
   title: 'Octopus',
-  tagline: 'Lightweight edge device management system based on Kubernetes',
+  tagline: 'Lightweight edge device management system based on Kubernetes/k3s',
   url: 'https://cnrancher.github.io',
   baseUrl: '/docs-octopus/',
   favicon: 'img/favicon.ico',
