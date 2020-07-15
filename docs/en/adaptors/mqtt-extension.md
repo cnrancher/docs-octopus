@@ -496,8 +496,8 @@ Templated topic has two features as below:
               ...
               message:
                 topic: "cattle.io/octopus/:operator/device/:namespace/:name"
-              operator:
-                write: "set"
+                operator:
+                  write: "set"
     ```
 
     - Publish Topic: `cattle.io/octopus/set/device/default/case3`
@@ -522,9 +522,9 @@ Templated topic has two features as below:
               ...
               message:
                 topic: "cattle.io/octopus/:operator/device/:path/:uid"
-              operator:
-                read: "status"
-              path: "region/ap"
+                operator:
+                  read: "status"
+                path: "region/ap"
     ```
 
     - Publish Topic: `cattle.io/octopus/device/region/ap/014997f5-1f12-498b-8631-d2f22920e20a`

@@ -183,7 +183,7 @@ The `DummySpecialDevice` can be considered as a fake fan.
 |:---|:---|:---|:---:|
 | location | Specifies the location of device. | string | true |
 
-#### DummySpecialDeviceGear
+### DummySpecialDeviceGear
 
 DummySpecialDeviceGear defines how fast the dummy special device should be.
 
@@ -193,7 +193,7 @@ DummySpecialDeviceGear defines how fast the dummy special device should be.
 | middle | Starts from 100 and increases every two seconds until 200. | string |
 | fast | Starts from 200 and increases every one second until 300. | string |
 
-## DummyProtocolDevice
+### DummyProtocolDevice
 
 The `DummyProtocolDevice` can be considered as a chaos protocol robot, it will change its attribute values every two seconds.
 
