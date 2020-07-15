@@ -109,7 +109,7 @@ spec:
 :--- | :--- | :--- | :---
 parameters | opcua 设备的参数| *[DeviceParamters](#deviceparamters) | 否
 protocol | 访问opcua 设备时使用的网络传输协议  | *[ProtocolConfig](#protocolconfig) | 是
-properties | 设备属性  | []*[DeviceProperty](#deviceproperty) | 否
+properties | 设备属性  | *[DeviceProperty](#deviceproperty) | 否
 extension | OPC-UA设备的MQTT集成  | *[DeviceExtension](#deviceextension) | 否
 
 #### DeviceParamters

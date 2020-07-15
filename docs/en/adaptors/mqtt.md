@@ -36,7 +36,7 @@ Grant permissions to Octopus as below <!-- kubectl describe clusterrole ... -->:
 ```text
   Resources                                   Non-Resource URLs  Resource Names  Verbs
   ---------                                   -----------------  --------------  -----
-  mqttdevices.devices.edge.cattle.io         []                 []              [create delete get list patch update watch]
+  mqttdevices.devices.edge.cattle.io         []                               [create delete get list patch update watch]
   mqttdevices.devices.edge.cattle.io/status  []                 []              [get patch update]
 ```
 

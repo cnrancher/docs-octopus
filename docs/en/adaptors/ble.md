@@ -93,7 +93,7 @@ Parameter | Description | Scheme | Required
 --- | --- | --- | ---
 parameters | Parameter of the BLE device| *[DeviceParamters](#deviceparamters) | false
 protocol | Device protocol config  | [DeviceProtocol](#deviceprotocol) | true
-properties | Device properties     | []*[DeviceProperty](#deviceproperty) | false
+properties | Device properties     | *[DeviceProperty](#deviceproperty) | false
 extension | Integrate with deivce MQTT extension  | *[DeviceExtension](#deviceextension) | false
 
 
@@ -134,7 +134,7 @@ Parameter | Description | Scheme | Required
 --- | --- | --- | ---
 characteristicUUID | Property UUID  | string | true
 defaultValue | Config data write to the bluetooth device(set when access mode is `ReadWrite`), for example `ON` configed in the dataWrite  | string | false
-dataWrite | Responsible for converting the data from the string into []byte that is understood by the bluetooth device, for example: `"ON":[1], "OFF":[0]` | string | false
+dataWrite | Responsible for converting the data from the string into byte that is understood by the bluetooth device, for example: `"ON":[1], "OFF":[0]` | string | false
 dataConverter | Responsible for converting the data being read from the bluetooth device into string | *[BluetoothDataConverter](#bluetoothdataconverter) | false
 
 #### BluetoothDataConverter

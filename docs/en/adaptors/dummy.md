@@ -37,7 +37,7 @@ Grant permissions to Octopus as below:
 ```text
   Resources                                           Non-Resource URLs  Resource Names  Verbs
   ---------                                           -----------------  --------------  -----
-  dummyprotocoldevices.devices.edge.cattle.io         []                 []              [create delete get list patch update watch]
+  dummyprotocoldevices.devices.edge.cattle.io         []                               [create delete get list patch update watch]
   dummyspecialdevices.devices.edge.cattle.io          []                 []              [create delete get list patch update watch]
   dummyprotocoldevices.devices.edge.cattle.io/status  []                 []              [get patch update]
   dummyspecialdevices.devices.edge.cattle.io/status   []                 []              [get patch update]
@@ -147,7 +147,7 @@ The `DummyProtocolDevice` can be considered as a chaos protocol robot, it will c
 | stringValue | Reports the value of string type. | *string | false |
 | floatValue | Reports the value of float type. | *[resource.Quantity](https://github.com/kubernetes/apimachinery/blob/master/pkg/api/resource/quantity.go) [kubernetes-sigs/controller-tools/issues#245](https://github.com/kubernetes-sigs/controller-tools/issues/245#issuecomment-550030238) | false |
 | booleanValue | Reports the value of bool type. | *bool | false |
-| arrayValue | Reports the value of array type. | [][DummyProtocolDeviceStatusObjectOrArrayProps](#dummyprotocoldevicestatusprops) | false | 
+| arrayValue | Reports the value of array type. | [DummyProtocolDeviceStatusObjectOrArrayProps](#dummyprotocoldevicestatusprops) | false | 
 | objectValue | Reports the value of object type. | map[string][DummyProtocolDeviceStatusObjectOrArrayProps](#dummyprotocoldevicestatusprops) | false |
 
 #### DummyProtocolDevicePropertyType

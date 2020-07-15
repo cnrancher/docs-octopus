@@ -113,7 +113,7 @@ The specification of MQTT options are valid in all MQTT extension adaptors, they
 | autoReconnect | Configures using the automatic reconnection logic, default to `true`. | bool  | false |
 | maxReconnectInterval | Specifies the amount of time that the client should wait before reconnecting to the broker, default to `10m`. | string  | false |
 | messageChannelDepth | Specifies the size of the internal queue that holds messages while the client is temporarily offline, default to `100`. | uint  | false |
-| httpHeaders | Specifies the additional HTTP headers that the client sends in the WebSocket opening handshake. | map[string][]string  | false |
+| httpHeaders | Specifies the additional HTTP headers that the client sends in the WebSocket opening handshake. | string  | false |
 
 
 #### MQTTClientWillMessage

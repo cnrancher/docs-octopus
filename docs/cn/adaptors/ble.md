@@ -149,7 +149,7 @@ startIndex | 指定开始转换字节流的位置  | int | 是
 endIndex | 指定停止转换字节流的位置 | int | 是
 shiftLeft | 指定向左位移的的字节数量 | int | 否
 shiftRight | 指定向右位移的的字节数量 | int | 否
-orderOfOperations | 指定操作的执行顺序 | []*[BluetoothOperations](#BluetoothOperations) | 否
+orderOfOperations | 指定操作的执行顺序 |*[BluetoothOperations](#BluetoothOperations) | 否
 
 #### BluetoothOperations
 
