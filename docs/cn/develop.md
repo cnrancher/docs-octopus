@@ -65,7 +65,7 @@ Octopus借鉴了[Maven](https://maven.apache.org/)，并基于[make](https://www
 
 ## 适配器的生成管理
 
-适配器的构建管理与Octopus相似，但执行方式不同。 执行任何适配器的阶段都可以运行`make adapter <适配器名称> <阶段名称>`。 请查看[开发适配器](./adaptors/develop)了解更多详细信息。
+适配器的构建管理与Octopus相似，但执行方式不同。 执行任何适配器的阶段都可以运行`make adapter <适配器名称> <阶段名称>`。 请查看[开发适配器](./adaptors/how-to-develop-adaptor.md)了解更多详细信息。
 
 ## 所有组件的构建管理
 

@@ -24,7 +24,7 @@ const features = [
     description: (
       <>
         Octopus has build-in device adaptor like BLE, modbus, OPC-UA, and MQTT, and it supports custom device adaptor plugins. Go
-        ahead and <a href="https://github.com/cnrancher/octopus/blob/master/docs/adaptors/develop.md" target="_blank">build your own adaptor</a>.
+        ahead and <a href="https://github.com/cnrancher/docs-octopus/blob/master/docs/en/develop.md" target="_blank">build your own adaptor</a>.
       </>
     ),
   },

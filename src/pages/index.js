@@ -14,7 +14,7 @@ const features = [
     description: (
       <>
          轻量且不需要替换Kubernetes集群的任何组件。 部署Octopus后，
-         群集可以将任何边缘设备作为k8s资源进行管理。
+         集群可以将任何边缘设备作为k8s资源进行管理。
       </>
     ),
   },
@@ -24,7 +24,7 @@ const features = [
     description: (
       <>
         Octopus具有内置的设备协议适配器，如BLE，Modbus，OPC-UA和MQTT，并且支持自定义设备适配器插件。
-        点击<a href="https://github.com/cnrancher/octopus/blob/master/docs/adaptors/develop.md" target="_blank">开始构建</a>自定义适配器。
+        点击<a href="https://github.com/cnrancher/docs-octopus/blob/master/docs/cn/develop.md" target="_blank">开始构建</a>自定义适配器。
       </>
     ),
   },
