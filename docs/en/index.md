@@ -8,7 +8,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 
 ## Octopus Introduction
 
-Octopus is an open-source and cloud-native device management system based on Kubernetes or [k3s](https://k3s.io/), it is very lightweight and does not need to replace any basic components of the Kubernetes cluster. After Octopus deployed, the cluster can have the ability to manage edge devices as custom k8s resources.
+Octopus is a light-weight and cloud-native device management system for Kubernetes and [k3s](https://k3s.io/), it does not need to replace any basic components of the Kubernetes cluster. After Octopus deployed, the cluster can have the ability to manage edge devices as custom k8s resources.
 
 ## Concepts
 
