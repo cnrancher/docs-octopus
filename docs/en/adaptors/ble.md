@@ -5,9 +5,11 @@ title: BLE Adaptor
 
 ## Introduction
 
-BLE stands for Bluetooth Low Energy (marketed as Bluetooth Smart). BLE is a form of wireless communication designed for short-range communications. 
+BLE stands for [Bluetooth Low Energy](#https://en.wikipedia.org/wiki/Bluetooth_Low_Energy) (marketed as Bluetooth Smart). BLE is a form of wireless communication designed for short-range communications. 
 
-BLE adaptor implements the Bluetooth protocol and helps to define the attributes of the connected BLE device.
+BLE adaptor implements on [bettercap/gatt](#github.com/bettercap/gatt) and helps to communicate with BLE supported equipment or define the attributes of the connected device.
+
+> The host that deploys BLE adaptor needs to turn on the Bluetooth module.
 
 ## Registration Information
 
