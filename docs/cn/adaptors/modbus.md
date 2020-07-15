@@ -9,7 +9,7 @@ title: Modbus 适配器
 在标准的Modbus网络中，有1个主设备和最多247个从设备，每个从设备具有从1到247的唯一从设备地址。
 除了请求从设备的信息外，主设备也可以将信息写入从设备。
 
-Modbus适配器同时支持TCP和RTU协议充当主节点，并可在边缘侧连接或操纵Modbus从设备。
+Modbus适配器实现了[goburrow/modbus](#github.com/goburrow/modbus)，支持TCP和RTU协议，它作为控制器（主sheb ）节点，连接或操作边缘端的Modbus从设备。
 
 ## 注册操作
 

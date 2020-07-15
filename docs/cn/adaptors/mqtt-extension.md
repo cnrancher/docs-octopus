@@ -146,7 +146,7 @@ MQTT选项的规范在所有MQTT扩展适配器中均有效，它们用于连接
 | qos | 指定消息的QoS，默认值为`1` | *[MQTTMessageQoSLevel](#mqttmessageqoslevel) | 否 |
 | retained | 指定是否保留最后发布的消息，默认为 "true" | bool | 否 |
 | path | 指定渲染topic的`:path`关键字的路径。 | string | 否 |
-| operator | 指定用于渲染主题的`:operator`关键字的操作符。 | *[MQTTMessageTopicOperator](mqttmessagetopicoperator) | 否 |
+| operator | 指定用于渲染主题的`:operator`关键字的操作符。 | *[MQTTMessageTopicOperator](#mqttmessagetopicoperator) | 否 |
 
 ##### MQTTWillMessage
 
