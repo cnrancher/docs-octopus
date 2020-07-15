@@ -3,20 +3,24 @@ id: dummy
 title: Dummy Adaptor
 ---
 
-### Registration Information
+## Introduction
+
+Dummy is used to quickly experience Octopus. The Dummy adaptor can simulate the interaction of limb and adaptor.
+
+## Registration Information
 
 |  Versions | Register Name | Endpoint Socket | Available |
 |:---:|:---:|:---:|:---:|
 |  `v1alpha1` | `adaptors.edge.cattle.io/dummy` | `dummy.sock` | * |
 
-### Support Model
+## Support Model
 
 | Kind | Group | Version | Available | 
 |:---:|:---:|:---:|:---:|
 | [`DummySpecialDevice`](#dummyspecialdevice) | `devices.edge.cattle.io` | `v1alpha1` | * |
 | [`DummyProtocolDevice`](#dummyprotocoldevice) | `devices.edge.cattle.io` | `v1alpha1` | * |
 
-### Support Platform
+## Support Platform
 
 | OS | Arch |
 |:---:|:---|
@@ -24,158 +28,250 @@ title: Dummy Adaptor
 | `linux` | `arm` |
 | `linux` | `arm64` |
 
-### Usage
+## Usage
 
 ```shell script
 $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
 ```
 
-### Authority
+## Authority
 
 Grant permissions to Octopus as below:
 
 ```text
   Resources                                           Non-Resource URLs  Resource Names  Verbs
   ---------                                           -----------------  --------------  -----
-  dummyprotocoldevices.devices.edge.cattle.io         []                               [create delete get list patch update watch]
+  dummyprotocoldevices.devices.edge.cattle.io         []                 []              [create delete get list patch update watch]
   dummyspecialdevices.devices.edge.cattle.io          []                 []              [create delete get list patch update watch]
   dummyprotocoldevices.devices.edge.cattle.io/status  []                 []              [get patch update]
   dummyspecialdevices.devices.edge.cattle.io/status   []                 []              [get patch update]
 ```
 
-Permissions obtained from cluster as below: 
+## Example
 
-```text
-none
-```
-### DummySpecialDevice
+- Specifies a `DummySpecialDevice` device link to connect a fake fan in living room.
+
+    ```YAML
+    apiVersion: edge.cattle.io/v1alpha1
+    kind: DeviceLink
+    metadata:
+      name: living-room-fan
+    spec:
+      adaptor:
+        node: edge-worker
+        name: adaptors.edge.cattle.io/dummy
+      model:
+        apiVersion: "devices.edge.cattle.io/v1alpha1"
+        kind: "DummySpecialDevice"
+      # uses Secret resources
+      references:
+        - name: "ca"
+          secret:
+            name: "living-room-fan-mqtt-ca"
+        - name: "tls"
+          secret:
+            name: "living-room-fan-mqtt-tls"
+      template:
+        metadata:
+          labels:
+            device: living-room-fan
+        spec:
+          # integrates with MQTT
+          extension:
+            mqtt:
+              client:
+                server: tcps://test.mosquitto.org:8884
+                tlsConfig:
+                  caFilePEMRef:
+                    name: ca
+                    item: ca.crt
+                  certFilePEMRef:
+                    name: tls
+                    item: tls.crt
+                  keyFilePEMRef:
+                    name: tls
+                    item: tls.key
+                  serverName: test.mosquitto.org
+                  insecureSkipVerify: true
+              message:
+                # uses dynamic topic with namespaced name
+                topic: "cattle.io/octopus/:namespace/:name"
+          protocol:
+            location: "living_room"
+          gear: slow
+          "on": true
+    ```
+
+- Specifies a `DummyProtocolDevice` device link to connect the chaos robot of localhost.
+
+    ```YAML
+    apiVersion: edge.cattle.io/v1alpha1
+    kind: DeviceLink
+    metadata:
+      name: localhost-robot
+    spec:
+      adaptor:
+        node: edge-worker
+        name: adaptors.edge.cattle.io/dummy
+      model:
+        apiVersion: "devices.edge.cattle.io/v1alpha1"
+        kind: "DummyProtocolDevice"
+      template:
+        metadata:
+          labels:
+            device: localhost-robot
+        spec:
+          protocol:
+            ip: "127.0.0.1"
+          properties:
+            name:
+              type: string
+              description: "The name (unique identifier) of the robot."
+              readOnly: true
+            gender:
+              type: object
+              description: "The gender of the robot."
+              objectProperties:
+                name:
+                  type: string
+                  description: "The name of the gender."
+                code:
+                  type: int
+                  description: "The code of the gender."
+            friends:
+              type: array
+              description: "The name list of the robot's friends."
+              arrayProperties:
+                type: string
+                description: "The name of the friend."
+            power:
+              type: float
+              description: "The power of the robot."
+    ```
+
+For more `Dummy*Device` device link examples, please refer to the [deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/dummy/deploy/e2e) directory.
+
+## DummySpecialDevice
 
 The `DummySpecialDevice` can be considered as a fake fan.
 
-| Field | Description | Schema | Required |
+| Parameter | Description | Schema | Required |
 |:---|:---|:---|:---:|
 | metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | false |
-| spec | Defines the desired state of DummySpecialDevice. | [DummySpecialDeviceSpec](#dummyspecialdevicespec) | true |
-| status | Defines the observed state of DummySpecialDevice. | [DummySpecialDeviceStatus](#dummyspecialdevicestatus) | false |
+| spec | Defines the desired state of `DummySpecialDevice`. | [DummySpecialDeviceSpec](#dummyspecialdevicespec) | true |
+| status | Defines the observed state of `DummySpecialDevice`. | [DummySpecialDeviceStatus](#dummyspecialdevicestatus) | false |
 
-#### DummySpecialDeviceSpec
+### DummySpecialDeviceSpec
 
-| Field | Description | Schema | Required |
+| Parameter | Description | Schema | Required |
 |:---|:---|:---|:---:|
-| extension | Specifies the extension of device. | [DeviceExtensionSpec](#deviceextensionspec) | false |
-| protocol |  Protocol for accessing the dummy special device. | [DummySpecialDeviceProtocol](#dummyspecialdeviceprotocol) | true |
-| on | Turn on the dummy special device | bool | true |
-| gear | Specifies how fast the dummy special device should be. | [DummySpecialDeviceGear](#dummyspecialdevicegear) | false |
+| extension | Specifies the extension of device. | [DummyDeviceExtension](#dummydeviceextension) | false |
+| protocol |  Specifies the protocol for accessing the device. | [DummySpecialDeviceProtocol](#dummyspecialdeviceprotocol) | true |
+| on | Specifies if turn on the device. | bool | true |
+| gear | Specifies how fast the device should be, default to `slow`. | [DummySpecialDeviceGear](#dummyspecialdevicegear) | false |
 
-#### DummySpecialDeviceStatus
+### DummySpecialDeviceStatus
 
-| Field | Description | Schema | Required |
+| Parameter | Description | Schema | Required |
 |:---|:---|:---|:---:|
-| extension | Reports the extension of device. | [DeviceExtensionStatus](#deviceextensionstatus) | false |
-| gear | Reports the current gear of dummy special device. | [DummySpecialDeviceGear](#dummyspecialdevicegear) | false |
-| rotatingSpeed | Reports the detail number of speed of dummy special device. | int32 | false |
+| gear | Reports the current gear of device. | [DummySpecialDeviceGear](#dummyspecialdevicegear) | false |
+| rotatingSpeed | Reports the detail number of speed. | int32 | false |
 
 #### DummySpecialDeviceProtocol
 
-| Field | Description | Schema | Required |
+| Parameter | Description | Schema | Required |
 |:---|:---|:---|:---:|
-| location | Specifies where to locate the dummy special device. | string | true |
+| location | Specifies the location of device. | string | true |
 
 #### DummySpecialDeviceGear
 
 DummySpecialDeviceGear defines how fast the dummy special device should be.
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| slow | Starts from 0 and increases every three seconds until 100. | string | false |
-| middle | Starts from 100 and increases every two seconds until 200. | string | false |
-| fast | Starts from 200 and increases every one second until 300. | string | false |
+| Parameter | Description | Schema |
+|:---|:---|:---:|
+| slow | Starts from 0 and increases every three seconds until 100. | string |
+| middle | Starts from 100 and increases every two seconds until 200. | string |
+| fast | Starts from 200 and increases every one second until 300. | string |
 
-#### DummyProtocolDevice
+## DummyProtocolDevice
 
 The `DummyProtocolDevice` can be considered as a chaos protocol robot, it will change its attribute values every two seconds.
 
-| Field | Description | Schema | Required |
+| Parameter | Description | Schema | Required |
 |:---|:---|:---|:---:|
 | metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | false |
-| spec | Defines the desired state of DummyProtocolDevice. | [DummyProtocolDeviceSpec](#dummyprotocoldevicespec) | true |
-| status | Defines the observed state of DummyProtocolDevice. | [DummyProtocolDeviceStatus](#dummyprotocoldevicestatus) | false |
+| spec | Defines the desired state of `DummyProtocolDevice`. | [DummyProtocolDeviceSpec](#dummyprotocoldevicespec) | true |
+| status | Defines the observed state of `DummyProtocolDevice`. | [DummyProtocolDeviceStatus](#dummyprotocoldevicestatus) | false |
 
-#### DummyProtocolDeviceSpec
+### DummyProtocolDeviceSpec
 
-| Field | Description | Schema | Required |
+| Parameter | Description | Schema | Required |
 |:---|:---|:---|:---:|
-| extension | Specifies the extension of device. | [DeviceExtensionSpec](#deviceextensionspec) | false |
-| protocol | Protocol for accessing the dummy protocol device. | [DummyProtocolDeviceProtocol](#dummyprotocoldeviceprotocol) | true |
-| props | Describes the desired properties. | map[string][DummyProtocolDeviceSpecProps](#dummyprotocoldevicespecprops) | false |
+| extension | Specifies the extension of device. | [DummyDeviceExtension](#dummydeviceextension) | false |
+| protocol | Specifies the protocol for accessing the device. | [DummyProtocolDeviceProtocol](#dummyprotocoldeviceprotocol) | true |
+| properties | Specifies the properties of device. | [map[string]DummyProtocolDeviceProperty](#dummyprotocoldeviceproperty) | false |
 
-#### DummyProtocolDeviceStatus
+### DummyProtocolDeviceStatus
 
-| Field | Description | Schema | Required |
+| Parameter | Description | Schema | Required |
 |:---|:---|:---|:---:|
 | extension | Reports the extension of device. | [DeviceExtensionStatus](#deviceextensionstatus) | false |
-| props | Reports the observed value of the desired properties. | map[string][DummyProtocolDeviceStatusProps](#dummyprotocoldevicestatusprops) | false |
+| properties | Reports the observed value of the desired properties. | [map[string]DummyProtocolDeviceStatusProperty](#dummyprotocoldevicestatusproperty) | false |
 
 #### DummyProtocolDeviceProtocol
 
-| Field | Description | Schema | Required |
+| Parameter | Description | Schema | Required |
 |:---|:---|:---|:---:|
 | ip | Specifies where to connect the dummy protocol device. | string | true |
 
-#### DummyProtocolDeviceSpecProps
+#### DummyProtocolDeviceProperty
 
-> `DummyProtocolDeviceSpecObjectOrArrayProps` is the same as `DummyProtocolDeviceSpecProps`.
-> The existence of `DummyProtocolDeviceSpecObjectOrArrayProps` is to combat the object circular reference.
+> `DummyProtocolDeviceObjectOrArrayProperty` is the same as `DummyProtocolDeviceProperty`.
+> The existence of `DummyProtocolDeviceObjectOrArrayProperty` is to combat the object circular reference.
 
-| Field | Description | Schema | Required |
+| Parameter | Description | Schema | Required |
 |:---|:---|:---|:---:|
 | type | Describes the type of property. | [DummyProtocolDevicePropertyType](#dummyprotocoldevicepropertytype) | true |
 | description | Outlines the property. | string | false |
 | readOnly | Configures the property is readOnly or not. | bool | false |
-| arrayProps | Describes item properties of the array type. | *[DummyProtocolDeviceSpecObjectOrArrayProps](#dummyprotocoldevicespecprops) | false | 
-| objectProps | Describes properties of the object type. | map[string][DummyProtocolDeviceSpecObjectOrArrayProps](#dummyprotocoldevicespecprops) | false |
+| arrayProperties | Describes item properties of the array type. | *[DummyProtocolDeviceObjectOrArrayProperty](#dummyprotocoldeviceproperty) | false | 
+| objectProperties | Describes properties of the object type. | [map[string]DummyProtocolDeviceObjectOrArrayProperty](#dummyprotocoldeviceproperty) | false |
 
-#### DummyProtocolDeviceStatusProps
+#### DummyProtocolDeviceStatusProperty
 
-> `DummyProtocolDeviceStatusObjectOrArrayProps` is the same as `DummyProtocolDeviceStatusProps`.
-> The existence of `DummyProtocolDeviceStatusObjectOrArrayProps` is to combat the object circular reference.
+> `DummyProtocolDeviceStatusObjectOrArrayProperty` is the same as `DummyProtocolDeviceStatusProperty`.
+> The existence of `DummyProtocolDeviceStatusObjectOrArrayProperty` is to combat the object circular reference.
 
-| Field | Description | Schema | Required |
+| Parameter | Description | Schema | Required |
 |:---|:---|:---|:---:|
 | type | Reports the type of property. | [DummyProtocolDevicePropertyType](#dummyprotocoldevicepropertytype) | true |
 | intValue | Reports the value of int type. | *int | false |
 | stringValue | Reports the value of string type. | *string | false |
-| floatValue | Reports the value of float type. | *[resource.Quantity](https://github.com/kubernetes/apimachinery/blob/master/pkg/api/resource/quantity.go) [kubernetes-sigs/controller-tools/issues#245](https://github.com/kubernetes-sigs/controller-tools/issues/245#issuecomment-550030238) | false |
+| floatValue | Reports the value of float type. | *[resource.Quantity](https://github.com/kubernetes/apimachinery/blob/master/pkg/api/resource/quantity.go), [kubernetes-sigs/controller-tools/issues#245](https://github.com/kubernetes-sigs/controller-tools/issues/245#issuecomment-550030238) | false |
 | booleanValue | Reports the value of bool type. | *bool | false |
-| arrayValue | Reports the value of array type. | [DummyProtocolDeviceStatusObjectOrArrayProps](#dummyprotocoldevicestatusprops) | false | 
-| objectValue | Reports the value of object type. | map[string][DummyProtocolDeviceStatusObjectOrArrayProps](#dummyprotocoldevicestatusprops) | false |
+| arrayValue | Reports the value of array type. | [[]DummyProtocolDeviceStatusObjectOrArrayProperty](#dummyprotocoldevicestatusproperty) | false | 
+| objectValue | Reports the value of object type. | [map[string]DummyProtocolDeviceStatusObjectOrArrayProperty](#dummyprotocoldevicestatusproperty) | false |
 
 #### DummyProtocolDevicePropertyType
 
 DummyProtocolDevicePropertyType describes the type of property.
 
-| Field | Description | Schema | Required |
+| Parameter | Description | Schema |
+|:---|:---|:---:|
+| string | Property data type is string. | string  |
+| int | Property data type is int. | string |
+| float | Property data type is float. | string  |
+| boolean | Property data type is boolean. | string |
+| array | Property data type is array. | string |
+| object | Property data type is object. | string |
+
+#### DummyDeviceExtension
+
+| Parameter | Description | Schema | Required |
 |:---|:---|:---|:---:|
-| string | | string | false |
-| int | | string | false |
-| float | | string | false |
-| boolean | | string | false |
-| array | | string | false |
-| object | | string | false |
+| mqtt | Specifies the MQTT settings. | *[v1alpha1.MQTTOptionsSpec](./mqtt-extension#specification) | false |
 
-#### DeviceExtensionSpec
-
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| mqtt | Specifies the MQTT settings. | *[v1alpha1.MQTTOptionsSpec](./mqtt-extension#specification) | true |
-
-#### DeviceExtensionStatus
-
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| mqtt | Reports the MQTT settings. | *[v1alpha1.MQTTOptionsStatus](./mqtt-extension#status) | true |
-
-### Demo
+## Walkthrough
 
 1. Create a [DeviceLink](https://github.com/cnrancher/octopus/blob/master/adaptors/dummy/deploy/e2e/dl_specialdevice.yaml) to connect the DummySpecialDevice, which simulates a fan of living room. 
 
@@ -200,12 +296,12 @@ DummyProtocolDevicePropertyType describes the type of property.
     
     ```shell script
     # get mqtt broker server
-    $ kubectl get dummyspecialdevices.devices.edge.cattle.io living-room-fan -o jsonpath="{.status.extension.mqtt.client.server}"
+    $ kubectl get dl living-room-fan -o jsonpath="{.spec.template.spec.extension.mqtt.client.server}"
    
     # get topic name
-    $ kubectl get dummyspecialdevices.devices.edge.cattle.io living-room-fan -o jsonpath="{.status.extension.mqtt.message.topicName}"
+    $ kubectl get dl living-room-fan -o jsonpath="{.spec.template.spec.extension.mqtt.message.topic}"
+
     # use mosquitto_sub
-   
     $ mosquitto_sub -h {the host of mqtt broker server} -p {the port of mqtt broker server} -t {the topic name}
     # mosquitto_sub -h test.mosquitto.org -p 1883 -t cattle.io/octopus/default/living-room-fan 
     ```
@@ -227,10 +323,13 @@ DummyProtocolDevicePropertyType describes the type of property.
     
     ```shell script
     # get mqtt broker server
-    $ kubectl get dummyprotocoldevices.devices.edge.cattle.io localhost-robot -o jsonpath="{.status.extension.mqtt.client.server}"
+    $ kubectl get dl localhost-robot -o jsonpath="{.spec.template.spec.extension.mqtt.client.server}"
    
     # get topic name
-    $ kubectl get dummyprotocoldevices.devices.edge.cattle.io localhost-robot -o jsonpath="{.status.extension.mqtt.message.topicName}"
+    $ kubectl get dl localhost-robot -o jsonpath="{.spec.template.spec.extension.mqtt.message.topic}"
+
+    # get dl uid
+    $ kubectl get dl localhost-robot -o jsonpath="{.metadata.uid}"
    
     # use mosquitto_sub
     $ mosquitto_sub -h {the host of mqtt broker server} -p {the port of mqtt broker server} -t {the topic name}
