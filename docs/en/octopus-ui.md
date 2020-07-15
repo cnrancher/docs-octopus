@@ -1,30 +1,29 @@
 ---
-id: Octopus-ui
+id: octopus-ui
 title: Octopus UI
 ---
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-:::note说明
-Octopus-UI当前仅适用于k3s集群。
+:::note
+Octopus-UI is only supported for k3s cluster.
 :::
-## 从Helm图表中安装Octopus-UI
-
-默认情况下，`Octopus-UI`在Octopus[Helm图表](./install#1-octopus-helm-应用)安装时会自动部署，您始终可以使用以下命令将其打开或关闭：
+## Install Octopus-UI from Helm
+By default, the `Octopus-UI` is auto deployed using octopus [Helm chart](./install#1-octopus-helm-chart), you can always turn it on or off with following commands:
 ```shell script
 $ helm upgrade -n octopus-system --set octopus-api-server.enabled=true octopus cnrancher/octopus
 ```
 
 
-## 从YAML文件安装Octopus-UI
+## Install Octopus-UI from Manifest
 
-通过`all-in-one` YAML文件来部署 `Octopus-UI`：
+Deploy the `Octopus-UI` using `all-in-one` YAML file:
 
 ```shell script
 $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus-api-server/master/deploy/e2e/all_in_one.yaml
 ```
 
-通过检查其pod和服务状态来验证 `Octopus-UI`的状态。
+Validate the `Octopus-UI` status by checking its pod and service status.
 ```shell script
 $ kubectl get po -n kube-system -l app.kubernetes.io/name=octopus-api-server
 
@@ -36,10 +35,11 @@ NAME              TYPE           CLUSTER-IP    EXTERNAL-IP                PORT(S
 rancher-octopus-api-server   LoadBalancer   10.43.98.95   172.16.1.89,192.168.0.90   8443:31520/TCP   22s
 ```
 
-默认情况下，`Octopus-UI`使用服务发现类型为`LoadBalancer`的`8443`端口，您可以通过其`EXTERNAL-IP:8443`来访问它：
-<img alt="Octopus-UI" src={useBaseUrl('img/edge-ui.jpg')} />
+by default `Octopus-UI` uses k3s `LoadBalancer` with port `8443`, you can visit it by its `EXTERNAL-IP:8443`:
 
-## 登入验证
+<img alt="Octopus-UI" src={useBaseUrl('img/edge-ui.png')} />
 
-`Octopus-UI`使用k3s生成的用户名和密码进行身份验证，您可以从生成的k3s[[KUBECONFIG]](https://rancher.com/docs/k3s/latest/en/cluster-access/)文件中找到它。
+## Authentication
+
+`Octopus-UI` uses k3s username and password for authentication, you can find it from the k3s generated [KUBECONFIG](https://rancher.com/docs/k3s/latest/en/cluster-access/) file.
 

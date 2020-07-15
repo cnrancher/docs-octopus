@@ -32,7 +32,7 @@ module.exports = {
     },
     {
       type: 'doc',
-      id: 'en/Octopus-ui',
+      id: 'en/octopus-ui',
     },
     {
       type: 'doc',
@@ -72,7 +72,7 @@ module.exports = {
     },
     {
       type: 'doc',
-      id: 'cn/Octopus-ui',
+      id: 'cn/octopus-ui',
     },
     {
       type: 'doc',
