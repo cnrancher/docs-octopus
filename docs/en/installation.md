@@ -19,7 +19,7 @@ The [Octopus-Chart](https://github.com/cnrancher/octopus-chart) repository hosts
 In order to be able to use the charts in this repository, add the name and URL to your Helm client:
 
 ```console
-$ helm repo add cnrancher http://charts.cnrancher.cn/octopus
+$ helm repo add octopus http://charts.cnrancher.cn/octopus
 $ helm repo update
 ```
 
@@ -27,20 +27,20 @@ $ helm repo update
 
 To install the Octopus Chart into your Kubernetes/k3s cluster use:
 ```
-$ helm create ns octopus-system
+$ kubectl create ns octopus-system
 ```
 ```
-$ helm install --namespace octopus-system octopus cnrancher/octopus
+$ helm install --namespace octopus-system myapp octopus/octopus
 ```
 
 After installation succeeds, you can get a status of Chart
 ```
-$ helm status octopus
+$ helm status myapp
 ```
 
 If you want to delete your Chart, use this command:
 ```
-$ helm delete octopus
+$ helm delete myapp
 ```
 
 The command removes nearly all the Kubernetes components associated with the
