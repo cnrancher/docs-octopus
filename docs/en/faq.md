@@ -26,3 +26,21 @@ Please reference the Octopus <a href="https://github.com/cnrancher/octopus/blob/
 ##### How can I build custom device adaptor?
 
 Please reference the [develop adaptor](./adaptors/develop) with instructions.
+
+##### Does it support local offline access to UI?
+
+Yes, if you are using the `master` image, you can add the configuration using `local` by editing `kubectl edit settings ui-index`:
+```yaml
+apiVersion: octopusapi.cattle.io/v1alpha1
+kind: Setting
+metadata:
+  creationTimestamp: "2020-07-15T11:04:09Z"
+  generation: 6
+  name: ui-index
+  resourceVersion: "5328065"
+  selfLink: /apis/octopusapi.cattle.io/v1alpha1/settings/ui-index
+  uid: 37e54cfa-ebd5-4d80-91dc-31959dfaf634
+default: https://rancher-octopus.s3-accelerate.amazonaws.com/ui/latest/index.html
+value: local # use local access
+```
+If the user is using the `tag` image, for example, `cnrancher/octopus-api-server:v1.0.2`, the offline file will be used by default.

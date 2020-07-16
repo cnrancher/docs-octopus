@@ -16,7 +16,7 @@ You should either have an existing k3s or Kubernetes cluster to deploy the Octop
     ```
    
    :::note
-   You are expected to see the following logs if the installation succeeds, use either `CTRL+C` or hit `Enter` to stop the local cluster.
+   You are expected to see the following logs if the installation succeeds, use either `CTRL+C` to stop the local cluster.
    :::
    ```logs
    [INFO] [0604 17:09:41] creating edge cluster with v1.17.2
