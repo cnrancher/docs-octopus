@@ -58,7 +58,7 @@ Octopus uses `Kustomize` to generate its installer manifest files, the installer
 
 1. Install Octopus
     ```shell script
-    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one.yaml
     ```
 
 1. Install Octopus Official Adaptors

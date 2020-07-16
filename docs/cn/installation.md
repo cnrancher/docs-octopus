@@ -56,7 +56,7 @@ Octopus使用 `Kustomize`生成其安装程序的清单文件，安装程序YAML
 
 1. 安装Octopus
     ```shell script
-    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one.yaml
     ```
 
 1. 安装Octopus官方的协议适配器(包含Modbus、OPC-UA、BLE、MQTT和Dummy)
