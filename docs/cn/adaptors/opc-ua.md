@@ -32,7 +32,7 @@ OPC-UA适配器集成了[gopcua](https://github.com/gopcua/opcua)，并专注于
 ## 使用方式
 
 ```shell script
-$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
+kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
 ```
 
 ## 权限

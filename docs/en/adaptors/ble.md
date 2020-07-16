@@ -34,7 +34,7 @@ BLE adaptor implements on [bettercap/gatt](#github.com/bettercap/gatt) and helps
 ## Usage
 
 ```shell script
-$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
+kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
 ```
 
 ## Authority

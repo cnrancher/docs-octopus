@@ -522,11 +522,11 @@ spec:
    
 1. 使用[`deploy/e2e`](https://github.com/cnrancher/octopus/tree/master/deploy/e2e)部署DeviceLink
     ```shell script
-    $ kubeclt apply -f roomlightcase1.yaml
+    kubeclt apply -f roomlightcase1.yaml
     ```
 1. 检查集群中设备的状态
     ```shell script
-    $ kubeclt get mqttdevice mqtt-test -oyaml
+    kubeclt get mqttdevice mqtt-test -oyaml
     ```
 
 1. 如果安装成功，应该返回如下信息：
@@ -568,7 +568,7 @@ spec:
 1. 您可以修改设备属性，如下所示：
 
     ```shell script
-    $ kubectl edit dl mqtt-test
+    kubectl edit dl mqtt-test
     ```
 
     ```yaml
