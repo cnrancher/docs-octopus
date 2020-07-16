@@ -74,7 +74,7 @@ In this walk-through, we will use Octopus to manage a `dummy` device and perform
 There are [two ways](./install) to deploy the Octopus, for convenience, we will use the manifest YAML file to bring up the Octopus. The installer YAML file is under the [`deploy/e2e`](https://github.com/cnrancher/octopus/tree/master/deploy/e2e) directory on Github:
 
 ```shell script
-$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one_without_webhook.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one.yaml
 ```
 
 expected result:
