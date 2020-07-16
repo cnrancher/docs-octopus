@@ -14,19 +14,19 @@ BLE adaptor implements on [bettercap/gatt](#github.com/bettercap/gatt) and helps
 ## Registration Information
 
 |  Versions | Register Name | Endpoint Socket | Available |
-|:---:|:---:|:---:|:---:|
+|:---|:---|:---|:---|
 |  `v1alpha1` | `adaptors.edge.cattle.io/ble` | `ble.sock` | * |
 
 ## Support Model
 
 | Kind | Group | Version | Available | 
-|:---:|:---:|:---:|:---:|
+|:---|:---|:---|:---|
 | `BluetoothDevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
 
 ## Support Platform
 
 | OS | Arch |
-|:---:|:---|
+|:---|:---|
 | `linux` | `amd64` |
 | `linux` | `arm` |
 | `linux` | `arm64` |
@@ -117,15 +117,15 @@ For more `BluetoothDevice` device link examples, please refer to the [deploy/e2e
 ## BluetoothDevice
 
 Parameter | Description | Schema | Required
---- | --- | --- | ---
+:--- | :--- | :--- | :---
 metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | false
 spec | Defines the desired state of `BluetoothDevice`. | [BluetoothDeviceSpec](#bluetoothdevicespec) | true
 status | Defines the observed state of `BluetoothDevice`. | [BluetoothDeviceStatus](#bluettothdevicestatus) | false
 
 ### BluetoothDeviceSpec
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 extension | Specifies the extension of device. | *[BluetoothDeviceExtension](#bluetoothdeviceextension) | false
 parameters | Specifies the parameters of device. | *[BluetoothDeviceParameters](#bluetoothdeviceparamters) | false
 protocol | Specifies the protocol for accessing. the device | [BluetoothDeviceProtocol](#bluetoothdeviceprotocol) | true
@@ -133,27 +133,27 @@ properties | Specifies the properties of device. | [[]BluetoothDeviceProperty](#
 
 ### BluetoothDeviceStatus
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 properties | Reports the properties of device. | [[]BluetoothDeviceStatusProperty](#bluetoothdevicestatusproperty) | false
 
 #### BluetoothDeviceParameters
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 syncInterval | Specifies default device sync interval, default to `15s`. | string | false
 timeout |  Specifies default device connection timeout, default to `30s`. | string | false
 
 #### BluetoothDeviceProtocol
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 endpoint | Specifies the endpoint of device, it can be the name or MAC address of device. | string | true
 
 #### BluetoothDeviceProperty
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 name | Specifies the name of property. | string | true
 description | Specifies the description of property.  | string | false
 accessMode | Specifies the access mode of property, default to `NotifyOnly`. | [BluetoothDevicePropertyAccessMode](#bluetoothpropertyaccessmode) | true
@@ -161,8 +161,8 @@ visitor | Specifies the visitor of property. | *[BluetoothDevicePropertyVisitor]
 
 #### BluetoothDeviceStatusProperty
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 name | Reports the name of property. | string | false
 value | Reports the value of property. | string | false
 accessMode | Reports the access mode of property. | [BluetoothDevicePropertyAccessMode](#bluetoothpropertyaccessmode) | false
@@ -170,16 +170,16 @@ updatedAt | Reports the updated timestamp of property. | *[metav1.Time](https://
 
 #### BluetoothDevicePropertyAccessMode
 
-Parameter | Description | Scheme
---- | --- | --- 
+Parameter | Description | Schema
+:--- | :--- | :--- 
 ReadOnly   | Property access mode is read only. | string
 ReadWrite  | Property access mode is read and write. | string
 NotifyOnly | Property access mode is notify only. | string
 
 #### BluetoothDevicePropertyVisitor
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 characteristicUUID | Specifies the characteristic UUID of property. | string | true
 defaultValue | Specifies the default value of property, when access mode is `ReadWrite`. | string | false
 dataWrite | Specifies the data to write to device. | string | false
@@ -187,8 +187,8 @@ dataConverter | Specifies the converter to convert data read from device to a st
 
 #### BluetoothDataConverter
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 startIndex | Specifies the start index of the incoming byte stream to be converted. | int | true
 endIndex | Specifies the end index of incoming byte stream to be converted. | int | true
 shiftLeft | Specifies the number of bits to shift left. | int | false
@@ -197,15 +197,15 @@ orderOfOperations | Specifies in what order the operations. | [[]BluetoothDevice
 
 #### BluetoothDeviceArithmeticOperation
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 type | Specifies the type of arithmetic operation. | [BluetoothDeviceArithmeticOperationType](#bluetoothdevicearithmeticoperationtype) | true
 value | Specifies the value for arithmetic operation, which is in form of float string. | string | true
 
 #### BluetoothDeviceArithmeticOperationType
 
-Parameter | Description | Scheme
---- | --- | --- 
+Parameter | Description | Schema
+:--- | :--- | :--- 
 Add | Arithmetic operation of add. | string
 Subtract | Arithmetic operation of subtract. | string
 Multiply | Arithmetic operation of multiply. | string
@@ -213,6 +213,6 @@ Divide | Arithmetic operation of divide. | string
 
 #### BluetoothDeviceExtension
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 mqtt | Specifies the MQTT settings. | *[v1alpha1.MQTTOptionsSpec](./mqtt-extension#specification) | false

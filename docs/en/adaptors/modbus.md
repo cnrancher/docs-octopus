@@ -24,19 +24,19 @@ Modbus adaptor implements the [goburrow/modbus](#github.com/goburrow/modbus) to 
 ## Registration Information
 
 |  Versions | Register Name | Endpoint Socket | Available |
-|:---:|:---:|:---:|:---:|
+|:---|:---|:---|:---|
 |  `v1alpha1` | `adaptors.edge.cattle.io/modbus` | `modbus.sock` | * |
 
 ## Support Model
 
 | Kind | Group | Version | Available | 
-|:---:|:---:|:---:|:---:|
+|:---|:---|:---|:---|
 | `ModbusDevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
 
 ## Support Platform
 
 | OS | Arch |
-|:---:|:---|
+|:---|:---|
 | `linux` | `amd64` |
 | `linux` | `arm` |
 | `linux` | `arm64` |
@@ -109,15 +109,15 @@ For more `ModbusDevice` device link examples, please refer to the [deploy/e2e](h
 ## ModbusDevice
 
 Parameter | Description | Schema | Required
---- | --- | --- | ---
+:--- | :--- | :--- | :---
 metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | false
 spec | Defines the desired state of `ModbusDevice`. | [ModbusDeviceSpec](#modbusdevicespec) | true
 status | Defines the observed state of `ModbusDevice`. | [ModbusDeviceStatus](#modbusdevicestatus) | false
 
 ### ModbusDeviceSpec
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 extension | Specifies the extension of device. | *[ModbusDeviceExtension](#modbusdeviceextension) | false
 parameters | Specifies the parameters of device. | *[ModbusDeviceParameters](#modbusdeviceparameters) | false
 protocol | Specifies the protocol for accessing the device. | *[ModbusDeviceProtocol](#modbusdeviceprotocol) | true
@@ -125,28 +125,28 @@ properties | Specifies the properties of device. | [[]ModbusDeviceProperty](#mod
 
 ### ModbusDeviceStatus
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 properties | Reports the properties of device. | [[]ModbusDeviceStatusProperty](#modbusdevicestatusproperty) | false
 
 #### ModbusDeviceParameters
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 syncInterval | Specifies the amount of interval that synchronized to limb, default to `15s`. | string | false
 timeout | Specifies the amount of timeout, default to `10s`. | string | false
 
 #### ModbusDeviceProtocol
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 rtu | Specifies the connection protocol as RTU. | *[ModbusDeviceProtocolRTU](#modbusdeviceprotocolrtu)| false
 tcp |  Specifies the connection protocol as TCP. | *[ModbusDeviceProtocolTCP](#modbusdeviceprotocoltcp)| false
 
 #### ModbusDeviceProtocolRTU
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 endpoint | Specifies the serial port of device, which is in form of "/dev/ttyS0". | string | true
 workerID | Specifies the worker ID of device. | int | true
 baudRate | Specifies the baud rate of connection, a measurement of transmission speed, default to `19200`. | int | false
@@ -156,15 +156,15 @@ stopBits | Specifies the stop bit of connection, selected from [1, 2],the use of
 
 #### ModbusDeviceProtocolTCP
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 endpoint | Specifies the IP address of device, which is in form of "ip:port". | string | true
 workerID | Specifies the worker ID of device. | int | true
 
 #### ModbusDeviceProperty
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 name | Specifies the name of property. | string | true
 description | Specifies the description of property. | string | false
 type | Specifies the type of property. | [ModbusDevicePropertyType](#modbusdevicepropertytype) | true
@@ -174,8 +174,8 @@ value | Specifies the value of property, only available in the writable property
 
 #### ModbusDeviceStatusProperty
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 name | Reports the name of property. | string | false
 type | Reports the type of property. | [ModbusDevicePropertyType](#modbusdevicepropertytype) | false
 value | Reports the value of property. | string | false
@@ -183,8 +183,8 @@ updatedAt | Reports the updated timestamp of property. | *[metav1.Time](https://
 
 #### ModbusDevicePropertyType
 
-Parameter | Description | Scheme
---- | --- | ---
+Parameter | Description | Schema
+:--- | :--- | :---
 string | Property data type is string. | string 
 int | Property data type is int. | string  
 float | Property data type is float. | string  
@@ -192,8 +192,8 @@ boolean | Property data type is boolean. | string
 
 #### ModbusDevicePropertyVisitor
 
-Parameter | Description | Scheme |  Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 register | Specifies the register to visit. | [ModbusDeviceRegisterType](#modbusdeviceregistertype) | true
 offset | Specifies the starting offset of register for read/write data. | int | true
 quantity | Specifies the quantity of register. | int | true
@@ -201,8 +201,8 @@ orderOfOperations | Specifies the operations in order if needed. | [[]ModbusDevi
 
 #### ModbusDeviceRegisterType
 
-Parameter | Description | Scheme
---- | --- | --- 
+Parameter | Description | Schema
+:--- | :--- | :--- 
 CoilRegister | Readable and writable, 1 bit (off/on). | string  
 DiscreteInputRegister | Readonly, 1 bit (off/on). | string  
 InputRegister | Readonly, 16 bits (0 to 65,535), essentially measurements and statuses. | string  
@@ -210,15 +210,15 @@ HoldingRegister | Readable and writable, 16 bits (0 to 65,535), essentially conf
 
 #### ModbusDeviceArithmeticOperation
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 type | Specifies the type of arithmetic operation. | [ModbusDeviceArithmeticOperationType](#modbusdevicearithmeticoperationtype) | false
 value | Specifies the value for arithmetic operation, which is in form of float string. | string | false
 
 #### ModbusDeviceArithmeticOperationType
 
-Parameter | Description | Scheme 
---- | --- | ---
+Parameter | Description | Schema 
+:--- | :--- | :---
 Add | Arithmetic operation of add. | string
 Subtract | Arithmetic operation of subtract. | string 
 Multiply | Arithmetic operation of multiply. | string 
@@ -226,6 +226,6 @@ Divide | Arithmetic operation of divide. | string
 
 #### ModbusDeviceExtension
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 mqtt | Specifies the MQTT settings. | *[v1alpha1.MQTTOptionsSpec](./mqtt-extension#specification) | false

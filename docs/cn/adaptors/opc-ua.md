@@ -102,7 +102,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/ad
 
 参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | 否
+metadata | 元数据 | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | 否
 spec | 定义`OPCUADevice`的预期状态 | [OPCUADeviceSpec](#opcuadevicespec) | 是
 status | 定义`OPCUADevice`的实际状态 | [OPCUADeviceStatus](#opcuadevicestatus) | 否
 

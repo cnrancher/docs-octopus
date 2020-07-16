@@ -16,7 +16,7 @@ Octopus takes inspiration from [Maven](https://maven.apache.org/) and provides a
 Explanation of each action:
 
 | Action | Usage |
-|---:|:---|
+|:---|:---|
 | `generate`, `gen`, `g` | Generate deployment manifests and deepcopy/runtime.Object implementations of `octopus` via [`controller-gen`](https://github.com/kubernetes-sigs/controller-tools/blob/master/cmd/controller-gen/main.go); Generate proto files of `adaptor` interfaces via [`protoc`](https://github.com/protocolbuffers/protobuf). |
 | `mod`, `m` | Download `octopus` dependencies. |
 | `lint`, `l` | Verify `octopus` via [`golangci-lint`](https://github.com/golangci/golangci-lint), roll back to `go fmt` and `go vet` if the installation fails. <br/<br/> Use `DIRTY_CHECK=true` to verify the whole project is in dirty tree or not. |
