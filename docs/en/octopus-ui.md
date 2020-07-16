@@ -11,7 +11,7 @@ Octopus-UI is only supported for k3s cluster.
 ## Install Octopus-UI from Helm
 By default, the `Octopus-UI` is auto deployed using octopus [Helm chart](./install#1-octopus-helm-chart), you can always turn it on or off with following commands:
 ```shell script
-helm upgrade -n octopus-system --set octopus-api-server.enabled=true octopus cnrancher/octopus
+$ helm upgrade -n octopus-system --set octopus-ui.enabled=true octopus octopus/octopus
 ```
 
 
@@ -24,6 +24,7 @@ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus-api-server/
 ```
 
 Validate the `Octopus-UI` status by checking its pod and service status.
+
 ```shell script
 kubectl get po -n kube-system -l app.kubernetes.io/name=octopus-ui
 
@@ -37,9 +38,8 @@ rancher-octopus-api-server   LoadBalancer   10.43.98.95   172.16.1.89,192.168.0.
 
 by default `Octopus-UI` uses k3s `LoadBalancer` with port `8443`, you can visit it by its `EXTERNAL-IP:8443`:
 
-<img alt="Octopus-UI" src={useBaseUrl('img/edge-ui.png')} />
+<img alt="Octopus-UI" src={useBaseUrl('img/edge-ui.jpg')} />
 
 ## Authentication
 
 `Octopus-UI` uses k3s username and password for authentication, you can find it from the k3s generated [KUBECONFIG](https://rancher.com/docs/k3s/latest/en/cluster-access/) file.
-

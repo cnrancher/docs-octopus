@@ -12,7 +12,7 @@ Octopus-UI当前仅适用于k3s集群。
 
 默认情况下，`Octopus-UI`在Octopus[Helm图表](./install#1-octopus-helm-应用)安装时会自动部署，您始终可以使用以下命令将其打开或关闭：
 ```shell script
-helm upgrade -n octopus-system --set octopus-api-server.enabled=true octopus cnrancher/octopus
+$ helm upgrade -n octopus-system --set octopus-ui.enabled=true octopus octopus/octopus
 ```
 
 
@@ -37,6 +37,7 @@ rancher-octopus-api-server   LoadBalancer   10.43.98.95   172.16.1.89,192.168.0.
 ```
 
 默认情况下，`Octopus-UI`使用服务发现类型为`LoadBalancer`的`8443`端口，您可以通过其`EXTERNAL-IP:8443`来访问它：
+
 <img alt="Octopus-UI" src={useBaseUrl('img/edge-ui.jpg')} />
 
 ## 登入验证

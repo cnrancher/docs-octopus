@@ -27,7 +27,7 @@ title: 快速入门指南
     ```
    
    :::note说明
-   如果安装成功，则应该看到以下日志，请使用`CTRL+C`或按`Enter`键以停止本地集群。
+   如果安装成功，则应该看到以下日志，请使用`CTRL+C`键以停止本地集群。
    :::
    ```logs
    [INFO] [0604 17:09:41] creating edge cluster with v1.17.2
