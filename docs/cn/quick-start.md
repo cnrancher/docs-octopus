@@ -74,7 +74,7 @@ title: 快速入门指南
 有[两种部署Octopus的方法](./install)，为方便起见，我们将通过一份 `all-in-one`的YAML文件来部署。 安装程序YAML文件位于Github上的[`deploy/e2e`](https://github.com/cnrancher/octopus/tree/master/deploy/e2e)目录下：
 
 ```shell script
-$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one_without_webhook.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one.yaml
 ```
 
 预期结果：
