@@ -32,7 +32,7 @@ BLE适配器实现了蓝牙协议的支持，并用于定义所连接的BLE设�
 ## 使用方式
 
 ```shell script
-$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
+kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
 ```
 
 ## 权限

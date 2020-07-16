@@ -45,7 +45,7 @@ Modbus适配器实现了[goburrow/modbus](#github.com/goburrow/modbus)，支持T
 ## 使用方式
 
 ```shell script
-$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml
+kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml
 
 ```
 

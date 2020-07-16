@@ -31,7 +31,7 @@ Dummy is used to quickly experience Octopus. The Dummy adaptor can simulate the 
 ## Usage
 
 ```shell script
-$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
 ```
 
 ## Authority
@@ -276,62 +276,62 @@ Parameter | Description | Schema | Required
 1. Create a [DeviceLink](https://github.com/cnrancher/octopus/blob/master/adaptors/dummy/deploy/e2e/dl_specialdevice.yaml) to connect the DummySpecialDevice, which simulates a fan of living room. 
 
     ```shell script
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_specialdevice.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_specialdevice.yaml
     ```
     
     Synchronize the above-created fan's status to the remote MQTT broker server.
     
     ```shell script
     # create a Generic Secret to store the CA for connecting test.mosquitto.org.
-    $ kubectl create secret generic living-room-fan-mqtt-ca --from-file=ca.crt=./test/integration/physical/testdata/mosquitto.org.crt
+    kubectl create secret generic living-room-fan-mqtt-ca --from-file=ca.crt=./test/integration/physical/testdata/mosquitto.org.crt
    
     # create a TLS Secret to store the TLS/SSL keypair for connecting test.mosquitto.org.
-    $ kubectl create secret tls living-room-fan-mqtt-tls --key ./test/integration/physical/testdata/client-key.pem --cert ./test/integration/physical/testdata/client.crt
+    kubectl create secret tls living-room-fan-mqtt-tls --key ./test/integration/physical/testdata/client-key.pem --cert ./test/integration/physical/testdata/client.crt
    
     # publish status to test.mosquitto.org
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_specialdevice_with_mqtt.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_specialdevice_with_mqtt.yaml
     ```
     
     Use [`mosquitto_sub`](https://mosquitto.org/man/mosquitto_sub-1.html) tool to watch the synchronized status.
     
     ```shell script
     # get mqtt broker server
-    $ kubectl get dl living-room-fan -o jsonpath="{.spec.template.spec.extension.mqtt.client.server}"
+    kubectl get dl living-room-fan -o jsonpath="{.spec.template.spec.extension.mqtt.client.server}"
    
     # get topic name
-    $ kubectl get dl living-room-fan -o jsonpath="{.spec.template.spec.extension.mqtt.message.topic}"
+    kubectl get dl living-room-fan -o jsonpath="{.spec.template.spec.extension.mqtt.message.topic}"
 
     # use mosquitto_sub
-    $ mosquitto_sub -h {the host of mqtt broker server} -p {the port of mqtt broker server} -t {the topic name}
+    mosquitto_sub -h {the host of mqtt broker server} -p {the port of mqtt broker server} -t {the topic name}
     # mosquitto_sub -h test.mosquitto.org -p 1883 -t cattle.io/octopus/default/living-room-fan 
     ```
    
 1. Create a [DeviceLink](./deploy/e2e/dl_protocoldevice.yaml) to connect the DummyProtocolDevice, which simulates an intelligent property-filled robot, it can fill the desired properties randomly in 2 seconds.
 
     ```shell script
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_protocoldevice.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_protocoldevice.yaml
     ```
    
     Synchronize the above-created robot's answers to the remote MQTT broker server.
         
     ```shell script
     # publish status to test.mosquitto.org
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_protocoldevice_with_mqtt.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_protocoldevice_with_mqtt.yaml
     ```
     
     Use [`mosquitto_sub`](https://mosquitto.org/man/mosquitto_sub-1.html) tool to watch the synchronized answers.
     
     ```shell script
     # get mqtt broker server
-    $ kubectl get dl localhost-robot -o jsonpath="{.spec.template.spec.extension.mqtt.client.server}"
+    kubectl get dl localhost-robot -o jsonpath="{.spec.template.spec.extension.mqtt.client.server}"
    
     # get topic name
-    $ kubectl get dl localhost-robot -o jsonpath="{.spec.template.spec.extension.mqtt.message.topic}"
+    kubectl get dl localhost-robot -o jsonpath="{.spec.template.spec.extension.mqtt.message.topic}"
 
     # get dl uid
-    $ kubectl get dl localhost-robot -o jsonpath="{.metadata.uid}"
+    kubectl get dl localhost-robot -o jsonpath="{.metadata.uid}"
    
     # use mosquitto_sub
-    $ mosquitto_sub -h {the host of mqtt broker server} -p {the port of mqtt broker server} -t {the topic name}
+    mosquitto_sub -h {the host of mqtt broker server} -p {the port of mqtt broker server} -t {the topic name}
     # mosquitto_sub -h test.mosquitto.org -p 1883 -t cattle.io/octopus/835aea2e-5f80-4d14-88f5-40c4bda41aa3
     ```

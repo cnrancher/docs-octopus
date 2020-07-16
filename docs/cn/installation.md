@@ -19,28 +19,28 @@ Octopus支持两种不同的部署方式，一种是基于[Helm chart](https://h
 为了能够使用此存储库中的图表，请将下列名称和URL添加到您的Helm客户端：
 
 ```console
-$ helm repo add octopus http://charts.cnrancher.cn/octopus
-$ helm repo update
+helm repo add octopus http://charts.cnrancher.cn/octopus
+helm repo update
 ```
 
 ### 安装应用
 
 请运行以下命令，将Octopus Chart安装到Kubernetes或k3s集群中：
 ```
-$ kubectl create ns octopus-system
+kubectl create ns octopus-system
 ```
 ```
-$ helm install --namespace octopus-system myapp octopus/octopus
+helm install --namespace octopus-system myapp octopus/octopus
 ```
 
 安装成功后，您可以获取应用状态：
 ```
-$ helm status myapp
+helm status myapp
 ```
 
 如果要删除应用，请使用以下命令：
 ```
-$ helm delete myapp
+helm delete myapp
 ```
 该命令几乎删除了与应用关联的所有Kubernetes组件，并删除了Kubernetes发行版。
 
@@ -56,16 +56,16 @@ Octopus使用 `Kustomize`生成其安装程序的清单文件，安装程序YAML
 
 1. 安装Octopus
     ```shell script
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
     ```
 
 1. 安装Octopus官方的协议适配器(包含Modbus、OPC-UA、BLE、MQTT和Dummy)
     ```shell script
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/mqtt/deploy/e2e/all_in_one.yaml
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/mqtt/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
     ```
 
 ### 动画快速演示
