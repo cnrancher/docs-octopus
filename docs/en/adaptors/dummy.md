@@ -197,31 +197,31 @@ DummySpecialDeviceGear defines how fast the dummy special device should be.
 
 The `DummyProtocolDevice` can be considered as a chaos protocol robot, it will change its attribute values every two seconds.
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | false |
 | spec | Defines the desired state of `DummyProtocolDevice`. | [DummyProtocolDeviceSpec](#dummyprotocoldevicespec) | true |
 | status | Defines the observed state of `DummyProtocolDevice`. | [DummyProtocolDeviceStatus](#dummyprotocoldevicestatus) | false |
 
 ### DummyProtocolDeviceSpec
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | extension | Specifies the extension of device. | [DummyDeviceExtension](#dummydeviceextension) | false |
 | protocol | Specifies the protocol for accessing the device. | [DummyProtocolDeviceProtocol](#dummyprotocoldeviceprotocol) | true |
 | properties | Specifies the properties of device. | [map[string]DummyProtocolDeviceProperty](#dummyprotocoldeviceproperty) | false |
 
 ### DummyProtocolDeviceStatus
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | extension | Reports the extension of device. | [DeviceExtensionStatus](#deviceextensionstatus) | false |
 | properties | Reports the observed value of the desired properties. | [map[string]DummyProtocolDeviceStatusProperty](#dummyprotocoldevicestatusproperty) | false |
 
 #### DummyProtocolDeviceProtocol
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | ip | Specifies where to connect the dummy protocol device. | string | true |
 
 #### DummyProtocolDeviceProperty
@@ -229,8 +229,8 @@ The `DummyProtocolDevice` can be considered as a chaos protocol robot, it will c
 > `DummyProtocolDeviceObjectOrArrayProperty` is the same as `DummyProtocolDeviceProperty`.
 > The existence of `DummyProtocolDeviceObjectOrArrayProperty` is to combat the object circular reference.
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | type | Describes the type of property. | [DummyProtocolDevicePropertyType](#dummyprotocoldevicepropertytype) | true |
 | description | Outlines the property. | string | false |
 | readOnly | Configures the property is readOnly or not. | bool | false |
@@ -242,8 +242,8 @@ The `DummyProtocolDevice` can be considered as a chaos protocol robot, it will c
 > `DummyProtocolDeviceStatusObjectOrArrayProperty` is the same as `DummyProtocolDeviceStatusProperty`.
 > The existence of `DummyProtocolDeviceStatusObjectOrArrayProperty` is to combat the object circular reference.
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | type | Reports the type of property. | [DummyProtocolDevicePropertyType](#dummyprotocoldevicepropertytype) | true |
 | intValue | Reports the value of int type. | *int | false |
 | stringValue | Reports the value of string type. | *string | false |
@@ -257,7 +257,7 @@ The `DummyProtocolDevice` can be considered as a chaos protocol robot, it will c
 DummyProtocolDevicePropertyType describes the type of property.
 
 | Parameter | Description | Schema |
-|:---|:---|:---:|
+|:---|:---|:---|
 | string | Property data type is string. | string  |
 | int | Property data type is int. | string |
 | float | Property data type is float. | string  |
@@ -267,8 +267,8 @@ DummyProtocolDevicePropertyType describes the type of property.
 
 #### DummyDeviceExtension
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | mqtt | Specifies the MQTT settings. | *[v1alpha1.MQTTOptionsSpec](./mqtt-extension#specification) | false |
 
 ## Walkthrough

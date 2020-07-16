@@ -99,19 +99,19 @@ The same is true for **Attributed Message** pattern, expect that the publisher n
 ## Registration Information
 
 |  Versions | Register Name | Endpoint Socket | Available |
-|:---:|:---:|:---:|:---:|
+|:---|:---|:---|:---|
 |  `v1alpha1` | `adaptors.edge.cattle.io/mqtt` | `mqtt.sock` | * |
 
 ## Support Model
 
 | Kind | Group | Version | Available | 
-|:---:|:---:|:---:|:---:|
+|:---|:---|:---|:---|
 | `MQTTDevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
 
 ## Support Platform
 
 | OS | Arch |
-|:---:|:---|
+|:---|:---|
 | `linux` | `amd64` |
 | `linux` | `arm` |
 | `linux` | `arm64` |
@@ -273,43 +273,43 @@ For more `MQTTDevice` device link examples, please refer to the [deploy/e2e](htt
 ## MQTTDevice
 
 Parameter | Description | Schema | Required
---- | --- | --- | ---
+:--- | :--- | :--- | :---
 metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | false
 spec | Defines the desired state of `MQTTDevice`. | [MQTTDeviceSpec](#mqttdevicespec) | true
 status | Defines the observed state of `MQTTDevice`. | [MQTTDeviceStatus](#mqttdevicestatus) | false
 
 ### MQTTDeviceSpec
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 protocol | Specifies the protocol for accessing the MQTT service. | [MQTTDeviceProtocol](#mqttdeviceprotocol) | true
 properties | Specifies the properties of device. | [[]MQTTDeviceProperty](#mqttdeviceproperty) | false
 
 ### MQTTDeviceStatus
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 properties | Reports the properties of device. | [[]MQTTDeviceStatusProperty](#mqttdevicestatusproperty) | false
 
 #### MQTTDeviceProtocol
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 pattern | Specifies the pattern of MQTTDevice protocol. | [MQTTDevicePattern](#mqttdevicepattern) | true
 client | Specifies the client settings. | [MQTTClientOptions](./mqtt-extension.md#mqttclientoptions) | true
 message | Specifies the message settings. | [MQTTMessageOptions](./mqtt-extension.md#mqttmessageoptions) | true
 
 #### MQTTDevicePattern
 
-Parameter | Description | Scheme
---- | --- | ---
+Parameter | Description | Schema
+:--- | :--- | :---
 AttributedMessage | Compress properties into one message, one topic has its all property values. | string 
 AttributedTopic | Flatten properties to topic, each topic has its own property value. | string  
 
 #### MQTTDeviceProperty
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 annotations | Specifies the annotations of property. | map[string]string | false
 name | Specifies the name of property. | string | true
 description | Specifies the description of property. | string | false
@@ -325,8 +325,8 @@ retained | Specifies if the last published message to be retained, only availabl
 
 #### MQTTDeviceStatusProperty
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 annotations | Reports the annotations of property. | map[string]string | false
 name | Reports the name of property. | string | false
 description | Reports the description of property. | string | false
@@ -341,8 +341,8 @@ updatedAt | Reports the updated timestamp of property. | *[metav1.Time](https://
 
 #### MQTTDevicePropertyType
 
-Parameter | Description | Scheme
---- | --- | ---
+Parameter | Description | Schema
+:--- | :--- | :---
 string | Property data type is string. | string
 int | Property data type is int. | string
 float | Property data type is float. | string

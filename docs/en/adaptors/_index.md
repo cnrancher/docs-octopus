@@ -81,7 +81,7 @@ Please view [here](../develop.md) for more detail about developing an adaptor.
 The access management of adaptors takes inspiration from [Kubernetes Device Plugins management](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/). The available version of access management APIs is `v1alpha1`.
 
 |  Versions | Available | Current |
-|:---:|:---:|:---:|
+:--- | :--- | :--- |
 |  [`v1alpha1`](./design_of_adaptor.md) | * | * |
 
 Use the following steps to make the adaptor interact with `limb`:

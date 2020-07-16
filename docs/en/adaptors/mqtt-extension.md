@@ -77,15 +77,15 @@ The specification of MQTT options are valid in all MQTT extension adaptors, they
 
 #### MQTTOptions
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | client | Specifies the client settings. | [MQTTClientOptions](#mqttclientoptions) | true |
 | message | Specifies the message settings. | [MQTTMessageOptions](#mqttmessageoptions) | true |
 
 ##### MQTTClientOptions
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+|Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---|
 | server | Specifies the server URI of MQTT broker, the format should be `schema://host:port`. The `schema` is one of the "ws", "wss", "tcp", "unix", "ssl", "tls" or "tcps". | string | true |
 | protocolVersion | Specifies the MQTT protocol version that the cluster uses to connect to broker. Legitimate values are `3` - MQTT 3.1 and `4` - MQTT 3.1.1, The default value is `0`, which means MQTT v3.1.1 identification is preferred. | *uint | false |
 | basicAuth | Specifies the username and password that the client connects to the MQTT broker. | *[MQTTClientBasicAuth](#mqttclientbasicauth) | false |
@@ -107,8 +107,8 @@ The specification of MQTT options are valid in all MQTT extension adaptors, they
 
 ##### MQTTClientBasicAuth
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+|Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | username | Specifies the username for basic authentication. | string  | false |
 | usernameRef | Specifies the relationship of DeviceLink's references to refer to the value as the username. | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12) | false |
 | password | Specifies the password for basic authentication. | string  | false |
@@ -116,8 +116,8 @@ The specification of MQTT options are valid in all MQTT extension adaptors, they
 
 ##### MQTTClientTLS
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | caFilePEM |  The PEM format content of the CA certificate, which is used for validate the server certificate with. | string  | false |
 | caFilePEMRef | Specifies the relationship of DeviceLink's references to refer to the value as the CA file PEM content . | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12)  | false |
 | certFilePEM | The PEM format content of the certificate, which is used for client authenticate to the server. | string  | false |
@@ -129,15 +129,15 @@ The specification of MQTT options are valid in all MQTT extension adaptors, they
 
 ##### MQTTClientStore
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | type | Specifies the type of storage. Options are `Memory` and `File`, the default value is `Memory`. | string | false |
 | direcotryPrefix | Specifies the directory prefix of the storage, if using `File` store. The default value is `/var/run/octopus/mqtt`. | string | false |
 
 #### MQTTMessageOptions
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | topic | Specifies the topic. | string | true |
 | will | Specifies the will message. | *[MQTTWillMessage](#mqttwillmessage) | false |
 | qos | Specifies the QoS of the message, default value is `1`. | *[MQTTMessageQoSLevel](#mqttmessageqoslevel) | false |
@@ -147,23 +147,23 @@ The specification of MQTT options are valid in all MQTT extension adaptors, they
 
 ##### MQTTWillMessage
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | topic | Specifies the topic of will message. If not set, the topic will append `$will` to the topic name specified in parent field as its topic name. | string | false |
 | content | Specifies the content of will message. The serialized form of the content is a Base64 encoded string, representing the arbitrary (possibly non-string) content value here. | string | true |
 
 ##### MQTTMessageQoSLevel
 
-Parameter | Description | Scheme
---- | --- | ---
+Parameter | Description | Schema
+:--- | :--- | :---
 0 | Send at most once. | byte 
 1 | Send at least once. | byte  
 2 | Send exactly once. | byte 
 
 ##### MQTTMessageTopicOperator
 
-| Parameter | Description | Schema | Required |
-|:---|:---|:---|:---:|
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 | read | Specifies the operator for rendering the `:operator` keyword of topic during subscribing. | string | false |
 | write | Specifies the operator for rendering the `:operator` keyword of topic during publishing. | string | false |
 

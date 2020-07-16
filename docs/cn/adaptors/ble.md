@@ -115,7 +115,7 @@ spec:
 
 参数 | 描述| 类型 | 是否必填
 :--- | :--- | :--- | :---
-metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | 否
+metadata | 元数据 | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | 否
 spec | 定义 "BluetoothDevice"的预期状态 | [BluetoothDeviceSpec](#bluetoothdevicespec) | 是
 status | D定义 "BluetoothDevice"的实际状态 | [BluetoothDeviceStatus](#bluettothdevicestatus) | 否
 

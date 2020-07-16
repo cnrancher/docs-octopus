@@ -12,19 +12,19 @@ OPC-UA adaptor implements on [gopcua/opcua](https://github.com/gopcua/opcua) and
 ## Registration Information
 
 |  Versions | Register Name | Endpoint Socket | Available |
-|:---:|:---:|:---:|:---:|
+|:---|:---|:---|:---|
 |  `v1alpha1` | `adaptors.edge.cattle.io/opcua` | `opcua.sock` | * |
 
 ## Support Model
 
 | Kind | Group | Version | Available | 
-|:---:|:---:|:---:|:---:|
+|:---|:---|:---|:---|
 | `OPCUADevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
 
 ## Support Platform
 
 | OS | Arch |
-|:---:|:---|
+|:---|:---|
 | `linux` | `amd64` |
 | `linux` | `arm` |
 | `linux` | `arm64` |
@@ -101,15 +101,15 @@ For more `OPCUADevice` device link examples, please refer to the [deploy/e2e](ht
 ## OPCUADevice
 
 Parameter | Description | Schema | Required
---- | --- | --- | ---
+:--- | :--- | :--- | :---
 metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | false
 spec | Defines the desired state of `OPCUADevice`. | [OPCUADeviceSpec](#opcuadevicespec) | true
 status | Defines the observed state of `OPCUADevice`. | [OPCUADeviceStatus](#opcuadevicestatus) | false
 
 ### OPCUADeviceSpec
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 extension | Specifies the extension of device. | *[OPCUADeviceExtension](#opcuadeviceextension) | false
 parameters | Specifies the parameters of device. | *[OPCUADeviceParamters](#opcuadeviceparamters) | false
 protocol | Specifies the protocol for accessing the device. | *[OPCUADeviceProtocol](#opcuadeviceprotocol) | true
@@ -117,21 +117,21 @@ properties | Specifies the properties of device. | [[]OPCUADeviceProperty](#opcu
 
 ### OPCUADeviceStatus
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 properties | Reports the properties of device. | [[]OPCUADeviceStatusProperty](#opcuadevicestatusproperty) | false
 
 #### OPCUADeviceParamters
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 syncInterval | Specifies the amount of interval that synchronized to limb, default to `15s`. | string | false
 timeout | Specifies the amount of timeout, default to `10s`. | string | false
 
 #### OPCUADeviceProtocol
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 endpoint | Specifies the URL of OPC-UA server endpoint, which is start with "opc.tcp://". | string | true
 securityPolicy | Specifies the security policy for accessing OPC-UA server, default to `None`. | [OPCUADeviceProtocolSecurityPolicy](#opcuadeviceprotocolsecuritypolicy) | false
 securityMode | Specifies the security mode for accessing OPC-UA server, default to `None`. | [OPCUADeviceProtocolSecurityMode](#opcuadeviceprotocolsecuritymode) | false
@@ -140,8 +140,8 @@ tlsConfig | Specifies the TLS configuration that the client connects to OPC-UA s
 
 #### OPCUADeviceProtocolSecurityPolicy
 
-Parameter | Description | Scheme
---- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 None | | string  
 Basic128Rsa15 | | string  
 Basic256 | | string  
@@ -151,16 +151,16 @@ Aes256Sha256RsaPss | | string
 
 #### OPCUADeviceProtocolSecurityMode
 
-Parameter | Description | Scheme
---- | --- | ---
+Parameter | Description | Schema
+:--- | :--- | :---
 None | | string  
 Sign | | string  
 SignAndEncrypt | | string
 
 #### OPCUADeviceProtocolBasicAuth
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 username | Specifies the username for accessing OPC-UA server. | string | false
 usernameRef | Specifies the relationship of DeviceLink's references to refer to the value as the username. | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12) | false
 password | Specifies the password for accessing OPC-UA server. | string | false
@@ -168,8 +168,8 @@ passwordRef | Specifies the relationship of DeviceLink's references to refer to 
 
 #### OPCUADeviceProtocolTLS
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 certFilePEM | Specifies the PEM format content of the certificate(public key), which is used for client authenticate to the OPC-UA server. | string | false
 certFilePEMRef | Specifies the relationship of DeviceLink's references to refer to the value as the client certificate file PEM content. | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12) | false
 keyFilePEM | Specifies the PEM format content of the key(private key), which is used for client authenticate to the OPC-UA server. | string | false
@@ -177,8 +177,8 @@ keyFilePEMRef | Specifies the relationship of DeviceLink's references to refer t
 
 #### OPCUADeviceProperty
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 name | Specifies the name of property. | string | true
 description | Specifies the description of property. | string | false
 type | Specifies the type of property. | [OPCUADevicePropertyType](#opcuadevicepropertytype) | true
@@ -188,8 +188,8 @@ value | Specifies the value of property, only available in the writable property
 
 #### OPCUADeviceStatusProperty
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 name | Reports the name of property. | string | false
 type | Reports the type of property. | [OPCUADevicePropertyType](#modbusdevicepropertytype) | false
 value | Reports the value of property. | string | false
@@ -197,15 +197,15 @@ updatedAt | Reports the updated timestamp of property. | *[metav1.Time](https://
 
 #### OPCUADevicePropertyVisitor
 
-Parameter | Description | Scheme |  Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 nodeID | Specifies the id of OPC-UA node, e.g. "ns=1,i=1005". | string | true
 browseName | Specifies the name of OPC-UA node. | string | false
 
 #### OPCUADevicePropertyType
 
-Parameter | Description | Scheme
---- | --- | --- 
+Parameter | Description | Schema
+:--- | :--- | :--- 
 boolean | Property data type is boolean. | string
 int64 | Property data type is int64. | string
 int32 |  Property data type is int32. | string
@@ -221,6 +221,6 @@ datetime |  Property data type is datetime. | string
 
 #### OPCUADeviceExtension
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
+Parameter | Description | Schema | Required
+:--- | :--- | :--- | :---
 mqtt | Specifies the MQTT settings. | *[v1alpha1.MQTTOptionsSpec](./mqtt-extension#specification) | false
