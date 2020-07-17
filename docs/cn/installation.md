@@ -35,12 +35,13 @@ helm install --namespace octopus-system myapp octopus/octopus
 
 安装成功后，您可以获取应用状态：
 ```
-helm status myapp
+helm status myapp -n octopus-system
+
 ```
 
 如果要删除应用，请使用以下命令：
 ```
-helm delete myapp
+helm delete myapp -n octopus-system
 ```
 该命令几乎删除了与应用关联的所有Kubernetes组件，并删除了Kubernetes发行版。
 

@@ -35,12 +35,13 @@ helm install --namespace octopus-system myapp octopus/octopus
 
 After installation succeeds, you can get a status of Chart
 ```
-helm status myapp
+helm status myapp -n octopus-system
+
 ```
 
 If you want to delete your Chart, use this command:
 ```
-helm delete myapp
+helm delete myapp -n octopus-system
 ```
 
 The command removes nearly all the Kubernetes components associated with the

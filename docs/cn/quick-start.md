@@ -57,7 +57,7 @@ title: 快速入门指南
 
 1. 打开一个新终端，并配置`KUBECONFIG`以访问本地k3s集群。
     ```shell script 
-    export KUBECONFIG=~/.kube/rancher-k3s.yaml
+    export KUBECONFIG="$(k3d get-kubeconfig --name='edge')"
     ```
    
 1. 运行`kubectl get node`命令， 检查本地k3s集群的节点是否正常。
