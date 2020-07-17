@@ -7,6 +7,9 @@ module.exports = {
   organizationName: 'cnrancher', // Usually your GitHub org/user name.
   projectName: 'docs-octopus', // Usually your repo name.
   themeConfig: {
+    baiduAnalytics: {
+      trackingID: '2b90a4a76e45194771b47f8f43e9121c',
+    },
     announcementBar: {
       id: 'support_us', // Any value that will identify this message
       content:
@@ -116,5 +119,5 @@ module.exports = {
       },
     ],
   ],
-  plugins: [''],
+  plugins: ['@docusaurus/plugin-baidu-analytics'],
 };
