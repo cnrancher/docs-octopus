@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="generator" content="Docusaurus v2.0.0-alpha.54">
-
+<script async src="https://hm.baidu.com/hm.js?2b90a4a76e45194771b47f8f43e9121c"></script>
 
 <title data-react-helmet="true">Installation | Octopus</title>
 
@@ -16,23 +16,23 @@
 <link rel="stylesheet" href="/docs-octopus/styles.29274c30.css">
 
 
-<link rel="preload" href="/docs-octopus/styles.ce99c915.js" as="script">
+<link rel="preload" href="/docs-octopus/styles.0e3f6499.js" as="script">
 
-<link rel="preload" href="/docs-octopus/runtime~main.ac12a8fb.js" as="script">
+<link rel="preload" href="/docs-octopus/runtime~main.abd4873f.js" as="script">
 
-<link rel="preload" href="/docs-octopus/main.457e7cef.js" as="script">
+<link rel="preload" href="/docs-octopus/main.d3a6c00b.js" as="script">
 
-<link rel="preload" href="/docs-octopus/1.6b9be2be.js" as="script">
+<link rel="preload" href="/docs-octopus/1.76de42a1.js" as="script">
 
-<link rel="preload" href="/docs-octopus/2.ecc18e87.js" as="script">
+<link rel="preload" href="/docs-octopus/2.c66b4146.js" as="script">
 
-<link rel="preload" href="/docs-octopus/47.8660cb97.js" as="script">
+<link rel="preload" href="/docs-octopus/47.a18d17e8.js" as="script">
 
-<link rel="preload" href="/docs-octopus/8ffbebae.8fb34b33.js" as="script">
+<link rel="preload" href="/docs-octopus/8ffbebae.0391f4e6.js" as="script">
 
-<link rel="preload" href="/docs-octopus/17896441.213872fb.js" as="script">
+<link rel="preload" href="/docs-octopus/17896441.ab3a7e00.js" as="script">
 
-<link rel="preload" href="/docs-octopus/3ad19910.0b844ac0.js" as="script">
+<link rel="preload" href="/docs-octopus/3ad19910.8c0105c8.js" as="script">
 
 </head>
 <body>
@@ -43,23 +43,23 @@
 chart and deletes the release.</p><h3><a aria-hidden="true" tabindex="-1" class="anchor enhancedAnchor_ZqCz" id="helm-chart-and-octopus-support"></a><a aria-hidden="true" tabindex="-1" class="hash-link" href="#helm-chart-and-octopus-support" title="Direct link to heading">#</a>Helm Chart and Octopus Support</h3><p>Visit the <a href="https://github.com/cnrancher/octopus/issues/">Octopus github issues</a> for support.</p><h2><a aria-hidden="true" tabindex="-1" class="anchor enhancedAnchor_ZqCz" id="2-bases-on-kustomize"></a><a aria-hidden="true" tabindex="-1" class="hash-link" href="#2-bases-on-kustomize" title="Direct link to heading">#</a>2. Bases on Kustomize</h2><p>Kustomize is an interesting tool in solving Kubernetes application management, it uses a different idea then Helm, which calls <a href="https://github.com/kubernetes/community/blob/master/contributors/design-proposals/architecture/declarative-application-management.md">Declarative Application Management</a>. </p><p>Octopus uses <code>Kustomize</code> to generate its installer manifest files, the installer YAML file is under the <a href="https://github.com/cnrancher/octopus/tree/master/deploy/e2e"><code>deploy/e2e</code></a> directory on Github, user can use it to install the octopus and its adaptors.</p><ol><li><p>Install Octopus</p><div class="mdxCodeBlock_iHAB"><div class="codeBlockContent_32p_"><button type="button" aria-label="Copy code to clipboard" class="copyButton_1BYj">Copy</button><div tabindex="0" class="prism-code language-shell codeBlock_19pQ"><div class="codeBlockLines_2n9r" style="color:#bfc7d5;background-color:#292d3e"><div class="token-line" style="color:#bfc7d5"><span class="token plain">kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one.yaml</span></div></div></div></div></div></li><li><p>Install Octopus Official Adaptors</p><div class="mdxCodeBlock_iHAB"><div class="codeBlockContent_32p_"><button type="button" aria-label="Copy code to clipboard" class="copyButton_1BYj">Copy</button><div tabindex="0" class="prism-code language-shell codeBlock_19pQ"><div class="codeBlockLines_2n9r" style="color:#bfc7d5;background-color:#292d3e"><div class="token-line" style="color:#bfc7d5"><span class="token plain">kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/mqtt/deploy/e2e/all_in_one.yaml</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml</span></div></div></div></div></div></li></ol><h3><a aria-hidden="true" tabindex="-1" class="anchor enhancedAnchor_ZqCz" id="animated-quick-demo"></a><a aria-hidden="true" tabindex="-1" class="hash-link" href="#animated-quick-demo" title="Direct link to heading">#</a>Animated quick demo</h3><p><a href="https://asciinema.org/a/338649"><img src="https://asciinema.org/a/338649.svg" alt="asciicast"></a></p><details><summary>process instruction</summary><div class="codeBlockContent_32p_"><button type="button" aria-label="Copy code to clipboard" class="copyButton_1BYj">Copy</button><div tabindex="0" class="prism-code language-undefined codeBlock_19pQ"><div class="codeBlockLines_2n9r" style="color:#bfc7d5;background-color:#292d3e"><div class="token-line" style="color:#bfc7d5"><span class="token plain"># deploy octopus without webhook kubectl apply -f deploy/e2e/all_in_one.yaml # confirm the octopus deployment kubectl get all -n octopus-system kubectl get crd | grep devicelinks # deploy a devicelink cat adaptors/dummy/deploy/e2e/dl_specialdevice.yaml kubectl apply -f adaptors/dummy/deploy/e2e/dl_specialdevice.yaml # confirm the state of devicelink kubectl get dl living-room-fan -n default # deploy dummy adaptor and model kubectl apply -f adaptors/dummy/deploy/e2e/all_in_one.yaml # confirm the dummy adaptor deployment kubectl get daemonset octopus-adaptor-dummy-adaptor -n octopus-system kubectl get crd | grep dummyspecialdevice # confirm the state of devicelink kubectl get dl living-room-fan -n default # watch the device instance kubectl get dummyspecialdevice living-room-fan -n default -w</span></div></div></div></div></details></div></article><div class="margin-vert--xl"><div class="row"><div class="col"><a href="https://github.com/cnrancher/docs-octopus/tree/master/docs/en/installation.md" target="_blank" rel="noreferrer noopener"><svg fill="currentColor" height="1.2em" width="1.2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 40 40" style="margin-right:0.3em;vertical-align:sub"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div></div></div><div class="margin-vert--lg"><nav class="pagination-nav"><div class="pagination-nav__item"><a class="pagination-nav__link" href="/docs-octopus/docs/en/quick-start"><div class="pagination-nav__link--sublabel">Previous</div><div class="pagination-nav__link--label">« Quick-Start Guide</div></a></div><div class="pagination-nav__item pagination-nav__item--next"><a class="pagination-nav__link" href="/docs-octopus/docs/en/devicelink/about-dl"><div class="pagination-nav__link--sublabel">Next</div><div class="pagination-nav__link--label">About DeviceLink »</div></a></div></nav></div></div></div><div class="col col--3"><div class="tableOfContents_TbNY"><ul class="contents contents__left-border"><li><a href="#1-octopus-helm-chart" class="contents__link">1. Octopus Helm Chart</a><ul><li><a href="#add-the-octopus-helm-chart-repo" class="contents__link">Add the Octopus Helm Chart repo</a></li><li><a href="#installing-the-chart" class="contents__link">Installing the Chart</a></li><li><a href="#helm-chart-and-octopus-support" class="contents__link">Helm Chart and Octopus Support</a></li></ul></li><li><a href="#2-bases-on-kustomize" class="contents__link">2. Bases on Kustomize</a><ul><li><a href="#animated-quick-demo" class="contents__link">Animated quick demo</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="row footer__links"><div class="col footer__col"><h4 class="footer__title">Docs</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" href="/docs-octopus/docs/cn/about">关于 Octopus</a></li><li class="footer__item"><a class="footer__link-item" href="/docs-octopus/docs/cn/quick-start">快速入门指南</a></li><li class="footer__item"><a class="footer__link-item" href="/docs-octopus/docs/cn/adaptors/develop">开发适配器</a></li></ul></div><div class="col footer__col"><h4 class="footer__title">社区相关</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://www.rancher.cn">Rancher 官网</a></li><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://slack.rancher.io">Slack</a></li></ul></div><div class="col footer__col"><h4 class="footer__title">更多</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://github.com/cnrancher/octopus">GitHub</a></li><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://github.com/cnrancher/octopus-chart">Helm Chart</a></li></ul></div></div><div class="text--center"><div>Copyright © 2020 <a href="https://www.rancher.cn/">Rancher Labs, Inc.</a> Built with love.</div></div></div></footer>
 </div>
 
-<script src="/docs-octopus/styles.ce99c915.js"></script>
+<script src="/docs-octopus/styles.0e3f6499.js"></script>
 
-<script src="/docs-octopus/runtime~main.ac12a8fb.js"></script>
+<script src="/docs-octopus/runtime~main.abd4873f.js"></script>
 
-<script src="/docs-octopus/main.457e7cef.js"></script>
+<script src="/docs-octopus/main.d3a6c00b.js"></script>
 
-<script src="/docs-octopus/1.6b9be2be.js"></script>
+<script src="/docs-octopus/1.76de42a1.js"></script>
 
-<script src="/docs-octopus/2.ecc18e87.js"></script>
+<script src="/docs-octopus/2.c66b4146.js"></script>
 
-<script src="/docs-octopus/47.8660cb97.js"></script>
+<script src="/docs-octopus/47.a18d17e8.js"></script>
 
-<script src="/docs-octopus/8ffbebae.8fb34b33.js"></script>
+<script src="/docs-octopus/8ffbebae.0391f4e6.js"></script>
 
-<script src="/docs-octopus/17896441.213872fb.js"></script>
+<script src="/docs-octopus/17896441.ab3a7e00.js"></script>
 
-<script src="/docs-octopus/3ad19910.0b844ac0.js"></script>
+<script src="/docs-octopus/3ad19910.8c0105c8.js"></script>
 
 
 </body>
