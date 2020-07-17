@@ -46,7 +46,7 @@ You should either have an existing k3s or Kubernetes cluster to deploy the Octop
 
 1. Open a new terminal and set the `KUBECONFIG` to access the local k3s cluster.
     ```shell script 
-    export KUBECONFIG=~/.kube/rancher-k3s.yaml
+    export KUBECONFIG="$(k3d get-kubeconfig --name='edge')"
     ```
    
 1. Validate the local k3s cluster by checking its node.
