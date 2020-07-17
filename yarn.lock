@@ -984,8 +984,8 @@
     unist-util-visit "^2.0.2"
 
 "@docusaurus/plugin-baidu-analytics@https://github.com/thxcode/docusaurus-plugin-baidu-analytics":
-  version "1.0.0-alpha1"
-  resolved "https://github.com/thxcode/docusaurus-plugin-baidu-analytics#0bd19140366da97b3e0a31f92f717caddcd81205"
+  version "1.0.0-alpha2"
+  resolved "https://github.com/thxcode/docusaurus-plugin-baidu-analytics#3cd26357bee73b5077c34ed24aba3ba71ea7ec83"
 
 "@docusaurus/plugin-content-blog@^2.0.0-alpha.54":
   version "2.0.0-alpha.54"
