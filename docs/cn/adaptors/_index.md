@@ -74,7 +74,7 @@ Octopus诞生时就考虑到了可伸缩性的必要，这种能力体现在设�
                                                                          adaptors.edge.cattle.io/modbus     
 ```
 
-请在[此处](../develop.md)查看有关开发适配器的更多详细信息。
+请在[此处](../how-to-develop-adaptor.md)查看有关开发适配器的更多详细信息。
 
 ## 适配器APIs
 
@@ -82,7 +82,7 @@ Octopus诞生时就考虑到了可伸缩性的必要，这种能力体现在设�
 
 |  Versions | Available | Current |
 |:---|:---|:---|
-|  [`v1alpha1`](./design_of_adaptor.md) | * | * |
+|  [`v1alpha1`](https://github.com/cnrancher/octopus/blob/8a0a7df439180a961b0d1c47415d0138c401767e/pkg/adaptor/api/v1alpha1/api.proto) | * | * |
 
 使用以下步骤使适配器与`limb`交互：
 
@@ -91,7 +91,8 @@ Octopus诞生时就考虑到了可伸缩性的必要，这种能力体现在设�
     // Registration is the service advertised by the Limb,
     // any adaptor start its service until Limb approved this register request.
     service Registration {
-        rpc Register (RegisterRequest) returns (Empty) {}
+      // Register is used to register the adaptor with limb.
+      rpc Register (RegisterRequest) returns (Empty) {}
     }
     
     message RegisterRequest {
@@ -111,23 +112,28 @@ Octopus诞生时就考虑到了可伸缩性的必要，这种能力体现在设�
     }
     
     message ConnectRequestReferenceEntry {
-        map<string, bytes> items = 1;
+      map<string, bytes> items = 1;
     }
     
+    // ConnectRequest is the request used during connection
+    // and is used to send desired device data to an adaptor.
     message ConnectRequest {
-        // [Deprecated] Parameters for the connection, it's in form JSON bytes.
-        bytes parameters = 1;
-        // Model for the device.
-        k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta model = 2;
-        // Desired device, it's in form JSON bytes.
-        bytes device = 3;
-        // References for the device, i.e: Secret, ConfigMap and Downward API.
-        map<string, ConnectRequestReferenceEntry> references = 4;
+      // Model for the device.
+      k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta model = 1;
+      // Desired device, it's in form JSON bytes.
+      bytes device = 2;
+      // References for the device, i.e: Secret, ConfigMap and Downward API.
+      map<string, ConnectRequestReferenceEntry> references = 3;
     }
-    
+
+    // ConnectResponse is the response used during connection
+    // and is used to return observed device data to the limb.
     message ConnectResponse {
-        // Observed device, it's in form JSON bytes.
-        bytes device = 1;
+      // Observed device, it's in form JSON bytes.
+      bytes device = 1;
+      // The unhandled error message indicates that the connection cannot be interrupted
+      // and the user needs to choose to recreate or ignore it.
+      string errorMessage = 2;
     }
     ```
 
@@ -144,10 +150,8 @@ Octopus诞生时就考虑到了可伸缩性的必要，这种能力体现在设�
 
 #### 关于链接
 
-**链接**可以让`limb`连接到适配器，在此阶段，适配器充当服务器，而`limb`充当客户端。 `limb`使用`parameters`, `model`, `device` 和 `references`构造连接请求，然后向目标适配器发出请求。
+**链接**可以让`limb`连接到适配器，在此阶段，适配器充当服务器，而`limb`充当客户端。 `limb`使用 `model`、`device` 和 `references`构造连接请求，然后向目标适配器发出请求。
 
-- `parameters`是用于连接的参数，格式为JSON字节。
-    > 此`parameters`字段已被**弃用**，它应将连接参数定义为设备模型的一部分。
 - `model` 是设备的模型，有助于适配器区分多个模型，或者在一个模型中存在不同版本时保持兼容性非常有用。
 - `device` 是设备的实例，格式为JSON字节，是完整的`model` 实例的`JSON`字节，并包含`spec`和`status`数据。
     > 适配器应根据`model`选择相应的反序列化接收对象，以接收该字段的数据。
