@@ -10,6 +10,8 @@ Octopus provides two out-of-box ways to integrate with [MQTT](http://mqtt.org/):
 
 > This post mainly outlines the detail of the first way, if you want to know more about the MQTT adaptor, please view [here](./mqtt). If the above out-of-box ways cannot satisfy you, you can follow the [CONTRIBUTING](https://github.com/cnrancher/octopus/blob/master/CONTRIBUTING.md) to contribute your idea or [develop a new adaptor](./develop.md).
 
+> **Noted:** MQTT extension only supports templated topic **write - [publish]** at present.
+
 Although the latest version of MQTT is v5.0, for the time being, Octopus does not support the revision, the main reason is the [corresponding development library](https://www.eclipse.org/paho/clients/golang/) does not support yet([paho.mqtt.golang/issues#347](https://github.com/eclipse/paho.mqtt.golang/issues/347)):
 
 - [x] [MQTT 3.1](http://public.dhe.ibm.com/software/dw/webservices/ws-mqtt/mqtt-v3r1.html)

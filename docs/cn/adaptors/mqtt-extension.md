@@ -10,12 +10,15 @@ Octopus提供了两种的方法与[MQTT](http://mqtt.org/)集成：
 
 > 这篇文章主要概述了第一种方法的细节，如果您想了解更多关于MQTT适配器的信息，请查看[MQTT适配器](./mqtt)。 如果以上开箱即用的方式无法满足您的要求，则可以按照[CONTRIBUTING](https://github.com/cnrancher/octopus/blob/master/CONTRIBUTING.md)提出您的想法，或[开发新的适配器](./develop.md)。
 
+> **说明：** MQTT集成目前仅支持**write - [publish]**的模板主题。
+
 尽管MQTT的最新版本为v5.0，但目前Octopus暂时不支持该修订版，主要原因是[相应的开发库](https://www.eclipse.org/paho/clients/golang/)尚不支持[paho.mqtt.golang/issues＃347](https://github.com/eclipse/paho.mqtt.golang/issues/347)：
 
 目前Octopus支持的MQTT版本如下： 
 
 - [x] [MQTT 3.1](http://public.dhe.ibm.com/software/dw/webservices/ws-mqtt/mqtt-v3r1.html)
 - [x] [MQTT 3.1.1](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html)
+- [ ] [MQTT 5.0](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
 
 设备与MQTT集成后，可以显示设备状态、赋予设备使用MQTT的能力，或扩展设备的使用场景，例如设备交互和设备监视。
 
