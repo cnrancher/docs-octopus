@@ -426,7 +426,7 @@ spec:
           type: "string"
 ```
 
-指定一个`readOnly: false'的可写属性。
+指定一个`readOnly: false'`的可写属性。
 
 ```diff
 apiVersion: edge.cattle.io/v1alpha1
@@ -1001,7 +1001,7 @@ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adap
                 format: "PYYMMDD"
     ```
 
-更多的 "MQTTDevice "设备链接示例，请参考[deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/mqtt/deploy/e2e)目录。
+更多的 "MQTTDevice "设备链接示例，请参考[deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/mqtt/deploy/e2e)目录，并使用[deploy/e2e/simulator.yaml](https://github.com/cnrancher/octopus/tree/master/adaptors/mqtt/deploy/e2e)进行快速体验。
 
 ## MQTTDevice
 

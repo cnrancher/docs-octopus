@@ -1007,8 +1007,7 @@ Grant permissions to Octopus as below <!-- kubectl describe clusterrole ... -->:
                 format: "PYYMMDD"
     ```
 
-For more `MQTTDevice` device link examples, please refer to the [deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/mqtt/deploy/e2e) directory.
-
+For more `MQTTDevice` device link examples, please refer to the [deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/mqtt/deploy/e2e) directory and make a quick experience with [deploy/e2e/simulator.yaml](https://github.com/cnrancher/octopus/tree/master/adaptors/mqtt/deploy/e2e).
 
 ## MQTTDevice
 

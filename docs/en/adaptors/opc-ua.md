@@ -96,7 +96,7 @@ Grant permissions to Octopus as below:
               value: "newString"
     ```
 
-For more `OPCUADevice` device link examples, please refer to the [deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/opcua/deploy/e2e) directory.
+For more `OPCUADevice` device link examples, please refer to the [deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/opcua/deploy/e2e) directory and make a quick experience with [deploy/e2e/simulator.yaml](https://github.com/cnrancher/octopus/tree/master/adaptors/opcua/deploy/e2e).
 
 ## OPCUADevice
 

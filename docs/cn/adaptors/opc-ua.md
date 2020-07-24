@@ -96,7 +96,7 @@ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adap
               value: "newString"
     ```
 
-更多的 "OPCUADevice "设备链接示例，请参考[deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/opcua/deploy/e2e)目录。
+更多的 "OPCUADevice "设备链接示例，请参考[deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/opcua/deploy/e2e)目录，并使用[deploy/e2e/simulator.yaml](https://github.com/cnrancher/octopus/tree/master/adaptors/opcua/deploy/e2e)进行快速体验。
 
 ## OPCUADevice
 

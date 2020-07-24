@@ -104,7 +104,7 @@ Grant permissions to Octopus as below:
               type: float
     ```
 
-For more `ModbusDevice` device link examples, please refer to the [deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/modbus/deploy/e2e) directory.
+For more `ModbusDevice` device link examples, please refer to the [deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/modbus/deploy/e2e) directory and make a quick experience with [deploy/e2e/simulator.yaml](https://github.com/cnrancher/octopus/tree/master/adaptors/modbus/deploy/e2e).
 
 ## ModbusDevice
 
