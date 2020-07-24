@@ -9,7 +9,7 @@ BLE stands for [Bluetooth Low Energy](#https://en.wikipedia.org/wiki/Bluetooth_L
 
 BLE adaptor implements on [bettercap/gatt](#github.com/bettercap/gatt) and helps to communicate with BLE supported equipment or define the attributes of the connected device.
 
-> The host that deploys BLE adaptor needs to turn on the Bluetooth module.
+> **Noted:** The host that deploys BLE adaptor needs to turn on the Bluetooth module.
 
 ## Registration Information
 
