@@ -575,7 +575,7 @@ children.1 <- "Frank"
 
 ### 用户案例
 
-试想一下，我们的家用电器是非常智能的，可以主动向MQTT agent 报告自己的状态信息，然后我们就会用`MQTTDevice`来连接和获取这些信息。例如å，我们的厨房门可以告诉我们它的生产信息，它的关闭状态等等。
+试想一下，我们的家用电器是非常智能的，可以主动向MQTT agent 报告自己的状态信息，然后我们就会用`MQTTDevice`来连接和获取这些信息。例如，我们的厨房门可以告诉我们它的生产信息，它的关闭状态等等。
 
 ```
 cattle.io/octopus/home/status/kitchen/door/state -> open
