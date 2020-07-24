@@ -8,7 +8,7 @@ There are two ways to deploy Octopus, one is [Helm chart](https://helm.sh/), ano
 ## 1. Octopus Helm Chart
 
 :::note
-The charts in this repository requires Helm version 3.x or later.**, read and follow the [Helm installation guide](https://helm.sh/docs/intro/install/).
+The charts in this repository requires Helm version 3.x or later, read and follow the [Helm installation guide](https://helm.sh/docs/intro/install/).
 :::
 
 The [Octopus-Chart](https://github.com/cnrancher/octopus-chart) repository hosts official Helm charts for [Octopus](https://github.com/cnrancher/octopus). These charts are used to deploy Octopus to the Kubernetes/k3s Cluster.
