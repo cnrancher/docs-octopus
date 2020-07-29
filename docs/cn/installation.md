@@ -19,7 +19,7 @@ Octopus支持两种不同的部署方式，一种是基于[Helm chart](https://h
 为了能够使用此存储库中的图表，请将下列名称和URL添加到您的Helm客户端：
 
 ```console
-helm repo add octopus http://charts.cnrancher.cn/octopus
+helm repo add octopus http://charts.cnrancher.com/octopus
 helm repo update
 ```
 
