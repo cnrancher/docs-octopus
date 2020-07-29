@@ -19,7 +19,7 @@ The [Octopus-Chart](https://github.com/cnrancher/octopus-chart) repository hosts
 In order to be able to use the charts in this repository, add the name and URL to your Helm client:
 
 ```console
-helm repo add octopus http://charts.cnrancher.cn/octopus
+helm repo add octopus http://charts.cnrancher.com/octopus
 helm repo update
 ```
 
