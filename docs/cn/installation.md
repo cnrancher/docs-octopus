@@ -43,7 +43,7 @@ helm status myapp -n octopus-system
 ```
 helm delete myapp -n octopus-system
 ```
-该命令几乎删除了与应用关联的所有Kubernetes组件，并删除了Kubernetes发行版。
+该命令几乎删除了与应用关联的所有Kubernetes组件，并删除了Helm。
 
 ### Helm Chart和Octopus支持
 

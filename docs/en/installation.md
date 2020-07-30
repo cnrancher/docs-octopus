@@ -45,7 +45,7 @@ helm delete myapp -n octopus-system
 ```
 
 The command removes nearly all the Kubernetes components associated with the
-chart and deletes the release.
+chart and deletes the Helm release.
 
 ### Helm Chart and Octopus Support
 
