@@ -77,6 +77,14 @@ title: 快速入门指南
 kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one.yaml
 ```
 
+:::note说明
+国内用户，可以使用以下方法加速安装：
+    
+```
+kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/deploy/e2e/all_in_one.yaml
+```
+:::
+
 预期结果：
 ```log
 namespace/octopus-system created
@@ -207,6 +215,15 @@ status:
 ```shell script
 kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
 ```
+
+:::note说明
+国内用户，可以使用以下方法加速安装：
+    
+```
+kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+```
+
+:::
 
 预期结果：
 ```

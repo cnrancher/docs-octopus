@@ -33,6 +33,15 @@ Dummy适配器是Octopus一种用于测试和Demo的模拟适配器。
 kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
 ```
 
+:::note说明
+国内用户，可以使用以下方法加速安装：
+    
+```
+kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+```
+
+:::
+
 ## 权限
 
 对Octopus授予权限，如下所示：

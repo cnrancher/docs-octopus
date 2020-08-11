@@ -169,6 +169,21 @@ Octopus基于[sigs.k8s.io/controller-runtime](https://github.com/kubernetes-sigs
 1. 通过`kubectl create ns octopus-monitoring`创建`octopus-monitoring`命名空间。
 1. 通过`kubectl apply -f /tmp/prometheus-operator_all_in_one.yaml`将prometheus-operator `all-in-ine`部署于本地集群。
 1. (可选)通过`kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one.yaml`来部署Octopus
+:::note说明
+国内用户，可以使用以下方法加速安装：
+    
+```
+kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/deploy/e2e/all_in_one.yaml
+```
+:::
+
 1. 通过`kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/integrate_with_prometheus_operator.yaml` 将监视集成部署于本地集群。
+:::note说明
+国内用户，可以使用以下方法加速安装：
+    
+```
+kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/deploy/e2e/integrate_with_prometheus_operator.yaml
+```
+:::
 1. 访问`http://localhost/prometheus`以通过浏览器查看Prometheus Web控制台，或访问`http://localhost/grafana`以查看Grafana控制台(管理员帐户为`admin/admin`)。
 1. (可选)从Grafana控制台导入[Octopus概述仪表板](https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/integrate_with_grafana.json)。

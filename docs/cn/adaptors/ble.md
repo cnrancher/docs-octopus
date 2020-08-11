@@ -37,6 +37,15 @@ BLE适配器实现了蓝牙协议的支持，并用于定义所连接的BLE设�
 kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
 ```
 
+:::note说明
+国内用户，可以使用以下方法加速安装：
+    
+```
+kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
+```
+
+:::
+
 ## 权限
 
 对Octopus授予权限，如下所示：
