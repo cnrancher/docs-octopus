@@ -59,6 +59,15 @@ Octopus使用 `Kustomize`生成其安装程序的清单文件，安装程序YAML
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
     ```
 
+    :::note说明
+    国内用户，可以使用以下方法加速安装：
+    
+    ```
+    kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+
+    ```
+    :::
+
 1. 安装Octopus官方的协议适配器(包含Modbus、OPC-UA、BLE、MQTT和Dummy)
     ```shell script
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml
@@ -67,6 +76,19 @@ Octopus使用 `Kustomize`生成其安装程序的清单文件，安装程序YAML
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
     $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
     ```
+
+    :::note说明
+    国内用户，可以使用以下方法加速安装：
+
+    ```
+    kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml
+    kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
+    kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/adaptors/mqtt/deploy/e2e/all_in_one.yaml
+    kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
+    kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+    ```
+
+    :::
 
 ### 动画快速演示
 

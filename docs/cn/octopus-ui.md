@@ -24,6 +24,14 @@ $ helm upgrade -n octopus-system --set octopus-api-server.enabled=true octopus c
 $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus-api-server/master/deploy/e2e/all_in_one.yaml
 ```
 
+:::note说明
+国内用户，可以使用以下方法加速安装：
+    
+```
+kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/api-server/master/deploy/e2e/all_in_one.yaml
+```
+:::
+
 通过检查其pod和服务状态来验证 `Octopus-UI`的状态。
 ```shell script
 $ kubectl get po -n kube-system -l app.kubernetes.io/name=octopus-api-server

@@ -121,6 +121,15 @@ Homie很有意思，它最大的特点就是**自发现**，也就是订阅者�
 kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/mqtt/deploy/e2e/all_in_one.yaml
 ```
 
+:::note说明
+国内用户，可以使用以下方法加速安装：
+    
+```
+kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/adaptors/mqtt/deploy/e2e/all_in_one.yaml
+```
+
+:::
+
 ## 权限
 
 对Octopus授予权限，如下所示：
