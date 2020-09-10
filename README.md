@@ -1,3 +1,8 @@
+# Latest News 
+
+This document repository's content for Chinese docs has been deprecated. The new Chinese documentation for Octopus is [Rancher 2x](https://github.com/cnrancher/docs-rancher2), redirect to **/docs/octopus** for the latest Chinese doc.
+
+
 # Website
 [![Build Status](http://drone-pandaria.cnrancher.com/api/badges/cnrancher/docs-octopus/status.svg)](http://drone-pandaria.cnrancher.com/cnrancher/docs-octopus)
 
