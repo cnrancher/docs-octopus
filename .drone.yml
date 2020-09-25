@@ -10,6 +10,7 @@ steps:
 - name: build
   image: node:10-alpine
   commands:
+  - apk update && apk upgrade && apk add --no-cache git
   - node -v
   - npm -v
   - yarn --version

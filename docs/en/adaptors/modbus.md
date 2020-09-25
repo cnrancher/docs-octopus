@@ -3,15 +3,15 @@ id: modbus
 title: Modbus Adaptor
 ---
 
-### Introduction
+## Introduction
 
 [Modbus](https://www.modbustools.com/modbus.html) is a master/slave protocol, the device requesting the information is called the Modbus master and the devices supplying information are Modbus slaves.
 In a standard Modbus network, there is one master and up to 247 slaves, each with a unique slave address from 1 to 247.
 The master can also write information to the slaves.
 
-Modbus adaptor support both TCP and RTU protocol, it acting as the master node and connects to or manipulating the Modbus slave devices on the edge side.
+Modbus adaptor implements the [goburrow/modbus](#github.com/goburrow/modbus) to support both TCP and RTU protocols, it acting as the controller(master) node and connects to or manipulating the Modbus worker(slave) devices on the edge side.
 
-### Registers Operation
+### Modbus Registers Operation
 
 - **Coil Registers**: readable and writable, 1 bit (off/on)
 
@@ -21,19 +21,24 @@ Modbus adaptor support both TCP and RTU protocol, it acting as the master node a
 
 - **Holding Registers**: readable and writable, 16 bits (0 to 65,535), essentially configuration values
 
+
 ### Registration Information
 
 |  Versions  |          Register Name           | Endpoint Socket | Available |
 | :--------: | :------------------------------: | :-------------: | :-------: |
 | `v1alpha1` | `adaptors.edge.cattle.io/modbus` |  `modbus.sock`  |    \*     |
 
-### Support Model
+
+## Support Model
+
 
 |      Kind      |          Group           |  Version   | Available |
 | :------------: | :----------------------: | :--------: | :-------: |
 | `ModbusDevice` | `devices.edge.cattle.io` | `v1alpha1` |    \*     |
 
-### Support Platform
+
+## Support Platform
+
 
 |   OS    | Arch    |
 | :-----: | :------ |
@@ -41,13 +46,13 @@ Modbus adaptor support both TCP and RTU protocol, it acting as the master node a
 | `linux` | `arm`   |
 | `linux` | `arm64` |
 
-### Usage
+## Usage
 
 ```shell script
 $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml
 ```
 
-### Authority
+## Authority
 
 Grant permissions to Octopus as below:
 
@@ -269,3 +274,4 @@ spec:
 |
 | :--- | :--------------- | :--------------------------------------------------------------------------------------- | :------- |
 | mqtt | specify MQTT options | \*[v1alpha1.MQTTOptionsSpec](/docs/octopus/adaptors/mqtt-extension/_index#specification) | no |
+

@@ -10,27 +10,27 @@ import GitHubButton from 'react-github-btn';
 const features = [
   {
     title: <>为边缘而生</>,
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    imageUrl: 'img/landing-img-edge.png',
     description: (
       <>
          轻量且不需要替换Kubernetes集群的任何组件。 部署Octopus后，
-         群集可以将任何边缘设备作为k8s资源进行管理。
+         集群可以将任何边缘设备作为k8s资源进行管理。
       </>
     ),
   },
   {
     title: <>简单而灵活</>,
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    imageUrl: 'img/landing-img-adaptors.png',
     description: (
       <>
         Octopus具有内置的设备协议适配器，如BLE，Modbus，OPC-UA和MQTT，并且支持自定义设备适配器插件。
-        点击<a href="https://github.com/cnrancher/octopus/blob/master/docs/adaptors/develop.md" target="_blank">开始构建</a>自定义适配器。
+        点击<a href="https://github.com/cnrancher/docs-octopus/blob/master/docs/cn/develop.md" target="_blank">开始构建</a>自定义适配器。
       </>
     ),
   },
   {
     title: <>支持原生Kubernetes和k3s</>,
-    imageUrl: 'img/undraw_docusaurus_react.svg',
+    imageUrl: 'img/landing-img-arch.png',
     description: (
       <>
         Octopus镜像同时支持ARM64和ARMv7。 适用于原生 Kubernetes和<a href="https://k3s.io/" target="_blank"> k3s </a>。

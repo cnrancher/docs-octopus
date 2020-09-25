@@ -5,7 +5,7 @@ title: 关于适配器
 
 ## 适配器设计
 
-Octopus诞生时就考虑到了可伸缩性的必要，这种能力具体体现在设备模型和适配器的设计中。
+Octopus诞生时就考虑到了可伸缩性的必要，这种能力体现在设备模型和适配器的设计中。
 
 由于可以通过CRD定义设备模型，因此设备模型可以是专用设备（例如风扇，LED等），也可以是通用协议设备（例如BLE，ModBus，OPC-UA设备等）。
 
@@ -74,15 +74,15 @@ Octopus诞生时就考虑到了可伸缩性的必要，这种能力具体体现�
                                                                          adaptors.edge.cattle.io/modbus     
 ```
 
-请在[此处](../develop.md)查看有关开发适配器的更多详细信息。
+请在[此处](../how-to-develop-adaptor.md)查看有关开发适配器的更多详细信息。
 
 ## 适配器APIs
 
 适配器的访问管理借鉴了[Kubernetes设备插件管理](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/)。 当前访问管理API的可用版本为`v1alpha1`。
 
 |  Versions | Available | Current |
-|:---:|:---:|:---:|
-|  [`v1alpha1`](./design_of_adaptor.md) | * | * |
+|:---|:---|:---|
+|  [`v1alpha1`](https://github.com/cnrancher/octopus/blob/8a0a7df439180a961b0d1c47415d0138c401767e/pkg/adaptor/api/v1alpha1/api.proto) | * | * |
 
 使用以下步骤使适配器与`limb`交互：
 
@@ -91,7 +91,8 @@ Octopus诞生时就考虑到了可伸缩性的必要，这种能力具体体现�
     // Registration is the service advertised by the Limb,
     // any adaptor start its service until Limb approved this register request.
     service Registration {
-        rpc Register (RegisterRequest) returns (Empty) {}
+      // Register is used to register the adaptor with limb.
+      rpc Register (RegisterRequest) returns (Empty) {}
     }
     
     message RegisterRequest {
@@ -111,45 +112,46 @@ Octopus诞生时就考虑到了可伸缩性的必要，这种能力具体体现�
     }
     
     message ConnectRequestReferenceEntry {
-        map<string, bytes> items = 1;
+      map<string, bytes> items = 1;
     }
     
+    // ConnectRequest is the request used during connection
+    // and is used to send desired device data to an adaptor.
     message ConnectRequest {
-        // [Deprecated] Parameters for the connection, it's in form JSON bytes.
-        bytes parameters = 1;
-        // Model for the device.
-        k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta model = 2;
-        // Desired device, it's in form JSON bytes.
-        bytes device = 3;
-        // References for the device, i.e: Secret, ConfigMap and Downward API.
-        map<string, ConnectRequestReferenceEntry> references = 4;
+      // Model for the device.
+      k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta model = 1;
+      // Desired device, it's in form JSON bytes.
+      bytes device = 2;
+      // References for the device, i.e: Secret, ConfigMap and Downward API.
+      map<string, ConnectRequestReferenceEntry> references = 3;
     }
-    
+
+    // ConnectResponse is the response used during connection
+    // and is used to return observed device data to the limb.
     message ConnectResponse {
-        // Observed device, it's in form JSON bytes.
-        bytes device = 1;
+      // Observed device, it's in form JSON bytes.
+      bytes device = 1;
+      // The unhandled error message indicates that the connection cannot be interrupted
+      // and the user needs to choose to recreate or ignore it.
+      string errorMessage = 2;
     }
     ```
 
-1. 适配器通过Unix socket字在主机路径`/var/lib/octopus/adaptors/limb.sock`处向`limb`注册。
-1. 成功注册后，适配器将以服务模式运行，在此模式下，适配器将保持连接设备的状态，并在设备状态发生任何变化时向`limb`报告。
+1. 适配器通过Unix socket旨在主机路径`/var/lib/octopus/adaptors/limb.sock`处向`limb`注册。
+1. 成功注册后，适配器以服务模式运行，在此模式下，适配器将保持连接设备的状态，并在设备状态发生任何变化时向`limb`报告。
 
 #### 关于注册
 
 **注册** 可以让`limb`发现适配器的存在，在这一阶段，`limb`充当服务器，而适配器充当客户端。适配器使用其名称，版本和访问端点构造一个注册请求，然后请求肢体。成功注册后，`limb`将继续监视适配器并通知与已注册适配器相关的那些DeviceLink。
 
-- 名称是适配器的名称，强烈建议使用此模式`adaptor-vendor.com/adaptor-name`来命名适配器，每个适配器必须具有一个唯一的`名称`。
-    > 具有相同`名称`的第二个适配器将覆盖前一个。
+- 名称是适配器的名称，强烈建议使用此模式`adaptor-vendor.com/adaptor-name`来命名适配器，每个适配器必须具有一个唯一的`名称`。如果两个适配器具有相同`名称`，新创建的适配器将覆盖已有的适配器。
 - 版本是访问管理的API版本，目前已在v1alpha1中修复。
-- 访问的“端点”是UNIX套接字的名称，每个适配器必须具有一个唯一的“端点”。
-    > 具有相同注册端点的第二个适配器在退出前一个适配器之前将永远不会成功注册。
+- 访问的“端点”是UNIX套接字的名称，每个适配器必须具有一个唯一的“端点”。如果两个适配器具有相同注册端点，在退出前一个适配器之前，第二个适配器不会成功注册。
 
 #### 关于链接
 
-**链接**可以让`limb`连接到适配器，在此阶段，适配器充当服务器，而`limb`充当客户端。 `limb`使用`parameters`, `model`, `device` 和 `references`构造连接请求，然后向目标适配器发出请求。
+**链接**可以让`limb`连接到适配器，在此阶段，适配器充当服务器，而`limb`充当客户端。 `limb`使用 `model`、`device` 和 `references`构造连接请求，然后向目标适配器发出请求。
 
-- `parameters`是用于连接的参数，格式为JSON字节。
-    > 此`parameters`字段已被**DEPRECATED**，它应将连接参数定义为设备模型的一部分。
 - `model` 是设备的模型，有助于适配器区分多个模型，或者在一个模型中存在不同版本时保持兼容性非常有用。
 - `device` 是设备的实例，格式为JSON字节，是完整的`model` 实例的`JSON`字节，并包含`spec`和`status`数据。
     > 适配器应根据`model`选择相应的反序列化接收对象，以接收该字段的数据。
@@ -158,8 +160,8 @@ Octopus诞生时就考虑到了可伸缩性的必要，这种能力具体体现�
 
 ## 可用适配器列表
 
-- [Modbus](./modbus)
-- [OPC-UA](./opc-ua)
-- [MQTT](./mqtt)
-- [BLE](./ble)
-- [Dummy](./dummy)
+- [Modbus](/docs-octopus/docs/cn/adaptors/modbus)
+- [OPC-UA](/docs-octopus/docs/cn/adaptors/opc-ua)
+- [MQTT](/docs-octopus/docs/cn/adaptors/mqtt)
+- [BLE](/docs-octopus/docs/cn/adaptors/ble)
+- [Dummy](/docs-octopus/docs/cn/adaptors/dummy)

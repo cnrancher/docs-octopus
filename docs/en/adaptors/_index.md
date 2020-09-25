@@ -74,15 +74,15 @@ At the meantime, the implementation of adapter can be connected to a single devi
                                                                          adaptors.edge.cattle.io/modbus     
 ```
 
-Please view [here](../develop.md) for more detail about developing an adaptor.
+Please view [here](../how-to-develop-adaptor.md) for more detail about developing an adaptor.
 
 ## Adaptor APIs
 
 The access management of adaptors takes inspiration from [Kubernetes Device Plugins management](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/). The available version of access management APIs is `v1alpha1`.
 
 |  Versions | Available | Current |
-|:---:|:---:|:---:|
-|  [`v1alpha1`](./design_of_adaptor.md) | * | * |
+:--- | :--- | :--- |
+|  [`v1alpha1`](https://github.com/cnrancher/octopus/blob/8a0a7df439180a961b0d1c47415d0138c401767e/pkg/adaptor/api/v1alpha1/api.proto) | * | * |
 
 Use the following steps to make the adaptor interact with `limb`:
 
@@ -91,43 +91,52 @@ Use the following steps to make the adaptor interact with `limb`:
     // Registration is the service advertised by the Limb,
     // any adaptor start its service until Limb approved this register request.
     service Registration {
-        rpc Register (RegisterRequest) returns (Empty) {}
+      // Register is used to register the adaptor with limb.
+      rpc Register (RegisterRequest) returns (Empty) {}
     }
-    
+
+    // RegisterRequest is the request used during registration
+    // and is used to uniquely identify an adaptor.
     message RegisterRequest {
-        // Name of the adaptor in the form `adaptor-vendor.com/adaptor-name`.
-        string name = 1;
-        // Version of the API the adaptor was built against.
-        string version = 2;
-        // Name of the unix socket the adaptor is listening on, it's in the form `*.sock`.
-        string endpoint = 3;
+      // Name of the adaptor in the form `adaptor-vendor.com/adaptor-name`.
+      string name = 1;
+      // Version of the API the adaptor was built against.
+      string version = 2;
+      // Name of the unix socket the adaptor is listening on, it's in the form `*.sock`.
+      string endpoint = 3;
     }
     ```
 1. The adaptor starts a gRPC service with a Unix socket under host path `/var/lib/octopus/adaptors`, that implements the following interfaces:
     ```proto
     // Connection is the service advertised by the adaptor.
     service Connection {
-        rpc Connect (stream ConnectRequest) returns (stream ConnectResponse) {}
+      // Connect is for communication between the adaptor and limb.
+      rpc Connect (stream ConnectRequest) returns (stream ConnectResponse) {}
     }
-    
+
     message ConnectRequestReferenceEntry {
-        map<string, bytes> items = 1;
+      map<string, bytes> items = 1;
     }
-    
+
+    // ConnectRequest is the request used during connection
+    // and is used to send desired device data to an adaptor.
     message ConnectRequest {
-        // [Deprecated] Parameters for the connection, it's in form JSON bytes.
-        bytes parameters = 1;
-        // Model for the device.
-        k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta model = 2;
-        // Desired device, it's in form JSON bytes.
-        bytes device = 3;
-        // References for the device, i.e: Secret, ConfigMap and Downward API.
-        map<string, ConnectRequestReferenceEntry> references = 4;
+      // Model for the device.
+      k8s.io.apimachinery.pkg.apis.meta.v1.TypeMeta model = 1;
+      // Desired device, it's in form JSON bytes.
+      bytes device = 2;
+      // References for the device, i.e: Secret, ConfigMap and Downward API.
+      map<string, ConnectRequestReferenceEntry> references = 3;
     }
-    
+
+    // ConnectResponse is the response used during connection
+    // and is used to return observed device data to the limb.
     message ConnectResponse {
-        // Observed device, it's in form JSON bytes.
-        bytes device = 1;
+      // Observed device, it's in form JSON bytes.
+      bytes device = 1;
+      // The unhandled error message indicates that the connection cannot be interrupted
+      // and the user needs to choose to recreate or ignore it.
+      string errorMessage = 2;
     }
     ```
 1. The adaptor registers itself with the `limb` through the Unix socket at host path `/var/lib/octopus/adaptors/limb.sock`.
@@ -145,10 +154,8 @@ The **Registration** can let the `limb` to know the existence of an adaptor/, on
 
 #### Connection
 
-The **Connection** can let the `limb` to connect to an adaptor, on this phase, the adaptor acts as a server, and the `limb` acts as a client. The `limb` constructs a connection request with the `parameters`, `model`, `device` and `references`, and then request to the target adaptor.
+The **Connection** can let the `limb` to connect to an adaptor, on this phase, the adaptor acts as a server, and the `limb` acts as a client. The `limb` constructs a connection request with the `model`, `device` and `references`, and then request to the target adaptor.
 
-- The `parameters` are the parameters used for connection, it's in form JSON bytes.
-    > This `parameters` field has been **DEPRECATED**, it should define the connection parameter as a part of the device model.
 - The `model` is the device's model, it's useful to help adaptor to distinguish multiple models, or maintain the compatibility if there are different versions in one model.
 - The `device` is the device's instance, it's in form JSON bytes, which is JSON bytes of a complete `model` instance and contains `spec` and `status` data.
     > The adaptor should select the corresponding deserialized receiving object according to the `model` to receive this field's data.
@@ -157,8 +164,8 @@ The **Connection** can let the `limb` to connect to an adaptor, on this phase, t
 
 ## Available Adaptor List
 
-- [Modbus](./modbus)
-- [OPC-UA](./opc-ua)
-- [MQTT](./mqtt)
-- [BLE](./ble)
-- [Dummy](./dummy)
+- [Modbus](/docs-octopus/docs/en/adaptors/modbus)
+- [OPC-UA](/docs-octopus/docs/en/adaptors/opc-ua)
+- [MQTT](/docs-octopus/docs/en/adaptors/mqtt)
+- [BLE](/docs-octopus/docs/en/adaptors/ble)
+- [Dummy](/docs-octopus/docs/en/adaptors/dummy)
