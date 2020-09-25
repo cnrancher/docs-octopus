@@ -4,7 +4,7 @@ title: Octopus 开发指南
 sidebar_label: Octopus 开发指南
 ---
 
-## Build management of Octopus
+## 建立Octopus管理流程
 
 Octopus借鉴了[Maven](https://maven.apache.org/)，并基于[make](https://www.gnu.org/software/make/manual/make.html)提供了一组项目构建管理工具。 生成管理过程包含多个阶段，一个阶段包含多个操作。 为了方便起见，动作的名称也代表当前阶段。 动作的总体流程关系如下所示：
 
@@ -15,17 +15,17 @@ Octopus借鉴了[Maven](https://maven.apache.org/)，并基于[make](https://www
 
 每个动作的说明：
 
-| Action | Usage |
-|---:|:---|
-| `generate`, `gen`, `g` | Generate deployment manifests and deepcopy/runtime.Object implementations of `octopus` via [`controller-gen`](https://github.com/kubernetes-sigs/controller-tools/blob/master/cmd/controller-gen/main.go); Generate proto files of `adaptor` interfaces via [`protoc`](https://github.com/protocolbuffers/protobuf). |
-| `mod`, `m` | Download `octopus` dependencies. |
-| `lint`, `l` | Verify `octopus` via [`golangci-lint`](https://github.com/golangci/golangci-lint), roll back to `go fmt` and `go vet` if the installation fails. <br/<br/> Use `DIRTY_CHECK=true` to verify the whole project is in dirty tree or not. |
-| `build`, `b` | Compile `octopus` according to the type and architecture of the OS, generate the binary into `bin` directory. <br/><br/> Use `CROSS=true` to compile binaries of the supported platforms(search `constant.sh` file in this repo). |
-| `test`, `t` | Run unit tests. |
-| `verify`, `v` | Run integration tests with a Kubernetes cluster. <br/><br/> Use `CLUSTER_TYPE` to specify the type for local cluster, default is `k3d`. Instead of setting up a local cluster, you can also use environment variable `USE_EXISTING_CLUSTER=true` to point out an existing cluster, and then the integration tests will use the kubeconfig of the current environment to communicate with the existing cluster. |
-| `package`, `pkg`, `p` | Package Docker image. |
-| `e2e`, `e` | Run E2E tests. |
-| `deploy`, `dep`, `d` | Push Docker images and create manifest images for the current version. <br/><br/> Use `WITHOUT_MANIFEST=true` to prevent pushing manifest image, or `ONLY_MANIFEST=true` to push the manifest images only and `IGNORE_MISSING=true` to warn on missing images defined in platform list if needed. |
+| 动作名称/当前阶段 | 作用 |
+|:---|:---|
+| `generate`, `gen`, `g` | 通过[`controller-gen`](https://github.com/kubernetes-sigs/controller-tools/blob/master/cmd/controller-gen/main.go)生成`octopus`的部署清单和deepcopy/runtime.Object实现；通过[`protoc`](https://github.com/protocolbuffers/protobuf)生成`adaptor`接口的proto文件 |
+| `mod`, `m` | 下载 Octopus的依赖文件 |
+| `lint`, `l` | 通过[`golangci-lint`](https://github.com/golangci/golangci-lint)来验证`octopus`，如果安装失败，则回滚到`go fmt`和`go vet`。<br/<br/> 使用`DIRTY_CHECK=true`验证整个项目是否在dirty tree中。 |
+| `build`, `b` | 根据操作系统的类型和架构编译`octopus`，生成二进制文件到`bin`目录。<br/><br/> 使用 "CROSS=true "编译支持的平台的二进制文件(在这个repo中搜索`constant.sh`文件)。|
+| `test`, `t` | 运行单元测试 |
+| `verify`, `v` | 使用Kubernetes集群运行集成测试。<br/><br/> 使用`CLUSTER_TYPE`来指定本地集群的类型，默认为`k3d`。不需要设置本地集群，也可以使用环境变量`USE_EXISTING_CLUSTER=true`指出一个现有的集群，然后集成测试将使用当前环境的kubeconfig与现有集群进行通信。 |
+| `package`, `pkg`, `p` | 打包Docker镜像 |
+| `e2e`, `e` | 运行E2E测试 |
+| `deploy`, `dep`, `d` | 推送Docker镜像并为当前版本创建manifest镜像。<br/><br/> 使用`WITHOUT_MANIFEST=true`防止推送manifest镜像，或者使用`ONLY_MANIFEST=true`只推送manifest镜像，使用`IGNORE_MISSING=true`在需要时对平台列表中定义的缺失镜像发出警告。|
 
 执行一个阶段可以运行`make octopus <stage name>`，例如，在执行`test`阶段时，请运行`make octopus test`。 要执行一个阶段，将执行先前顺序中的所有动作，如果运行`make octopus test`，则实际上包括执行`generate`，`mod`，`lint`，`build`和`test`动作。
 
@@ -65,7 +65,7 @@ Octopus借鉴了[Maven](https://maven.apache.org/)，并基于[make](https://www
 
 ## 适配器的生成管理
 
-适配器的构建管理与Octopus相似，但执行方式不同。 执行任何适配器的阶段都可以运行`make adapter <适配器名称> <阶段名称>`。 请查看[开发适配器](./adaptors/develop)了解更多详细信息。
+适配器的构建管理与Octopus相似，但执行方式不同。 执行任何适配器的阶段都可以运行`make adapter <适配器名称> <阶段名称>`。 请查看[开发适配器](./adaptors/how-to-develop-adaptor.md)了解更多详细信息。
 
 ## 所有组件的构建管理
 

@@ -1,12 +1,15 @@
 module.exports = {
   title: 'Octopus',
-  tagline: 'Lightweight edge device management system based on Kubernetes',
+  tagline: 'Lightweight edge device management system based on Kubernetes/k3s',
   url: 'https://cnrancher.github.io',
   baseUrl: '/docs-octopus/',
   favicon: 'img/favicon.ico',
   organizationName: 'cnrancher', // Usually your GitHub org/user name.
   projectName: 'docs-octopus', // Usually your repo name.
   themeConfig: {
+    baiduAnalytics: {
+      trackingID: '2b90a4a76e45194771b47f8f43e9121c',
+    },
     announcementBar: {
       id: 'support_us', // Any value that will identify this message
       content:
@@ -39,7 +42,7 @@ module.exports = {
           position: 'left',
         },
         {
-          href: './eng',
+          href: 'https://cnrancher.github.io/docs-octopus/eng/',
           label: 'English',
           position: 'right',
         },
@@ -108,7 +111,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/cnrancher/docs-octopus/edit/master/website/',
+            'https://github.com/cnrancher/docs-octopus/tree/master',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -116,5 +119,5 @@ module.exports = {
       },
     ],
   ],
-  plugins: [''],
+  plugins: ['@docusaurus/plugin-baidu-analytics'],
 };

@@ -3,39 +3,48 @@ id: opc-ua
 title: OPC-UA 适配器
 ---
 
-### 介绍
+## 介绍
 
 [OPC Unified Architecture](https://opcfoundation.org/about/opc-technologies/opc-ua/)（OPC-UA）是由OPC Foundation开发的用于工业自动化的机器对机器通信协议。
 
 OPC-UA适配器集成了[gopcua](https://github.com/gopcua/opcua)，并专注于与工业OPC-UA设备和系统进行通信，以便在边缘侧进行数据收集和数据处理。
 
-### 注册信息
+## 注册信息
 
-|  Versions | Register Name | Endpoint Socket | Available |
-|:---:|:---:|:---:|:---:|
+| 版本 | 注册名称 | 端点 Socket | 是否可用 |
+|:---|:---|:---|:---|
 |  `v1alpha1` | `adaptors.edge.cattle.io/opcua` | `opcua.sock` | * |
 
-### 支持模型
+## 支持模型
 
-| Kind | Group | Version | Available | 
-|:---:|:---:|:---:|:---:|
+| 类型 | 设备组 | 版本 | 是否可用 | 
+|:---|:---|:---|:---|
 | `OPCUADevice` | `devices.edge.cattle.io` | `v1alpha1` | * |
 
-### 支持平台
+## 支持平台
 
-| OS | Arch |
-|:---:|:---|
+| 操作系统 | 架构 |
+|:---|:---|
 | `linux` | `amd64` |
 | `linux` | `arm` |
 | `linux` | `arm64` |
 
-### 使用方式
+## 使用方式
 
 ```shell script
-$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
+kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
 ```
 
-### 权限
+:::note说明
+国内用户，可以使用以下方法加速安装：
+    
+```
+kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
+```
+
+:::
+
+## 权限
 
 对Octopus授予权限，如下所示：
 
@@ -46,129 +55,181 @@ $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/ad
   opcuadevices.devices.edge.cattle.io/status  []                 []              [get patch update]
 ```
 
-### OPC-UA DeviceLink YAML
+## Example
 
-OPC-UA `DeviceLink` YAML的示例:
+- 指定一个 "OPCUADevice"设备链接来连接OPC-UA服务器。
 
-```yaml
-apiVersion: edge.cattle.io/v1alpha1
-kind: DeviceLink
-metadata:
-  name: opcua-open
-spec:
-  adaptor:
-    node: edge-worker
-    name: adaptors.edge.cattle.io/opcua
-  model:
-    apiVersion: "devices.edge.cattle.io/v1alpha1"
-    kind: "OPCUADevice"
-  template:
+    ```YAML
+    apiVersion: edge.cattle.io/v1alpha1
+    kind: DeviceLink
     metadata:
-      labels:
-        device: opcua-open
+      name: opcua
     spec:
-      parameters:
-        syncInterval: 10s
-        timeout: 10s
-      extension:
-        mqtt:
-          client:
-            server: tcp://test.mosquitto.org:1883
-          message:
-            topic:
-              prefix: cattle.io/octopus
-              with: nn # namespace/name
-      protocol:
-        url: opc.tcp://192.168.64.5:30839/
-      properties:
-        - name: datetime
-          description: the current datetime
-          readOnly: true
-          visitor:
-            nodeID: ns=0;i=2258
-          dataType: datetime
-        - name: integer
-          description: mock number. Default value is 42
-          readOnly: false
-          visitor:
-            nodeID: ns=1;s=the.answer
-          dataType: int32
-          value: "1"
-        - name: string
-          description: mock byte string. Default value is "test123"
-          readOnly: false
-          visitor:
-            nodeID: ns=1;s=myByteString
-          dataType: byteString
-          value: "newString"
-```
+      adaptor:
+        node: edge-worker
+        name: adaptors.edge.cattle.io/opcua
+      model:
+        apiVersion: "devices.edge.cattle.io/v1alpha1"
+        kind: "OPCUADevice"
+      template:
+        metadata:
+          labels:
+            device: opcua
+        spec:
+          parameters:
+            syncInterval: 5s
+            timeout: 10s
+          protocol:
+            # replace the address if needed
+            endpoint: opc.tcp://10.43.29.71:4840/
+          properties:
+            - name: datetime
+              description: the current datetime
+              readOnly: true
+              visitor:
+                nodeID: ns=0;i=2258
+              type: datetime
+            - name: integer
+              description: mock number. Default value is 42
+              readOnly: false
+              visitor:
+                nodeID: ns=1;s=the.answer
+              type: int32
+              value: "1"
+            - name: string
+              description: mock byte string. Default value is "test123"
+              readOnly: false
+              visitor:
+                nodeID: ns=1;s=myByteString
+              type: byteString
+              value: "newString"
+    ```
 
-### OPC-UA Device Spec
+更多的 "OPCUADevice "设备链接示例，请参考[deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/opcua/deploy/e2e)目录，并使用[deploy/e2e/simulator.yaml](https://github.com/cnrancher/octopus/tree/master/adaptors/opcua/deploy/e2e)进行快速体验。
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-parameters | Parameter of the opcua device| *[DeviceParamters](#deviceparamters) | false
-protocol | Protocol for accessing the opcua device  | *[ProtocolConfig](#protocolconfig) | true
-properties | Device properties  | []*[DeviceProperty](#deviceproperty) | false
-extension | Integrate with deivce MQTT extension  | *[DeviceExtension](#deviceextension) | false
+## OPCUADevice
 
-#### DeviceParamters
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+metadata | 元数据 | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | 否
+spec | 定义`OPCUADevice`的预期状态 | [OPCUADeviceSpec](#opcuadevicespec) | 是
+status | 定义`OPCUADevice`的实际状态 | [OPCUADeviceStatus](#opcuadevicestatus) | 否
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-syncInterval | Device properties sync interval, default to `5s`  | string | false
-timeout |  Device connection timeout, default to `10s` | string | false
+### OPCUADeviceSpec
 
-#### ProtocolConfig
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+extension | 指定设备的插件 | *[OPCUADeviceExtension](#opcuadeviceextension) | 否
+parameters | 指定设备的参数 | *[OPCUADeviceParamters](#opcuadeviceparamters) | 否
+protocol | 指定访问设备时使用的协议 | *[OPCUADeviceProtocol](#opcuadeviceprotocol) | 是
+properties | 指定设备的属性 | *[OPCUADeviceProperty](#opcuadeviceproperty) | 否
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-url | The URL for opc-ua server endpoint | string | true
-username | Username for accessing opc-ua server | string | false
-password | Password for opc-ua server endpoint | string | false
-securityPolicy | Defaults to `None`. Valid values are `None, Basic128Rsa15, Basic256, Basic256Sha256, Aes128Sha256RsaOaep, Aes256Sha256RsaPss`. | string | false
-securityMode | Defaults to `None`. Valid values are `None, Sign, and SignAndEncrypt`. | string | false
-certificateFile | Certificate file for accessing opc-ua server | string | true
-privateKeyFile | PrivateKey file for accessing opc-ua server | string | true
+### OPCUADeviceStatus
 
-#### DeviceProperty
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+properties | 上报设备的属性| *[OPCUADeviceStatusProperty](#opcuadevicestatusproperty) | 否
 
-Parameter | Description | Scheme | Required
---- | --- | --- | ---
-name | Property name | string | true
-description | Property description  | string | false
-readOnly | Check if the device property is readonly, otherwise readwrite, default to false | boolean | false
-dataType | The datatype of this property | *[PropertyDataType](#propertydatatype) | true
-visitor | The visitor configuration of this property | *[PropertyVisitor](#propertyvisitor) | true
-value | Set desired value of the property | string | false
+#### OPCUADeviceParamters
 
-#### PropertyVisitor
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+syncInterval | 指定默认的设备同步时间间隔，默认为`15s`| string | 否
+timeout |  指定默认的设备的连接超时时间，默认为`10s` | string | 否
 
-Parameter | Description | Scheme |  Required
---- | --- | --- | ---
-nodeID | The ID of opc-ua node, e.g. "ns=1,i=1005" | string | true
-browseName | The name of opc-ua node | string | false
+#### OPCUADeviceProtocol
 
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+endpoint | 指定OPC-UA服务器端点的URL，以 "opc.tcp://"开头。 | string | 是
+securityPolicy | 指定访问OPC-UA服务器的安全策略，默认为 "None"。 | *[OPCUADeviceProtocolSecurityPolicy](#opcuadeviceprotocolsecuritypolicy) | 否
+securityMode | 指定访问OPC-UA服务器的安全模式，默认为 "None"。 | *[OPCUADeviceProtocolSecurityMode](#opcuadeviceprotocolsecuritymode) | 否
+basicAuth | 指定客户端连接OPC-UA服务器的用户名和密码。 | *[OPCUADeviceProtocolBasicAuth](#opcuadeviceprotocolbasicauth) | 否
+tlsConfig | 指定客户端连接OPC-UA服务器的TLS配置。 | *[OPCUADeviceProtocolTLS](#opcuadeviceprotocoltls) | 否
 
-#### PropertyDataType
+#### OPCUADeviceProtocolSecurityPolicy
 
-Parameter | Description | Scheme
---- | --- | --- 
-boolean | Property data type is boolean. | string
-int64 | Property data type is int64. | string
-int32 |  Property data type is int32. | string
-int16 |  Property data type is int16. | string
-uint64 | Property data type is uint64. | string
-uint32 |  Property data type is uint32. | string
-uint16 |  Property data type is uint16. | string
-float |  Property data type is float. | string
-double |  Property data type is double. | string
-string |  Property data type is string. | string
-byteString |  Property data type is bytestring. Will be converted to string for display. | string
-datetime |  Property data type is datetime. | string
+参数 | 描述| 类型 |
+:--- | :--- | :--- |
+None | 无安全策略| string  
+Basic128Rsa15 | 使用Basic128Rsa15安全策略| string  
+Basic256 | 使用Basic256安全策略| string  
+Basic256Sha256 | 使用asic256Sha256安全策略| string  
+Aes128Sha256RsaOaep | 使用Aes128Sha256RsaOaep安全策略| string  
+Aes256Sha256RsaPss | 使用Aes256Sha256RsaPss安全策略| string  
 
+#### OPCUADeviceProtocolSecurityMode
 
-#### DeviceExtension
+参数 | 描述| 类型 |
+:--- | :--- | :--- |
+None | 不加密| string  
+Sign | 仅签名| string  
+SignAndEncrypt |签名且加密 | string
 
-- 关于OPC-UA设备的MQTT集成请参考[example YAML](#opc-ua-devicelink-yaml)。
-- 参考[与MQTT文档集成](./mqtt-extension)了解更多详细信息。
+#### OPCUADeviceProtocolBasicAuth
+
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+username | 指定访问OPC-UA服务器的用户名 | string | 否
+usernameRef | 指定DeviceLink的引用关系，将该值作为用户名引用 | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12) | 否
+password | 指定访问OPC-UA服务器的用户密码 | string | 否
+passwordRef | 指定DeviceLink的引用关系，将该值作为用户密码引用 | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12) | 否
+
+#### OPCUADeviceProtocolTLS
+
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+certFilePEM | 指定证书(公钥)的PEM格式内容，用于客户端对OPC-UA服务器的认证 | string | 否
+certFilePEMRef | 指定DeviceLink的引用关系，将该值作为客户端证书文件PEM内容引用。 | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12) | 否
+keyFilePEM | 指定密钥(私钥)的PEM格式内容，用于客户端对OPC-UA服务器的认证。 | string | 否
+keyFilePEMRef | 指定DeviceLink的引用关系，将该值作为客户端密钥文件PEM内容引用。 | *[edgev1alpha1.DeviceLinkReferenceRelationship](https://github.com/cnrancher/octopus/blob/master/api/v1alpha1/devicelink_types.go#L12) | 否
+
+#### OPCUADeviceProperty
+
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+name | 指定属性名称 | string | 是
+description | 指定属性的描述 | string | 否
+type | 指定属性的类型 | *[OPCUADevicePropertyType](#opcuadevicepropertytype) | 是
+visitor | 指定属性的visitor | *[OPCUADevicePropertyVisitor](#opcuadevicepropertyvisitor) | 是
+readOnly | 指定属性的是否只读，默认值为`false` | boolean | 否
+value | 指定属性的值，只在可写属性中可用 | string | 否
+
+#### OPCUADeviceStatusProperty
+
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+name | 属性名称 | string | 否
+type | 属性类型 | *[OPCUADevicePropertyType](#modbusdevicepropertytype) | 否
+value |属性值 | string | 否
+updatedAt | 修改属性时留下的时间戳 | *[metav1.Time](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/time.go#L33) | 否
+
+#### OPCUADevicePropertyVisitor
+
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+nodeID | 指定OPC-UA节点的id，例如 "ns=1,i=1005" | string | 是
+browseName | 指定OPC-UA节点名称 | string | 否
+
+#### OPCUADevicePropertyType
+
+参数 | 描述| 类型 |
+:--- | :--- | :--- |
+boolean | 属性数据类型为布尔值 | string
+int64 | 属性数据类型为int64 | string
+int32 |  属性数据类型为int32 | string
+int16 |  属性数据类型为int16 | string
+uint64 | 属性数据类型为uint64 | string
+uint32 |  属性数据类型为uint32 | string
+uint16 |  属性数据类型为uint16 | string
+float |  属性数据类型为float | string
+double |  属性数据类型为double | string
+string |  属性数据类型为string | string
+byteString |  属性数据类型为bytestring，将转换为string显示 | string
+datetime |  属性数据类型为datetime | string
+
+#### OPCUADeviceExtension
+
+参数 | 描述| 类型 | 是否必填
+:--- | :--- | :--- | :---
+mqtt | 指定MQTT的设置 | *[v1alpha1.MQTTOptionsSpec](./mqtt-extension#specification) | 否 

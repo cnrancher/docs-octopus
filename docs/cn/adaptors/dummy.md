@@ -3,36 +3,46 @@ id: dummy
 title: Dummy 适配器
 ---
 
+## 概述
 Dummy适配器是Octopus一种用于测试和Demo的模拟适配器。
 
-### 注册信息
+## 注册信息
 
-|  Versions | Register Name | Endpoint Socket | Available |
-|:---:|:---:|:---:|:---:|
+|  版本 | 注册名称 | 端点 Socket | 是否可用 |
+|:---|:---|:---|:---|
 |  `v1alpha1` | `adaptors.edge.cattle.io/dummy` | `dummy.sock` | * |
 
-### 支持模型
+## 支持模型
 
-| Kind | Group | Version | Available | 
-|:---:|:---:|:---:|:---:|
+| 类型 | 设备组 | 版本 | 是否可用 | 
+|:---|:---|:---|:---|
 | [`DummySpecialDevice`](#dummyspecialdevice) | `devices.edge.cattle.io` | `v1alpha1` | * |
 | [`DummyProtocolDevice`](#dummyprotocoldevice) | `devices.edge.cattle.io` | `v1alpha1` | * |
 
-### 支持平台
+## 支持平台
 
-| OS | Arch |
-|:---:|:---|
+| 操作系统 | 架构 |
+|:---|:---|
 | `linux` | `amd64` |
 | `linux` | `arm` |
 | `linux` | `arm64` |
 
-### 使用方式
+## 使用方式
 
 ```shell script
-$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
 ```
 
-### 权限
+:::note说明
+国内用户，可以使用以下方法加速安装：
+    
+```
+kubectl apply -f http://rancher-mirror.cnrancher.com/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+```
+
+:::
+
+## 权限
 
 对Octopus授予权限，如下所示：
 
@@ -44,192 +54,291 @@ $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/ad
   dummyprotocoldevices.devices.edge.cattle.io/status  []                 []              [get patch update]
   dummyspecialdevices.devices.edge.cattle.io/status   []                 []              [get patch update]
 ```
+## YAML 示例
 
-### DummySpecialDevice
+> 指定`DummySpecialDevice`设备，以下示例假定客厅中有一个名为`living-room-fan`的风扇待连接。
+
+    ```YAML
+    apiVersion: edge.cattle.io/v1alpha1
+    kind: DeviceLink
+    metadata:
+      name: living-room-fan
+    spec:
+      adaptor:
+        node: edge-worker
+        name: adaptors.edge.cattle.io/dummy
+      model:
+        apiVersion: "devices.edge.cattle.io/v1alpha1"
+        kind: "DummySpecialDevice"
+      # uses Secret resources
+      references:
+        - name: "ca"
+          secret:
+            name: "living-room-fan-mqtt-ca"
+        - name: "tls"
+          secret:
+            name: "living-room-fan-mqtt-tls"
+      template:
+        metadata:
+          labels:
+            device: living-room-fan
+        spec:
+          # integrates with MQTT
+          extension:
+            mqtt:
+              client:
+                server: tcps://test.mosquitto.org:8884
+                tlsConfig:
+                  caFilePEMRef:
+                    name: ca
+                    item: ca.crt
+                  certFilePEMRef:
+                    name: tls
+                    item: tls.crt
+                  keyFilePEMRef:
+                    name: tls
+                    item: tls.key
+                  serverName: test.mosquitto.org
+                  insecureSkipVerify: true
+              message:
+                # uses dynamic topic with namespaced name
+                topic: "cattle.io/octopus/:namespace/:name"
+          protocol:
+            location: "living_room"
+          gear: slow
+          "on": true
+    ```
+
+> 指定一个 "DummyProtocolDevice "设备链接来连接localhost的 chaos robot。
+
+    ```YAML
+    apiVersion: edge.cattle.io/v1alpha1
+    kind: DeviceLink
+    metadata:
+      name: localhost-robot
+    spec:
+      adaptor:
+        node: edge-worker
+        name: adaptors.edge.cattle.io/dummy
+      model:
+        apiVersion: "devices.edge.cattle.io/v1alpha1"
+        kind: "DummyProtocolDevice"
+      template:
+        metadata:
+          labels:
+            device: localhost-robot
+        spec:
+          protocol:
+            ip: "127.0.0.1"
+          properties:
+            name:
+              type: string
+              description: "The name (unique identifier) of the robot."
+              readOnly: true
+            gender:
+              type: object
+              description: "The gender of the robot."
+              objectProperties:
+                name:
+                  type: string
+                  description: "The name of the gender."
+                code:
+                  type: int
+                  description: "The code of the gender."
+            friends:
+              type: array
+              description: "The name list of the robot's friends."
+              arrayProperties:
+                type: string
+                description: "The name of the friend."
+            power:
+              type: float
+              description: "The power of the robot."
+    ```
+
+更多的 "DummyDevice"设备链接实例，请参考[deploy/e2e](https://github.com/cnrancher/octopus/tree/master/adaptors/dummy/deploy/e2e)目录。
+
+## DummySpecialDevice
 
 `DummySpecialDevice`可被视为模拟风扇。
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | false |
-| spec | Defines the desired state of DummySpecialDevice. | [DummySpecialDeviceSpec](#dummyspecialdevicespec) | true |
-| status | Defines the observed state of DummySpecialDevice. | [DummySpecialDeviceStatus](#dummyspecialdevicestatus) | false |
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| metadata | 元数据 | 详情请参考[metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | 否 |
+| spec | 设备的期望状态 | [DummySpecialDeviceSpec](#dummyspecialdevicespec) | 是 |
+| status | 设备的实际状态 | [DummySpecialDeviceStatus](#dummyspecialdevicestatus) | 否 |
 
-#### DummySpecialDeviceSpec
+### DummySpecialDeviceSpec
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| extension | Specifies the extension of device. | [DeviceExtensionSpec](#deviceextensionspec) | false |
-| protocol |  Protocol for accessing the dummy special device. | [DummySpecialDeviceProtocol](#dummyspecialdeviceprotocol) | true |
-| on | Turn on the dummy special device | bool | true |
-| gear | Specifies how fast the dummy special device should be. | [DummySpecialDeviceGear](#dummyspecialdevicegear) | false |
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| extension | 设备是否有与MQTT插件基础 | [DeviceExtensionSpec](#deviceextensionspec) | 否 |
+| protocol |  访问设备时使用的传输协议| [DummySpecialDeviceProtocol](#dummyspecialdeviceprotocol) | 是 |
+| on | 设备是否已经启动 | bool | 是 |
+| gear | 如果设备已启动，上报设备运转的频率 | [DummySpecialDeviceGear](#dummyspecialdevicegear) | 否 |
 
-#### DummySpecialDeviceStatus
+### DummySpecialDeviceStatus
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| extension | Reports the extension of device. | [DeviceExtensionStatus](#deviceextensionstatus) | false |
-| gear | Reports the current gear of dummy special device. | [DummySpecialDeviceGear](#dummyspecialdevicegear) | false |
-| rotatingSpeed | Reports the detail number of speed of dummy special device. | int32 | false |
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| extension | 集群使用的MQTT插件的配置  | [DeviceExtensionStatus](#deviceextensionstatus) | 否 |
+| gear | 如果设备已启动，上报设备运转的频率 | [DummySpecialDeviceGear](#dummyspecialdevicegear) | 否 |
+| rotatingSpeed | 设备的转速 | int32 | 是 |
 
-#### DummySpecialDeviceProtocol
+### DummySpecialDeviceProtocol
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| location | Specifies where to locate the dummy special device. | string | true |
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| location | 设备所处的位置 | string | 是 |
 
-#### DummySpecialDeviceGear
+### DummySpecialDeviceGear
 
-DummySpecialDeviceGear defines how fast the dummy special device should be.
+DummySpecialDeviceGear定义了设备运行的速度。
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| slow | Starts from 0 and increases every three seconds until 100. | string | false |
-| middle | Starts from 100 and increases every two seconds until 200. | string | false |
-| fast | Starts from 200 and increases every one second until 300. | string | false |
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| slow | 从0开始，每3秒增加一次，直至达到100 | string | 否 |
+| middle |从100开始，每2秒增加一次，直至达到200  | string | 否 |
+| fast | 从200开始，每1秒增加一次，直至达到300 | string | 否 |
 
-#### DummyProtocolDevice
+### DummyProtocolDevice
 
-The `DummyProtocolDevice` can be considered as a chaos protocol robot, it will change its attribute values every two seconds.
+您可以将`DummyProtocolDevice` 看成一个chaos protocol robot，它的值每两秒会变化一次。
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| metadata | | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | false |
-| spec | Defines the desired state of DummyProtocolDevice. | [DummyProtocolDeviceSpec](#dummyprotocoldevicespec) | true |
-| status | Defines the observed state of DummyProtocolDevice. | [DummyProtocolDeviceStatus](#dummyprotocoldevicestatus) | false |
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| metadata | 元数据 | [metav1.ObjectMeta](https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go#L110) | 否 |
+| spec | 设备的期望状态 | [DummyProtocolDeviceSpec](#dummyprotocoldevicespec) | 是 |
+| status | 设备的实际状态 | [DummyProtocolDeviceStatus](#dummyprotocoldevicestatus) | 否 |
 
-#### DummyProtocolDeviceSpec
+### DummyProtocolDeviceSpec
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| extension | Specifies the extension of device. | [DeviceExtensionSpec](#deviceextensionspec) | false |
-| protocol | Protocol for accessing the dummy protocol device. | [DummyProtocolDeviceProtocol](#dummyprotocoldeviceprotocol) | true |
-| props | Describes the desired properties. | map[string][DummyProtocolDeviceSpecProps](#dummyprotocoldevicespecprops) | false |
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| extension | 集群使用的MQTT插件的配置 | [DeviceExtensionSpec](#deviceextensionspec) | 否 |
+| protocol | 访问设备时使用的传输协议 | [DummyProtocolDeviceProtocol](#dummyprotocoldeviceprotocol) | 是 |
+| props | 设备属性的期望值 | [DummyProtocolDeviceSpecProps](#dummyprotocoldevicespecprops) | 否 |
 
-#### DummyProtocolDeviceStatus
+### DummyProtocolDeviceStatus
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| extension | Reports the extension of device. | [DeviceExtensionStatus](#deviceextensionstatus) | false |
-| props | Reports the observed value of the desired properties. | map[string][DummyProtocolDeviceStatusProps](#dummyprotocoldevicestatusprops) | false |
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| extension | 集群使用的MQTT插件的配置 | [DeviceExtensionStatus](#deviceextensionstatus) | 否 |
+| props | 设备属性的实际值 | map[string][DummyProtocolDeviceStatusProps](#dummyprotocoldevicestatusprops) | 否 |
 
-#### DummyProtocolDeviceProtocol
+### DummyProtocolDeviceProtocol
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| ip | Specifies where to connect the dummy protocol device. | string | true |
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| ip | 连接设备时用到的ip地址 | string | 是 |
 
-#### DummyProtocolDeviceSpecProps
+### DummyProtocolDeviceSpecProps
+>**说明：**
+> - `DummyProtocolDeviceSpecObjectOrArrayProps`和`DummyProtocolDeviceSpecProps`相同
+> - 使用`DummyProtocolDeviceSpecObjectOrArrayProps` 的目的是避免对象循环引用
 
-> `DummyProtocolDeviceSpecObjectOrArrayProps` is the same as `DummyProtocolDeviceSpecProps`.
-> The existence of `DummyProtocolDeviceSpecObjectOrArrayProps` is to combat the object circular reference.
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| type | 设备属性的类型，可选值包括：string、int、float、boolean、object和array | [DummyProtocolDevicePropertyType](#dummyprotocoldevicepropertytype) | 是 |
+| description | 属性描述 | string | 否 |
+| readOnly | 是否只读 | bool | 否 |
+| arrayProps | 数组类型的属性 | [DummyProtocolDeviceSpecObjectOrArrayProps](#dummyprotocoldevicespecprops) | 否 | 
+| objectProps | 对象类型的属性 | [string][DummyProtocolDeviceSpecObjectOrArrayProps](#dummyprotocoldevicespecprops) | 否 |
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| type | Describes the type of property. | [DummyProtocolDevicePropertyType](#dummyprotocoldevicepropertytype) | true |
-| description | Outlines the property. | string | false |
-| readOnly | Configures the property is readOnly or not. | bool | false |
-| arrayProps | Describes item properties of the array type. | *[DummyProtocolDeviceSpecObjectOrArrayProps](#dummyprotocoldevicespecprops) | false | 
-| objectProps | Describes properties of the object type. | map[string][DummyProtocolDeviceSpecObjectOrArrayProps](#dummyprotocoldevicespecprops) | false |
+### DummyProtocolDeviceStatusProperty
 
-#### DummyProtocolDeviceStatusProps
+>**说明：**
+> - `DummyProtocolDeviceStatusObjectOrArrayProperty` 和`DummyProtocolDeviceStatusProperty`相同
+> - 使用`DummyProtocolDeviceStatusObjectOrArrayProperty`的目的是避免对象循环引用
 
-> `DummyProtocolDeviceStatusObjectOrArrayProps` is the same as `DummyProtocolDeviceStatusProps`.
-> The existence of `DummyProtocolDeviceStatusObjectOrArrayProps` is to combat the object circular reference.
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| type | 设备属性的类型 | [DummyProtocolDevicePropertyType](#dummyprotocoldevicepropertytype) | 是 |
+| intValue | 如果设备属性的类型是int，上报int的值R | int | 否 |
+| stringValue | 如果设备属性的类型是string，上报string的值 | string | 否 |
+| floatValue | 如果设备属性的类型是float，上报float的值 | [resource.Quantity](https://github.com/kubernetes/apimachinery/blob/master/pkg/api/resource/quantity.go) [kubernetes-sigs/controller-tools/issues#245](https://github.com/kubernetes-sigs/controller-tools/issues/245#issuecomment-550030238) | 否 |
+| booleanValue | 如果设备属性的类型是boolean，上报boolean的值 | boolean | 否 |
+| arrayValue | 如果设备属性的类型是boolean，上报array的值 | [DummyProtocolDeviceStatusObjectOrArrayProps](#dummyprotocoldevicestatusprops) | 否 | 
+| objectValue | 如果设备属性的类型是object，上报object的值 | [DummyProtocolDeviceStatusObjectOrArrayProps](#dummyprotocoldevicestatusprops) | 否 |
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| type | Reports the type of property. | [DummyProtocolDevicePropertyType](#dummyprotocoldevicepropertytype) | true |
-| intValue | Reports the value of int type. | *int | false |
-| stringValue | Reports the value of string type. | *string | false |
-| floatValue | Reports the value of float type. | *[resource.Quantity](https://github.com/kubernetes/apimachinery/blob/master/pkg/api/resource/quantity.go) [kubernetes-sigs/controller-tools/issues#245](https://github.com/kubernetes-sigs/controller-tools/issues/245#issuecomment-550030238) | false |
-| booleanValue | Reports the value of bool type. | *bool | false |
-| arrayValue | Reports the value of array type. | [][DummyProtocolDeviceStatusObjectOrArrayProps](#dummyprotocoldevicestatusprops) | false | 
-| objectValue | Reports the value of object type. | map[string][DummyProtocolDeviceStatusObjectOrArrayProps](#dummyprotocoldevicestatusprops) | false |
+### DummyProtocolDevicePropertyType
 
-#### DummyProtocolDevicePropertyType
+DummyProtocolDevicePropertyType 描述了设备属性的类型。
 
-DummyProtocolDevicePropertyType describes the type of property.
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| string |int类型属性的值 | string | 否 |
+| int |int类型属性的值 | string | 否 |
+| float |float类型属性的值 | string | 否 |
+| boolean |boolean类型属性的值 | string | 否 |
+| array |array类型属性的值 | string | 否 |
+| object |object类型属性的值 | string | 否 |
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| string | | string | false |
-| int | | string | false |
-| float | | string | false |
-| boolean | | string | false |
-| array | | string | false |
-| object | | string | false |
+#### DummyDeviceExtension
 
-##### DeviceExtensionSpec
+参数 | 描述 | 类型 | 是否必填
+:--- | :--- | :--- | :---
+| mqtt | 说明MQTT插件的配置 | *[v1alpha1.MQTTOptionsSpec](./mqtt-extension#specification) | 是 |
 
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| mqtt | Specifies the MQTT settings. | *[v1alpha1.MQTTOptionsSpec](./mqtt-extension#specification) | true |
 
-##### DeviceExtensionStatus
-
-| Field | Description | Schema | Required |
-|:---|:---|:---|:---:|
-| mqtt | Reports the MQTT settings. | *[v1alpha1.MQTTOptionsStatus](./mqtt-extension#status) | true |
-
-### Demo演示
+## Demo演示
 
 1. 创建一个[DeviceLink](https://github.com/cnrancher/octopus/blob/master/adaptors/dummy/deploy/e2e/dl_specialdevice.yaml)以连接DummySpecialDevice，该设备模拟客厅的风扇。
 
     ```shell script
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_specialdevice.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_specialdevice.yaml
     ```
    
     将上面创建的风扇状态同步到远程MQTT代理服务器。
     
     ```shell script
     # create a Generic Secret to store the CA for connecting test.mosquitto.org.
-    $ kubectl create secret generic living-room-fan-mqtt-ca --from-file=ca.crt=./test/integration/physical/testdata/mosquitto.org.crt
+    kubectl create secret generic living-room-fan-mqtt-ca --from-file=ca.crt=./test/integration/physical/testdata/mosquitto.org.crt
    
     # create a TLS Secret to store the TLS/SSL keypair for connecting test.mosquitto.org.
-    $ kubectl create secret tls living-room-fan-mqtt-tls --key ./test/integration/physical/testdata/client-key.pem --cert ./test/integration/physical/testdata/client.crt
+    kubectl create secret tls living-room-fan-mqtt-tls --key ./test/integration/physical/testdata/client-key.pem --cert ./test/integration/physical/testdata/client.crt
    
     # publish status to test.mosquitto.org
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_specialdevice_with_mqtt.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_specialdevice_with_mqtt.yaml
     ```
     
     使用[`mosquitto_sub`](https://mosquitto.org/man/mosquitto_sub-1.html)工具观看同步状态。
     
     ```shell script
     # get mqtt broker server
-    $ kubectl get dummyspecialdevices.devices.edge.cattle.io living-room-fan -o jsonpath="{.status.extension.mqtt.client.server}"
+    kubectl get dummyspecialdevices.devices.edge.cattle.io living-room-fan -o jsonpath="{.status.extension.mqtt.client.server}"
    
     # get topic name
-    $ kubectl get dummyspecialdevices.devices.edge.cattle.io living-room-fan -o jsonpath="{.status.extension.mqtt.message.topicName}"
+    kubectl get dummyspecialdevices.devices.edge.cattle.io living-room-fan -o jsonpath="{.status.extension.mqtt.message.topicName}"
     # use mosquitto_sub
    
-    $ mosquitto_sub -h {the host of mqtt broker server} -p {the port of mqtt broker server} -t {the topic name}
+    mosquitto_sub -h {the host of mqtt broker server} -p {the port of mqtt broker server} -t {the topic name}
     # mosquitto_sub -h test.mosquitto.org -p 1883 -t cattle.io/octopus/default/living-room-fan 
     ```
    
-1. 创建一个[DeviceLink](https://github.com/cnrancher/octopus/blob/master/adaptors/dummy/deploy/e2e/dl_protocoldevice.yaml)以连接DummyProtocolDevice，该设备模拟一个充满智能属性的机器人，它可以在2秒内随机填充所需的属性。
+1. 创建一个[DeviceLink](https://github.com/cnrancher/octopus/blob/master/adaptors/dummy/deploy/e2e/dl_protocoldevice.yaml)以连接DummyProtocolDevice，该设备模拟一个智能机器人，它可以在2秒内随机填充所需的属性。
 
     ```shell script
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_protocoldevice.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_protocoldevice.yaml
     ```
    
     将以上创建的机械的答案同步到远程MQTT代理服务器。
         
     ```shell script
     # publish status to test.mosquitto.org
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_protocoldevice_with_mqtt.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/dl_protocoldevice_with_mqtt.yaml
     ```
     
-    使用[`mosquitto_sub`](https://mosquitto.org/man/mosquitto_sub-1.html)工具观看同步的答案。
+    使用[`mosquitto_sub`](https://mosquitto.org/man/mosquitto_sub-1.html)工具观看同步的结果。
     
     ```shell script
     # get mqtt broker server
-    $ kubectl get dummyprotocoldevices.devices.edge.cattle.io localhost-robot -o jsonpath="{.status.extension.mqtt.client.server}"
+    kubectl get dummyprotocoldevices.devices.edge.cattle.io localhost-robot -o jsonpath="{.status.extension.mqtt.client.server}"
    
     # get topic name
-    $ kubectl get dummyprotocoldevices.devices.edge.cattle.io localhost-robot -o jsonpath="{.status.extension.mqtt.message.topicName}"
+    kubectl get dummyprotocoldevices.devices.edge.cattle.io localhost-robot -o jsonpath="{.status.extension.mqtt.message.topicName}"
    
     # use mosquitto_sub
-    $ mosquitto_sub -h {the host of mqtt broker server} -p {the port of mqtt broker server} -t {the topic name}
+    mosquitto_sub -h {the host of mqtt broker server} -p {the port of mqtt broker server} -t {the topic name}
     # mosquitto_sub -h test.mosquitto.org -p 1883 -t cattle.io/octopus/835aea2e-5f80-4d14-88f5-40c4bda41aa3
     ```

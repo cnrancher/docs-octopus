@@ -16,7 +16,7 @@ Octopus is built on [sigs.k8s.io/controller-runtime](https://github.com/kubernet
 #### Controller metrics
 
 | Type | Name | Description | Usage |
-|:---:|:---|:---|:---|
+:--- | :--- | :--- | :---
 | C | [`controller_runtime_reconcile_total`](../../vendor/sigs.k8s.io/controller-runtime/pkg/internal/controller/metrics/metrics.go#L25-L32) | Total number of reconciliations per controller. |  |
 | C | [`controller_runtime_reconcile_errors_total`](../../vendor/sigs.k8s.io/controller-runtime/pkg/internal/controller/metrics/metrics.go#L34-L39) | Total number of reconciliation errors per controller. |  |
 | H | [`controller_runtime_reconcile_time_seconds`](../../vendor/sigs.k8s.io/controller-runtime/pkg/internal/controller/metrics/metrics.go#L41-L46) | Length of time per reconciliation per controller. |  |
@@ -24,7 +24,7 @@ Octopus is built on [sigs.k8s.io/controller-runtime](https://github.com/kubernet
 #### Webhook metrics
 
 | Type | Name | Description | Usage |
-|:---:|:---|:---|:---|
+:--- | :--- | :--- | :---
 | H | [`controller_runtime_webhook_latency_seconds`](../../vendor/sigs.k8s.io/controller-runtime/pkg/webhook/internal/metrics/metrics.go#L26-L34) | Histogram of the latency of processing admission requests. | |
 
 ### Exposing from Kubernetes client
@@ -32,29 +32,15 @@ Octopus is built on [sigs.k8s.io/controller-runtime](https://github.com/kubernet
 #### Rest client metrics
 
 | Type | Name | Description | Usage |
-|:---:|:---|:---|:---|
+:--- | :--- | :--- | :---
 | C | [`rest_client_requests_total`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L44-L49) | Number of HTTP requests, partitioned by status code, method, and host. | |
 | H | [`rest_client_request_latency_seconds`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L35-L42) | Request latency in seconds. Broken down by verb and URL. | |
 
-#### Reflector metrics
-
-> Deprecated by [kubernetes/pull#74636](https://github.com/kubernetes/kubernetes/pull/74636) to fix the memory leak in kubelet.
-
-| Type | Name | Description | Usage |
-|:---:|:---|:---|:---|
-| G | [`reflector_last_resource_version`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L101-L105) | Last resource version seen for the reflectors. |  |
-| C | [`reflector_lists_total`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L59-L63) | Total number of API lists done by the reflectors. | |
-| S | [`reflector_list_duration_seconds`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L65-L69) | How long an API list takes to return and decode for the reflectors. | |
-| S | [`reflector_items_per_list`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L71-L75) | How many items an API list returns to the reflectors. |  |
-| C | [`reflector_short_watches_total`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L83-L87) | Total number of short API watches done by the reflectors. |  |
-| C | [`reflector_watches_total`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L77-L81) | Total number of API watches done by the reflectors. |  |
-| S | [`reflector_watch_duration_seconds`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L89-L93) | How long an API watch takes to return and decode for the reflectors. |  |
-| S | [`reflector_items_per_watch`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/client_go_adatper.go#L95-L99) | How many items an API watch returns to the reflectors. |  |
 
 #### Workqueue metrics
 
 | Type | Name | Description | Usage |
-|:---:|:---|:---|:---|
+:--- | :--- | :--- | :---
 | G | [`workqueue_depth`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/workqueue.go#L44-L49) | Current depth of workqueue. | |
 | G | [`workqueue_unfinished_work_seconds`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/workqueue.go#L90-L98) | How many seconds of work has done that is in progress and hasn't been observed by work_duration. Large values indicate stuck threads. One can deduce the number of stuck threads by observing the rate at which this increases. | |
 | G | [`workqueue_longest_running_processor_seconds`](../../vendor/sigs.k8s.io/controller-runtime/pkg/metrics/workqueue.go#L104-L110) | How many seconds has the longest running processor for workqueue been running. | |
@@ -68,7 +54,7 @@ Octopus is built on [sigs.k8s.io/controller-runtime](https://github.com/kubernet
 #### Go runtime metrics
 
 | Type | Name | Description | Usage |
-|:---:|:---|:---|:---|
+:--- | :--- | :--- | :---
 | G | [`go_goroutines`](../../vendor/github.com/prometheus/client_golang/prometheus/go_collector.go#L66-L69) | Number of goroutines that currently exist. | |
 | G | [`go_threads`](../../vendor/github.com/prometheus/client_golang/prometheus/go_collector.go#L70-L73) | Number of OS threads created. | |
 | G | [`go_info`](../../vendor/github.com/prometheus/client_golang/prometheus/go_collector.go#L78-L81) | Information about the Go environment. | |
@@ -101,7 +87,7 @@ Octopus is built on [sigs.k8s.io/controller-runtime](https://github.com/kubernet
 #### Running process metrics
 
 | Type | Name | Description | Usage |
-|:---:|:---|:---|:---|
+:--- | :--- | :--- | :---
 | C | [`process_cpu_seconds_total`](../../vendor/github.com/prometheus/client_golang/prometheus/process_collector.go#L71-L75) | Total user and system CPU time spent in seconds. | |
 | G | [`process_open_fds`](../../vendor/github.com/prometheus/client_golang/prometheus/process_collector.go#L76-L80) | Number of open file descriptors. | |
 | G | [`process_max_fds`](../../vendor/github.com/prometheus/client_golang/prometheus/process_collector.go#L81-L85) | Maximum number of open file descriptors. | |
@@ -115,7 +101,7 @@ Octopus is built on [sigs.k8s.io/controller-runtime](https://github.com/kubernet
 #### Limb metrics
 
 | Type | Name | Description | Usage |
-|:---:|:---|:---|:---|
+:--- | :--- | :--- | :---
 | G | [`limb_connect_connections`](../../pkg/metrics/limb/metrics.go#L12-L19) | How many connections are connecting adaptor. | |
 | C | [`limb_connect_errors_total`](../../pkg/metrics/limb/metrics.go#L21-L28) | Total number of connecting adaptor errors. | |
 | C | [`limb_send_errors_total`](../../pkg/metrics/limb/metrics.go#L30-L37) | Total number of errors of sending device desired to adaptor. | |

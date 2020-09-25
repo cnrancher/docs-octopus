@@ -12,11 +12,11 @@ You should either have an existing k3s or Kubernetes cluster to deploy the Octop
 
 1. Spin-up a local k3d cluster with 3 worker nodes on default.
     ```shell script 
-    $ curl -fL https://octopus-assets.oss-cn-beijing.aliyuncs.com/k3d/cluster-k3s-spinup.sh | bash -
+    curl -fL https://octopus-assets.oss-cn-beijing.aliyuncs.com/k3d/cluster-k3s-spinup.sh | bash -
     ```
    
    :::note
-   You are expected to see the following logs if the installation succeeds, use either `CTRL+C` or hit `Enter` to stop the local cluster.
+   You are expected to see the following logs if the installation succeeds, use either `CTRL+C` to stop the local cluster.
    :::
    ```logs
    [INFO] [0604 17:09:41] creating edge cluster with v1.17.2
@@ -46,12 +46,12 @@ You should either have an existing k3s or Kubernetes cluster to deploy the Octop
 
 1. Open a new terminal and set the `KUBECONFIG` to access the local k3s cluster.
     ```shell script 
-    $ export KUBECONFIG=~/.kube/rancher-k3s.yaml
+    export KUBECONFIG="$(k3d get-kubeconfig --name='edge')"
     ```
    
 1. Validate the local k3s cluster by checking its node.
     ```shell script 
-    $ kubectl get node
+    kubectl get node
    NAME                 STATUS   ROLES    AGE     VERSION
    edge-control-plane   Ready    master   3m46s   v1.17.2+k3s1
    edge-worker2         Ready    <none>   3m8s    v1.17.2+k3s1
@@ -74,7 +74,7 @@ In this walk-through, we will use Octopus to manage a `dummy` device and perform
 There are [two ways](./install) to deploy the Octopus, for convenience, we will use the manifest YAML file to bring up the Octopus. The installer YAML file is under the [`deploy/e2e`](https://github.com/cnrancher/octopus/tree/master/deploy/e2e) directory on Github:
 
 ```shell script
-$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one_without_webhook.yaml
+kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one.yaml
 ```
 
 expected result:
@@ -94,7 +94,7 @@ daemonset.apps/octopus-limb created
 After installed, we can verify the status of Octopus as below:
 
 ```shell script
-$ kubectl get all -n octopus-system
+kubectl get all -n octopus-system
 NAME                                 READY   STATUS    RESTARTS   AGE
 pod/octopus-limb-w8vcf               1/1     Running   0          14s
 pod/octopus-limb-862kh               1/1     Running   0          14s
@@ -202,7 +202,7 @@ status:
 The dummy adaptor installer YAML file is under the [`adaptors/dummy/deploy/e2e`](https://github.com/cnrancher/octopus/blob/master/adaptors/dummy/deploy/e2e) directory, the `all_in_one.yaml` contains the device model and the device adaptor, we can apply it into the cluster directly:
 
 ```shell script
-$ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
 ```
 
 expected result:
@@ -213,7 +213,7 @@ clusterrole.rbac.authorization.k8s.io/octopus-adaptor-dummy-manager-role created
 clusterrolebinding.rbac.authorization.k8s.io/octopus-adaptor-dummy-manager-rolebinding created
 daemonset.apps/octopus-adaptor-dummy-adaptor created
 
-$ kubectl get all -n octopus-system
+kubectl get all -n octopus-system
 NAME                                      READY   STATUS    RESTARTS   AGE
 pod/octopus-limb-w8vcf                    1/1     Running   0          2m27s
 pod/octopus-limb-862kh                    1/1     Running   0          2m27s
@@ -244,7 +244,7 @@ replicaset.apps/octopus-brain-65fdb4ff99   1         1         1       2m27s
 Notes that we have also granted Octopus permission to managing `DummySpecialDevice`/`DummyProtocolDevice`:
 
 ```shell script
-$ kubectl get clusterrolebinding | grep octopus
+kubectl get clusterrolebinding | grep octopus
 octopus-manager-rolebinding                            2m49s
 octopus-adaptor-dummy-manager-rolebinding              43s
 
@@ -282,13 +282,13 @@ spec:
         location: "living_room"
       gear: slow
       "on": true
-
+EOF
 ```
 
 There are [several states](./devicelink/state-of-dl) of a DeviceLink, if we found the `PHASE` is **DeviceConnected** and its `STATUS` is on **Healthy**, we can now query its status use the same `DeviceLink` name of device model CRD(i.e dummyspecialdevice in here):
 
 ```shell script
-$ kubectl get devicelink living-room-fan -n default
+kubectl get devicelink living-room-fan -n default
 NAME              KIND                 NODE          ADAPTOR                         PHASE             STATUS    AGE
 living-room-fan   DummySpecialDevice   edge-worker   adaptors.edge.cattle.io/dummy   DeviceConnected   Healthy   10s
 
@@ -296,7 +296,7 @@ living-room-fan   DummySpecialDevice   edge-worker   adaptors.edge.cattle.io/dum
 
 Check device reported status:
 ```shell script
-$ kubectl get dummyspecialdevice living-room-fan -n default -w
+kubectl get dummyspecialdevice living-room-fan -n default -w
 NAME              GEAR   SPEED   AGE
 living-room-fan   slow   10      32s
 living-room-fan   slow   11      33s
@@ -309,17 +309,17 @@ living-room-fan   slow   12      36s
 Users can use device spec properties to manage its device, e.g, if we want to turn off the fan, we can set its spec `"on": false`:
 
 ```shell script
-$ kubectl patch devicelink living-room-fan -n default --type merge --patch '{"spec":{"template":{"spec":{"on":false}}}}'
+kubectl patch devicelink living-room-fan -n default --type merge --patch '{"spec":{"template":{"spec":{"on":false}}}}'
 ```
 
 the log shows `devicelink.edge.cattle.io/living-room-fan is patched`, query its status, both `GEAR` and `SPEED` shows an empty value.
 
 ```
-$ kubectl get devicelink living-room-fan -n default
+kubectl get devicelink living-room-fan -n default
   NAME              KIND                 NODE          ADAPTOR                         PHASE             STATUS    AGE
   living-room-fan   DummySpecialDevice   edge-worker   adaptors.edge.cattle.io/dummy   DeviceConnected   Healthy   89s
 
-$ kubectl get dummyspecialdevice living-room-fan -n default
+kubectl get dummyspecialdevice living-room-fan -n default
 NAME              GEAR   SPEED   AGE
 living-room-fan                  117s
 ```

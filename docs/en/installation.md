@@ -8,7 +8,7 @@ There are two ways to deploy Octopus, one is [Helm chart](https://helm.sh/), ano
 ## 1. Octopus Helm Chart
 
 :::note
-The charts in this repository requires Helm version 3.x or later.**, read and follow the [Helm installation guide](https://helm.sh/docs/intro/install/).
+The charts in this repository requires Helm version 3.x or later, read and follow the [Helm installation guide](https://helm.sh/docs/intro/install/).
 :::
 
 The [Octopus-Chart](https://github.com/cnrancher/octopus-chart) repository hosts official Helm charts for [Octopus](https://github.com/cnrancher/octopus). These charts are used to deploy Octopus to the Kubernetes/k3s Cluster.
@@ -19,32 +19,33 @@ The [Octopus-Chart](https://github.com/cnrancher/octopus-chart) repository hosts
 In order to be able to use the charts in this repository, add the name and URL to your Helm client:
 
 ```console
-$ helm repo add cnrancher http://charts.cnrancher.cn/octopus
-$ helm repo update
+helm repo add octopus http://charts.cnrancher.com/octopus
+helm repo update
 ```
 
 ### Installing the Chart
 
 To install the Octopus Chart into your Kubernetes/k3s cluster use:
 ```
-$ helm create ns octopus-system
+kubectl create ns octopus-system
 ```
 ```
-$ helm install --namespace octopus-system octopus cnrancher/octopus
+helm install --namespace octopus-system myapp octopus/octopus
 ```
 
 After installation succeeds, you can get a status of Chart
 ```
-$ helm status octopus
+helm status myapp -n octopus-system
+
 ```
 
 If you want to delete your Chart, use this command:
 ```
-$ helm delete octopus
+helm delete myapp -n octopus-system
 ```
 
 The command removes nearly all the Kubernetes components associated with the
-chart and deletes the release.
+chart and deletes the Helm release.
 
 ### Helm Chart and Octopus Support
 
@@ -58,16 +59,16 @@ Octopus uses `Kustomize` to generate its installer manifest files, the installer
 
 1. Install Octopus
     ```shell script
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/deploy/e2e/all_in_one.yaml
     ```
 
 1. Install Octopus Official Adaptors
     ```shell script
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/mqtt/deploy/e2e/all_in_one.yaml
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
-    $ kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/modbus/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/opcua/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/mqtt/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/ble/deploy/e2e/all_in_one.yaml
+    kubectl apply -f https://raw.githubusercontent.com/cnrancher/octopus/master/adaptors/dummy/deploy/e2e/all_in_one.yaml
     ```
 
 ### Animated quick demo
